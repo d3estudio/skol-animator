@@ -1,6 +1,6 @@
 var WIDTH = 13;
 var HEIGHT = 5;
-var currentCol = WIDTH-1;
+var currentCol = WIDTH - 1;
 var billboard = new Alphabet();
 var message = billboard.textToBin('SKOL');
 
@@ -12,11 +12,20 @@ function drawMessage(currentCol) {
 
         letter.forEach(function(line, lineIndex) {
             line.forEach(function(dot, dotIndex) {
-                var bit = $("div[data-x='"+(currentCol+dotIndex+shift)+"'][data-y='"+lineIndex+"']");
-                if (dot) {
-                    bit.addClass('flip');
-                } else {
-                    bit.removeClass('flip');
+                var x = currentCol + dotIndex + shift,
+                    y = lineIndex,
+                    bit;
+                motors.forEach(function(motor) {
+                    if (motor.x == x && motor.y == y) {
+                        bit = motor;
+                    }
+                });
+                if (bit) {
+                    if (dot) {
+                        bit.setAnimation('flip');
+                    } else {
+                        bit.removeAnimation('flip');
+                    }
                 }
             })
         });
@@ -27,12 +36,12 @@ function drawMessage(currentCol) {
 function draw() {
     //console.log(new Date());
     setTimeout(function() {
-        if (currentCol >= -(message.length*4)) {
+        if (currentCol >= -(message.length * 4)) {
             requestAnimationFrame(draw);
             drawMessage(currentCol);
             currentCol--;
         }
-    }, 1000);
+    }, 3000);
 }
 
 draw();

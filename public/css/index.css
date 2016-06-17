@@ -1,25 +1,28 @@
 body {
-    background: rgba(0, 0, 0, 0) url("/img/beach.jpg") no-repeat fixed center bottom;
+    background: rgba(0, 0, 0, 0) url("/img/beach.jpg") no-repeat fixed center bottom / cover;
 }
-.front,
-.left,
-.right {
+.front, .left, .right {
     float: left;
 }
 .top {
     clear: both;
 }
-.front,
-.left,
-.right,
-.top {
-    background: #333333;
+.front, .left, .right, .top {
     position: relative;
 }
 .block {
-    background: #666666;
     position: relative;
     float: left;
+    overflow: hidden;
+}
+.block .hole {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    left: 10%;
+    top: 10%;
+    border-radius: 100%;
+    z-index: 1;
 }
 .block .circle {
     position: absolute;
@@ -29,10 +32,24 @@ body {
     top: 10%;
     background: #000000;
     border-radius: 100%;
-    transition: 0.8s;
+    transition: 2.5s linear;
+    z-index: 2;
+    overflow: hidden;
+}
+.block .circle .mirror {
+    width: 100%;
+    height: 100%;
+    transition: opacity 0s linear 1.25s;
+    opacity: 0;
+    background: #abbaab !important;
+    background: -webkit-linear-gradient(to left, #abbaab, #ffffff) !important;
+    background: linear-gradient(to left, #abbaab, #ffffff) !important;
 }
 .block.flip .circle {
-    transition: 0.8s;
+    transition: 2.5s linear;
     transform: rotateX(180deg);
-    background: #ffffff;
+}
+.block.flip .circle .mirror {
+    transition: opacity 0s linear 1.25s;
+    opacity: 1;
 }
