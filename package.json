@@ -1,0 +1,14 @@
+{
+  "name": "skol-animator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Live Building",
+  "repository": "https://github.com/chr0nu5/skol-animator",
+  "dependencies": {
+    "body-parser": "^1.15.0",
+    "consolidate": "^0.14.0",
+    "ejs": "^2.4.1",
+    "express": "^4.13.4",
+    "swig": "^1.4.2"
+  }
+}

@@ -1,0 +1,38 @@
+body {
+    background: rgba(0, 0, 0, 0) url("/img/beach.jpg") no-repeat fixed center bottom;
+}
+.front,
+.left,
+.right {
+    float: left;
+}
+.top {
+    clear: both;
+}
+.front,
+.left,
+.right,
+.top {
+    background: #333333;
+    position: relative;
+}
+.block {
+    background: #666666;
+    position: relative;
+    float: left;
+}
+.block .circle {
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    left: 10%;
+    top: 10%;
+    background: #000000;
+    border-radius: 100%;
+    transition: 0.8s;
+}
+.block.flip .circle {
+    transition: 0.8s;
+    transform: rotateX(180deg);
+    background: #ffffff;
+}
