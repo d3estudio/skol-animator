@@ -18,15 +18,13 @@ function drawMessage(currentCol) {
                 motors.forEach(function(motor) {
                     if (motor.x == x && motor.y == y) {
                         bit = motor;
+                        if (dot) {
+                            bit.setAnimation('flip');
+                        } else {
+                            bit.removeAnimation('flip');
+                        }
                     }
                 });
-                if (bit) {
-                    if (dot) {
-                        bit.setAnimation('flip');
-                    } else {
-                        bit.removeAnimation('flip');
-                    }
-                }
             })
         });
         shift += letter[0].length;

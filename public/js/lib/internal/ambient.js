@@ -14,7 +14,7 @@ animate_ambient();
 function init_ambient() {
     //camera
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
-    camera.position.set(500, 250, -1000);
+    camera.position.set(500, 250, -1200);
 
     //controls
     controls = new THREE.OrbitControls(camera);
@@ -44,19 +44,20 @@ function init_ambient() {
     //HTML
     element = document.createElement('div');
     element.className = 'top';
-    element.setAttribute("style","width:440px;height:520px");
+    element.setAttribute("style","width:440px;height:1360px");
 
     //CSS Object
     roof = new THREE.CSS3DObject(element);
     roof.position.x = 0;
     roof.position.y = 100;
     roof.rotation.x = Math.PI/2;
+    roof.rotation.y = Math.PI;
     scene2.add(roof);
 
     //HTML
     element = document.createElement('div');
     element.className = 'left';
-    element.setAttribute("style","width:520px;height:200px");
+    element.setAttribute("style","width:1360px;height:200px");
 
     //CSS Object
     left = new THREE.CSS3DObject(element);
@@ -71,7 +72,7 @@ function init_ambient() {
     //HTML
     element = document.createElement('div');
     element.className = 'right';
-    element.setAttribute("style","width:520px;height:200px");
+    element.setAttribute("style","width:1360px;height:200px");
 
     //CSS Object
     right = new THREE.CSS3DObject(element);
@@ -79,21 +80,35 @@ function init_ambient() {
     right.position.y = 0;
     right.position.z = 0;
     right.rotation.x = Math.PI;
-    right.rotation.y = Math.PI/2;
+    right.rotation.y = -Math.PI/2;
     right.rotation.z = Math.PI;
     scene2.add(right);
 
-    // element = document.createElement('div');
-    // element.className = 'front';
-    // element.setAttribute("style","width:440px;height:200px");
-    //
-    // //CSS Object
-    // front = new THREE.CSS3DObject(element);
-    // front.position.x = 0;
-    // front.position.y = -260;
-    // front.position.z = 110;
-    // front.rotation.x = 1,5708;
-    // scene2.add(front);
+    element = document.createElement('div');
+    element.className = 'front';
+    element.setAttribute("style","width:440px;height:200px");
+
+    //CSS Object
+    front = new THREE.CSS3DObject(element);
+    front.position.x = 0;
+    front.position.y = 0;
+    front.position.z = -680;
+    front.rotation.x = Math.PI;
+    front.rotation.z = Math.PI;
+    scene2.add(front);
+
+    element = document.createElement('div');
+    element.className = 'floor';
+    element.setAttribute("style","width:640px;height:1560px");
+
+    //CSS Object
+    floor = new THREE.CSS3DObject(element);
+    floor.position.x = 0;
+    floor.position.y = -100;
+    floor.position.z = 0;
+    floor.rotation.x = Math.PI/2;
+    floor.rotation.y = Math.PI;
+    scene2.add(floor);
 
     //CSS3D Renderer
     renderer2 = new THREE.CSS3DRenderer();
