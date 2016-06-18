@@ -1,7 +1,7 @@
 body {
     background: rgba(0, 0, 0, 0) url("/img/beach.jpg") no-repeat fixed center bottom / cover;
 }
-.front, .left, .right {
+/*.front, .left, .right {
     float: left;
 }
 .top {
@@ -9,7 +9,12 @@ body {
 }
 .front, .left, .right, .top {
     position: relative;
+}*/
+
+.top, .left, .right, .front {
+    border: 1px solid #000000;
 }
+
 .block {
     position: relative;
     float: left;
