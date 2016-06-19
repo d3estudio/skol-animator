@@ -21,24 +21,36 @@ var Motor = function(x, y, color, parent, id) {
 
     //add this motor to the 3D preview
     _this.init = function() {
-        _this.hole.css({"box-shadow":"0 0 0 99999px "+color});
-        _this.hole.css({"-webkit-box-shadow":"0 0 0 99999px "+color});
-        _this.hole.css({"-moz-box-shadow":"0 0 0 99999px "+color});
-        _this.circle.css({background:color});
+        _this.hole.css({
+            "box-shadow": "0 0 0 99999px " + color
+        });
+        _this.hole.css({
+            "-webkit-box-shadow": "0 0 0 99999px " + color
+        });
+        _this.hole.css({
+            "-moz-box-shadow": "0 0 0 99999px " + color
+        });
+        _this.circle.css({
+            background: color
+        });
         _this.parent.append(_this.body);
         _this.body.append(_this.hole).append(_this.circle);
     }
 
     //restart this motor
     _this.create = function() {
-        _this.body.css({background:'none'});
+        _this.body.css({
+            background: 'none'
+        });
         _this.init();
     }
 
     //remove this motor from preview
     _this.destroy = function() {
         _this.body.html('');
-        _this.body.css({background:color});
+        _this.body.css({
+            background: color
+        });
     }
 
     //lock this motor to wait the current command
@@ -51,6 +63,7 @@ var Motor = function(x, y, color, parent, id) {
         _this.locked = false;
     }
 
+    //send a command to rotate the motor according to the following table:
     _this.sendCommand = function(cmd) {
         console.log(cmd);
     }
@@ -59,7 +72,7 @@ var Motor = function(x, y, color, parent, id) {
     _this.setAnimation = function(animation) {
         _this.body.addClass(animation);
     }
-    _this.removeAnimation =  function(animation) {
+    _this.removeAnimation = function(animation) {
         _this.body.removeClass(animation);
     }
 }
