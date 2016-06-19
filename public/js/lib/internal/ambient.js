@@ -14,7 +14,7 @@ function init_ambient() {
     //camera
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
     //                  hor     ver  zoom (0 is center)
-    camera.position.set(-500*2, 375, -1200);
+    camera.position.set(500*2, 375*2, -1200);
 
     //controls
     controls = new THREE.OrbitControls(camera);

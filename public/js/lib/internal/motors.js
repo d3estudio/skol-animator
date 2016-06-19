@@ -21,4 +21,12 @@ var Motor = function(x, y, color, parent, id) {
     _this.removeAnimation =  function(animation) {
         _this.body.removeClass(animation);
     }
+    _this.disable = function() {
+        _this.body.html('');
+        _this.body.css({background:color});
+    }
+    _this.enable = function() {
+        _this.body.css({background:'none'});
+        _this.init();
+    }
 }
