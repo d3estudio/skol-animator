@@ -38,23 +38,28 @@ function init() {
             x = parseInt(i - (11 * y)),
             color = new Color('top', i);
         motor = new Motor(x, y, color.getColor(), '.top', i);
-        motors.push(motor);
         motor.init();
         if (y < 23) {
             if (y == 22 && (x == 0 || x == 2 || x == 4 || x == 5 || x == 6 || x == 8 || x == 9 || x == 10)) {
-                motor.enable();
+                motor.create();
+                motors.push(motor);
             } else if (y == 21 && (x == 0 || x == 1 || x == 3 || x == 6 || x == 7 || x == 10)) {
-                motor.enable();
+                motor.create();
+                motors.push(motor);
             } else if (y == 20 && (x == 2 || x == 3 || x == 5 || x == 7 || x == 10)) {
-                motor.enable();
+                motor.create();
+                motors.push(motor);
             } else if (y == 19 && (x == 1 || x == 6 || x == 7 || x == 9)) {
-                motor.enable();
+                motor.create();
+                motors.push(motor);
             } else if (y == 18 && (x == 0 || x == 4 || x == 6)) {
-                motor.enable();
+                motor.create();
+                motors.push(motor);
             } else if (y == 17 && x == 3) {
-                motor.enable();
+                motor.create();
+                motors.push(motor);
             } else {
-                motor.disable();
+                motor.destroy();
             }
         }
     }
@@ -65,19 +70,22 @@ function init() {
             x = parseInt(i - (34 * y)),
             color = new Color('left', i);
         motor = new Motor(x, y, color.getColor(), '.left', i);
-        motors.push(motor);
         motor.init();
         if (x < 21) {
             if (x == 20 && (y == 1 || y == 3)) {
-                motor.enable();
+                motor.create();
+                motors.push(motor);
             } else if (x == 19 && (y == 1 || y == 4)) {
-                motor.enable();
+                motor.create();
+                motors.push(motor);
             } else if (x == 18 && (y == 0 || y == 3)) {
-                motor.enable();
+                motor.create();
+                motors.push(motor);
             } else if (x == 17 && y == 1) {
-                motor.enable();
+                motor.create();
+                motors.push(motor);
             } else {
-                motor.disable();
+                motor.destroy();
             }
         }
     }
@@ -88,19 +96,22 @@ function init() {
             x = parseInt(i - (34 * y)),
             color = new Color('right', i);
         motor = new Motor(x, y, color.getColor(), '.right', i);
-        motors.push(motor);
         motor.init();
         if (x > 12) {
             if (x == 13 && (y == 0 || y == 1)) {
-                motor.enable();
+                motor.create();
+                motors.push(motor);
             } else if (x == 14 && y == 2) {
-                motor.enable();
+                motor.create();
+                motors.push(motor);
             } else if (x == 15 && y == 1) {
-                motor.enable();
+                motor.create();
+                motors.push(motor);
             } else if (x == 16 && y == 3) {
-                motor.enable();
+                motor.create();
+                motors.push(motor);
             } else {
-                motor.disable();
+                motor.destroy();
             }
         }
     }
@@ -114,8 +125,6 @@ function init() {
         motors.push(motor);
         motor.init();
     }
-
-    $('.block').addClass('flip');
 }
 
 // init

@@ -2,7 +2,6 @@ var Color = function(parent, index) {
     var _this = this;
     _this.parent = parent;
     _this.index = index;
-    console.log(index);
     _this.colors = {
         top: [
             'rgba(134,151,107,1)'
