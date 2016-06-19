@@ -1,24 +1,11 @@
-body {
-    background: rgba(0, 0, 0, 0) url("/img/beach.jpg") no-repeat fixed center bottom / cover;
-}
-/*.front, .left, .right {
-    float: left;
-}
-.top {
-    clear: both;
-}
-.front, .left, .right, .top {
-    position: relative;
-}*/
-
 .top, .left, .right, .front {
     border: 1px solid #000000;
 }
 .floor {
     border: 1px solid #000000;
-    background: #dddddd;
+    background: url(http://textureshot.com/textures/Concrete/Rough/ConcreteRough_0002_01_M_T.jpg);
+    background-size: 60px 60px;
 }
-
 .block {
     position: relative;
     float: left;
@@ -53,6 +40,15 @@ body {
     background: #abbaab !important;
     background: -webkit-linear-gradient(to left, #abbaab, #ffffff) !important;
     background: linear-gradient(to left, #abbaab, #ffffff) !important;
+    position: relative;
+}
+.block .circle .mirror .line {
+    width: 100%;
+    position: absolute;
+    height: 2px;
+    background: #aaaaaa;
+    top: 50%;
+    margin-top: -1px;
 }
 .block.flip .circle {
     transition: 2.5s linear;

@@ -32,6 +32,7 @@ function init() {
 
     var globalID = 0;
 
+    // roof
     for (var i = 0; i < 374; i++) {
         var y = parseInt(i / 11),
             x = parseInt(i - (11 * y)),
@@ -41,28 +42,31 @@ function init() {
         motor.init();
     }
 
+    // left
     for (var i = 0; i < 170; i++) {
         var y = parseInt(i / 34),
             x = parseInt(i - (34 * y)),
-            color = new Color('top',i);
+            color = new Color('left',i);
             motor = new Motor(x, y, color.getColor(), '.left', i);
         motors.push(motor);
         motor.init();
     }
 
+    // front
     for (var i = 0; i < 55; i++) {
         var y = parseInt(i / 11),
             x = parseInt(i - (11 * y)),
-            color = new Color('top',i);
+            color = new Color('front',i);
             motor = new Motor(x, y, color.getColor(), '.front', i);
         motors.push(motor);
         motor.init();
     }
 
+    // right
     for (var i = 0; i < 170; i++) {
         var y = parseInt(i / 34),
             x = parseInt(i - (34 * y)),
-            color = new Color('top',i);
+            color = new Color('right',i);
             motor = new Motor(x, y, color.getColor(), '.right', i);
         motors.push(motor);
         motor.init();

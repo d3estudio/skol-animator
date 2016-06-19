@@ -6,7 +6,7 @@ var Motor = function(x, y, color, parent, id) {
     _this.id = id;
     _this.body = $('<div class="block"></div>');
     _this.hole = $('<div class="hole"></div>');
-    _this.circle = $('<div class="circle"><div class="mirror"></div></div>');
+    _this.circle = $('<div class="circle"><div class="mirror"><div class="line"></div></div></div>');
     _this.init = function() {
         _this.hole.css({"box-shadow":"0 0 0 99999px "+color});
         _this.hole.css({"-webkit-box-shadow":"0 0 0 99999px "+color});

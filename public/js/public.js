@@ -42,4 +42,4 @@ function draw() {
     }, 3000);
 }
 
-draw();
+//draw();
