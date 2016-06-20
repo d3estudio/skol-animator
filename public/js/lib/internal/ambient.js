@@ -1,11 +1,8 @@
+var scene;
 var camera;
 var controls;
-var torus;
-var light;
 var renderer;
-var scene;
-var renderer2;
-var div;
+var css_renderer;
 
 init_ambient();
 animate_ambient();
@@ -13,8 +10,8 @@ animate_ambient();
 function init_ambient() {
     //camera
     camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 10000);
-    //                  hor     ver  zoom (0 is center)
-    camera.position.set(500*2, 375*2, -1200);
+    //                  hor, ver, zoom (0 is center)
+    camera.position.set(500/2, 375, -1200);
 
     //controls
     controls = new THREE.OrbitControls(camera);
@@ -105,16 +102,16 @@ function init_ambient() {
     scene.add(floor);
 
     //CSS3D Renderer
-    renderer2 = new THREE.CSS3DRenderer();
-    renderer2.setSize(window.innerWidth, window.innerHeight);
-    renderer2.domElement.style.position = 'absolute';
-    renderer2.domElement.style.top = 0;
-    document.body.appendChild(renderer2.domElement);
+    css_renderer = new THREE.CSS3DRenderer();
+    css_renderer.setSize(window.innerWidth, window.innerHeight);
+    css_renderer.domElement.style.position = 'absolute';
+    css_renderer.domElement.style.top = 0;
+    document.body.appendChild(css_renderer.domElement);
 }
 
 function animate_ambient() {
     requestAnimationFrame(animate_ambient);
-    renderer2.render(scene, camera);
+    css_renderer.render(scene, camera);
     renderer.render(scene, camera);
     controls.update();
 }
