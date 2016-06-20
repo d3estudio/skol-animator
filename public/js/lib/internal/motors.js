@@ -21,7 +21,7 @@ var Motor = function(x, y, color, parent, id) {
     _this.angle = 0;
 
     //motor acceleration mode, and 360 degress rotation time to sync with the real world
-    _this.speed = 0;
+    _this.speed = 1;
     _this.SPEED_TIME = 2.6;
     _this.SLOW__TIME = 5.2;
 
@@ -78,11 +78,13 @@ var Motor = function(x, y, color, parent, id) {
     //lock this motor to wait the current command
     _this.lock = function() {
         _this.locked = true;
+        console.log(_this.name, 'is LOCKED');
     }
 
     //unlock this motor and allow another command
     _this.unlock = function() {
         _this.locked = false;
+        console.log(_this.name, 'is UNLOCKED');
     }
 
     //compute the real time angle of the motor to show the mirror
@@ -118,7 +120,7 @@ var Motor = function(x, y, color, parent, id) {
     _this.animateToAngle = function(currentAngle, newAngle) {
         if (currentAngle == newAngle) {
             _this.unlock();
-            console.log('Same Position or End of rotation');
+            console.log(_this.name, 'End of rotation');
         } else {
             if (newAngle > currentAngle) {
                 currentAngle += 9;
@@ -131,7 +133,6 @@ var Motor = function(x, y, color, parent, id) {
             } else {
                 time = ((_this.SLOW__TIME * 1000) / 360) * 9;
             }
-            //console.log('CurrentAngle', currentAngle, 'NewAngle', newAngle, 'Time', time);
             setTimeout(function() {
                 _this.animateToAngle(currentAngle, newAngle);
             }, time);
@@ -165,7 +166,7 @@ var Motor = function(x, y, color, parent, id) {
                 _this.lock();
                 _this.animateToAngle(currentAngle, newAngle);
             } else {
-                console.log('Motor is busy');
+                console.log(_this.name, 'is BUSY');
             }
         } else {
 
