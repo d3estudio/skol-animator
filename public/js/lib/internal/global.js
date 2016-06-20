@@ -4,12 +4,12 @@ function init() {
 
     var globalID = 0;
 
-    // roof
+    // roof 374
     for (var i = 0; i < 374; i++) {
         var y = parseInt(i / 11),
             x = parseInt(i - (11 * y)),
             color = new Color('top', i);
-        motor = new Motor(x, y, color.getColor(), '.top', i);
+        motor = new Motor(x, y, color.getColor(), '.top', globalID++);
         motor.init();
         if (y < 23) {
             if (y == 22 && (x == 0 || x == 2 || x == 4 || x == 5 || x == 6 || x == 8 || x == 9 || x == 10)) {
@@ -36,12 +36,12 @@ function init() {
         }
     }
 
-    // left
+    // left 170
     for (var i = 0; i < 170; i++) {
         var y = parseInt(i / 34),
             x = parseInt(i - (34 * y)),
             color = new Color('left', i);
-        motor = new Motor(x, y, color.getColor(), '.left', i);
+        motor = new Motor(x, y, color.getColor(), '.left', globalID++);
         motor.init();
         if (x < 21) {
             if (x == 20 && (y == 1 || y == 3)) {
@@ -62,12 +62,12 @@ function init() {
         }
     }
 
-    // right
+    // right 170
     for (var i = 0; i < 170; i++) {
         var y = parseInt(i / 34),
             x = parseInt(i - (34 * y)),
             color = new Color('right', i);
-        motor = new Motor(x, y, color.getColor(), '.right', i);
+        motor = new Motor(x, y, color.getColor(), '.right', globalID++);
         motor.init();
         if (x > 12) {
             if (x == 13 && (y == 0 || y == 1)) {
@@ -88,12 +88,12 @@ function init() {
         }
     }
 
-    // front
+    // front 55
     for (var i = 0; i < 55; i++) {
         var y = parseInt(i / 11),
             x = parseInt(i - (11 * y)),
             color = new Color('front', i);
-        motor = new Motor(x, y, color.getColor(), '.front', i);
+        motor = new Motor(x, y, color.getColor(), '.front', globalID++);
         motors.push(motor);
         motor.init();
     }

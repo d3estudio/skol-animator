@@ -19,9 +19,9 @@ function drawMessage(currentCol) {
                     if (motor.x == x && motor.y == y) {
                         bit = motor;
                         if (dot) {
-                            bit.setAnimation('flip');
+                            bit.sendCommand(0x28);
                         } else {
-                            bit.removeAnimation('flip');
+                            bit.sendCommand(0x14);
                         }
                     }
                 });

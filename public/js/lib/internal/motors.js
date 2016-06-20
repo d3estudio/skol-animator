@@ -1,6 +1,9 @@
 var Motor = function(x, y, color, parent, id) {
     var _this = this;
 
+    //naming for LOGS
+    _this.name = parent.toUpperCase().replace('.', '') + '_[' + x + '][' + y + ']_' + id;
+
     //index on the matrix
     _this.x = x;
     _this.y = y;
@@ -16,8 +19,6 @@ var Motor = function(x, y, color, parent, id) {
 
     //motor current angle
     _this.angle = 0;
-    _this.virtualAngle = 0;
-    _this.lastVirtualAngle = 0;
 
     //motor acceleration mode, and 360 degress rotation time to sync with the real world
     _this.speed = 0;
@@ -32,7 +33,7 @@ var Motor = function(x, y, color, parent, id) {
     _this.FPS = 50;
 
     //motor simulation representation
-    _this.body = $('<div class="block"></div>');
+    _this.body = $('<div class="block" data-id="' + id + '" data-x="' + x + '" data-y="' + y + '"></div>');
     _this.hole = $('<div class="hole"></div>');
     _this.circle = $('<div class="circle"></div>');
     _this.mirror = $('<div class="mirror"><div class="line"></div></div>');
@@ -86,37 +87,15 @@ var Motor = function(x, y, color, parent, id) {
 
     //compute the real time angle of the motor to show the mirror
     _this.computeAngle = function() {
-        var matrix = _this.circle.css('-moz-transform');
-        if (matrix != 'none') {
-            // do some magic
-            var transform = matrix.split(' ');
-            if (transform[6]) {
-                var x = transform[6].split(",")[0];
-                if (x) {
-                    _this.virtualAngle = Math.round(Math.asin(x) * (180 / Math.PI));
-                }
-            }
+        if (_this.angle > 90 && _this.angle < 270) {
+            _this.mirror.css({
+                opacity: 1
+            });
+        } else {
+            _this.mirror.css({
+                opacity: 0
+            });
         }
-        if (_this.virtualAngle != _this.lastVirtualAngle) {
-            if (_this.virtualAngle > 0 && _this.virtualAngle > _this.lastVirtualAngle) {
-                _this.mirror.css({
-                    opacity: 0
-                });
-            } else if (_this.virtualAngle > 0 && _this.virtualAngle < _this.lastVirtualAngle) {
-                _this.mirror.css({
-                    opacity: 1
-                });
-            } else if (_this.virtualAngle < 0 && _this.virtualAngle > _this.lastVirtualAngle) {
-                _this.mirror.css({
-                    opacity: 0
-                });
-            } else if (_this.virtualAngle < 0 && _this.virtualAngle < _this.lastVirtualAngle) {
-                _this.mirror.css({
-                    opacity: 1
-                });
-            }
-        }
-        _this.lastVirtualAngle = _this.virtualAngle;
     }
 
     //convert a command to an angle and a time
@@ -136,12 +115,31 @@ var Motor = function(x, y, color, parent, id) {
     }
 
     //animate the motor respecting the limitations
-    _this.animateToAngleWithTime = function(angle, time) {
+    _this.animateToAngle = function(currentAngle, newAngle) {
+        if (currentAngle == newAngle) {
+            _this.unlock();
+            console.log('Same Position or End of rotation');
+        } else {
+            if (newAngle > currentAngle) {
+                currentAngle += 9;
+            } else {
+                currentAngle -= 9;
+            }
+            var time = 0;
+            if (_this.speed) {
+                time = ((_this.SPEED_TIME * 1000) / 360) * 9;
+            } else {
+                time = ((_this.SLOW__TIME * 1000) / 360) * 9;
+            }
+            //console.log('CurrentAngle', currentAngle, 'NewAngle', newAngle, 'Time', time);
+            setTimeout(function() {
+                _this.animateToAngle(currentAngle, newAngle);
+            }, time);
+        }
         _this.circle.css({
-            'transform': 'rotateX(' + angle + 'deg)',
-            'transition': time + 's linear'
-        })
-        console.log(angle, time);
+            'transform': 'rotateX(' + currentAngle + 'deg)'
+        });
+        _this.angle = ((currentAngle % 360) + 360) % 360;
     }
 
     //send a command to rotate the motor according to the following table:
@@ -163,7 +161,12 @@ var Motor = function(x, y, color, parent, id) {
             } else {
                 time = Math.abs(parseFloat((angle / 360) * _this.SLOW__TIME));
             }
-            _this.animateToAngleWithTime(newAngle, time);
+            if (!_this.locked) {
+                _this.lock();
+                _this.animateToAngle(currentAngle, newAngle);
+            } else {
+                console.log('Motor is busy');
+            }
         } else {
 
         }

@@ -31,15 +31,12 @@ body {
     top: 12%;
     background: #000000;
     border-radius: 100%;
-    transition: 2.5s linear;
     z-index: 2;
     overflow: hidden;
-    transform-style: preserve-3d;
 }
 .block .circle .mirror {
     width: 100%;
     height: 100%;
-    /*transition: opacity 0s linear 1.25s;*/
     opacity: 0;
     background: #abbaab !important;
     background: -webkit-linear-gradient(to left, #abbaab, #ffffff) !important;
@@ -54,12 +51,3 @@ body {
     top: 50%;
     margin-top: -1px;
 }
-.block.flip .circle {
-    transition: 6s linear;
-    transform: rotateX(720deg);
-    transform-style: preserve-3d;
-}
-/*.block.flip .circle .mirror {
-    transition: opacity 0s linear 1.25s;
-    opacity: 1;
-}*/
