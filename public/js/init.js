@@ -1,5 +1,26 @@
+//menu controllers
+var ContextMenu = function() {
+    var _this = this;
+    this.message = 'SKOL';
+    this.continuous = false;
+    this.START = function() {
+        var scroll = new ScrollText(_this.message, 13, 5, [leftWall, rightWall], _this.continuous);
+        scroll.init();
+    };
+};
+var options = new ContextMenu();
+var gui = new dat.GUI();
+gui.add(options, 'message');
+gui.add(options, 'continuous');
+gui.add(options, 'START');
+
 //3D ambient
-var ambient = new Ambient(document.body, {x:750, y:375, z:-1200, distance: 45}, window.innerWidth, window.innerHeight);
+var ambient = new Ambient(document.body, {
+    x: 750*-1,
+    y: 375,
+    z: -1200,
+    distance: 45
+}, window.innerWidth, window.innerHeight);
 ambient.init();
 ambient.animate();
 
@@ -12,7 +33,3 @@ roof.init();
 leftWall.init();
 frontWall.init();
 rightWall.init();
-
-//fun goes here
-var scroll = new ScrollText('SKOL', 13, 5, [leftWall, rightWall], false);
-scroll.init();

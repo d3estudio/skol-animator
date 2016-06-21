@@ -1,6 +1,9 @@
 body {
     overflow: hidden;
 }
+.dg.ac{
+    z-index: 999 !important;
+}
 .top, .left, .right, .front {
     border: 1px solid #000000;
 }

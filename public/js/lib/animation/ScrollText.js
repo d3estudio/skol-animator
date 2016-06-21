@@ -44,22 +44,26 @@ var ScrollText = function(message, width, height, where, overflow) {
             console.info(_this.name, _this.message, 'FINISHED (waiting last command)');
         });
     }
+    _this.step4 = function() {
+        _this.currentCol+=1
+        _this.moveLetters();
+        //var steps = 20; // 1 step is 9deg // 3000 is an animation delay after roration
+        //setTimeout(_this.step2, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 3000);
+    }
     _this.step3 = function() {
         _this.where.forEach(function(wall, wallIndex) {
             wall.motors.forEach(function(motor) {
-                if (motor.command == 0x28) {
-                    //go to 540deg
-                    motor.sendCommand(0x50);
-                    var steps = 40; // 1 step is 9deg // 3000 is an animation delay after roration
-                    setTimeout(_this.finish, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 3000);
-                }
+                //go to 180deg
+                motor.sendCommand(0x28);
+                var steps = 20; // 1 step is 9deg // 3000 is an animation delay after roration
+                setTimeout(_this.step4, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 3000);
             });
         });
     }
     _this.step2 = function() {
         _this.where.forEach(function(wall, wallIndex) {
             wall.motors.forEach(function(motor) {
-                if (motor.command == 0x14) {
+                if (motor.command != 0x14) {
                     //go to 180deg
                     motor.sendCommand(0x28);
                 }
@@ -73,7 +77,7 @@ var ScrollText = function(message, width, height, where, overflow) {
         setTimeout(function() {
             if (_this.overflow) {
                 if (_this.currentCol > _this.message.size * -1) {
-                    _this.moveLetters(_this.currentCol);
+                    _this.moveLetters();
                     _this.currentCol--;
                     requestAnimationFrame(_this.draw);
                 } else {
@@ -81,7 +85,7 @@ var ScrollText = function(message, width, height, where, overflow) {
                 }
             } else {
                 if (_this.currentCol > -1) {
-                    _this.moveLetters(_this.currentCol);
+                    _this.moveLetters();
                     _this.currentCol--;
                     requestAnimationFrame(_this.draw);
                 } else {

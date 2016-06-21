@@ -16,12 +16,6 @@ var Ambient = function(where, cameraPosition, width, height) {
         _this.camera = new THREE.PerspectiveCamera(_this.cameraPosition.distance, _this.width / _this.height, 1, 10000);
         _this.camera.position.set(_this.cameraPosition.x, _this.cameraPosition.y, _this.cameraPosition.z);
 
-        //controls
-        _this.controls = new THREE.OrbitControls(_this.camera);
-        _this.controls.rotateSpeed = 1.0;
-        _this.controls.zoomSpeed = 1.2;
-        _this.controls.panSpeed = 0.8;
-
         //WebGL Renderer
         _this.renderer = new THREE.WebGLRenderer({
             antialias: true
@@ -110,6 +104,12 @@ var Ambient = function(where, cameraPosition, width, height) {
         _this.css_renderer.domElement.style.position = 'absolute';
         _this.css_renderer.domElement.style.top = 0;
         _this.where.appendChild(_this.css_renderer.domElement);
+
+        //controls
+        _this.controls = new THREE.OrbitControls(_this.camera, _this.css_renderer.domElement);
+        _this.controls.rotateSpeed = 1.0;
+        _this.controls.zoomSpeed = 1.2;
+        _this.controls.panSpeed = 0.8;
     }
     _this.animate = function() {
         requestAnimationFrame(_this.animate);
