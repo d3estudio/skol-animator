@@ -11,6 +11,9 @@ var Motor = function(x, y, color, parent, id) {
     //where this motor is hold
     _this.parent = $(parent);
 
+    //parent name slug
+    _this.parentName = parent.replace('.', '').toUpperCase();
+
     //motor ID
     _this.id = id;
 
@@ -22,21 +25,31 @@ var Motor = function(x, y, color, parent, id) {
 
     //motor acceleration mode, and 360 degress rotation time to sync with the real world
     _this.speed = 1;
-    _this.SPEED_TIME = 2.6;
-    _this.SLOW__TIME = 5.2;
+    _this.SPEED_TIME = 2.6 * 1000;
+    _this.SLOW__TIME = 5.2 * 1000;
 
     //motor current applied command
     _this.command = 0x14;
 
     //timer to runUpdates on the virtualMotor
     _this.virtualTimer = null;
-    _this.FPS = 50;
 
     //motor simulation representation
     _this.body = $('<div class="block" data-id="' + id + '" data-x="' + x + '" data-y="' + y + '"></div>');
     _this.hole = $('<div class="hole"></div>');
     _this.circle = $('<div class="circle"></div>');
     _this.mirror = $('<div class="mirror"><div class="line"></div></div>');
+
+    //get FPS
+    _this.getFPS = function() {
+        var time = 0;
+        if (_this.speed) {
+            time = (_this.SPEED_TIME / 360) * 9;
+        } else {
+            time = (_this.SLOW__TIME / 360) * 9;
+        }
+        return time;
+    }
 
     //add this motor to the 3D preview
     _this.init = function() {
@@ -54,7 +67,8 @@ var Motor = function(x, y, color, parent, id) {
 
         _this.virtualTimer = setInterval(function() {
             _this.computeAngle();
-        }, _this.FPS);
+        }, _this.getFPS);
+        console.info(_this.name, 'INITIATED');
     }
 
     //restart this motor
@@ -64,6 +78,7 @@ var Motor = function(x, y, color, parent, id) {
         });
         clearInterval(_this.virtualTimer);
         _this.init();
+        console.info(_this.name, 'CREATED');
     }
 
     //remove this motor from preview
@@ -73,18 +88,19 @@ var Motor = function(x, y, color, parent, id) {
             background: color
         });
         clearInterval(_this.virtualTimer);
+        console.info(_this.name, 'DESTROYED');
     }
 
     //lock this motor to wait the current command
     _this.lock = function() {
         _this.locked = true;
-        console.log(_this.name, 'is LOCKED');
+        console.info(_this.name, 'LOCKED');
     }
 
     //unlock this motor and allow another command
     _this.unlock = function() {
         _this.locked = false;
-        console.log(_this.name, 'is UNLOCKED');
+        console.info(_this.name, 'UNLOCKED');
     }
 
     //compute the real time angle of the motor to show the mirror
@@ -120,22 +136,17 @@ var Motor = function(x, y, color, parent, id) {
     _this.animateToAngle = function(currentAngle, newAngle) {
         if (currentAngle == newAngle) {
             _this.unlock();
-            console.log(_this.name, 'End of rotation');
+            var date = new Date();
+            console.info(_this.name, 'finidhed COMMAND at ', date, date.getMilliseconds(), 'with angle', currentAngle);
         } else {
             if (newAngle > currentAngle) {
                 currentAngle += 9;
             } else {
                 currentAngle -= 9;
             }
-            var time = 0;
-            if (_this.speed) {
-                time = ((_this.SPEED_TIME * 1000) / 360) * 9;
-            } else {
-                time = ((_this.SLOW__TIME * 1000) / 360) * 9;
-            }
             setTimeout(function() {
                 _this.animateToAngle(currentAngle, newAngle);
-            }, time);
+            }, _this.getFPS());
         }
         _this.circle.css({
             'transform': 'rotateX(' + currentAngle + 'deg)'
@@ -148,8 +159,7 @@ var Motor = function(x, y, color, parent, id) {
         if (cmd <= 0xF0) {
             var newAngle = _this.getAngleFromCommand(cmd),
                 currentAngle = _this.getAngleFromCommand(_this.command),
-                angle,
-                time;
+                angle;
             if (cmd > _this.command) {
                 angle = newAngle - currentAngle;
             } else if (cmd < _this.command) {
@@ -157,16 +167,13 @@ var Motor = function(x, y, color, parent, id) {
             } else {
                 angle = newAngle - currentAngle;
             }
-            if (_this.speed) {
-                time = Math.abs(parseFloat((angle / 360) * _this.SPEED_TIME));
-            } else {
-                time = Math.abs(parseFloat((angle / 360) * _this.SLOW__TIME));
-            }
             if (!_this.locked) {
                 _this.lock();
+                var date = new Date();
+                console.info(_this.name, 'started COMMAND at ', date, date.getMilliseconds(), 'with angle', currentAngle);
                 _this.animateToAngle(currentAngle, newAngle);
             } else {
-                console.log(_this.name, 'is BUSY');
+                console.warn(_this.name, 'BUSY');
             }
         } else {
 

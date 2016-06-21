@@ -22,6 +22,7 @@ body {
     top: 10%;
     border-radius: 100%;
     z-index: 1;
+    background: rgba(0,0,0,0.5);
 }
 .block .circle {
     position: absolute;

@@ -1,5 +1,22 @@
-var Alphabet = function() {
+var Alphabet = function(message) {
     var _this = this;
+    _this.message = message.toUpperCase();
+    _this.size = 0;
+    _this.getLetter = function(char) {
+        return _this.letters[char];
+    }
+    _this.textToBin = function() {
+        var output = [];
+        _this.size = 0;
+        for (var i = 0; i < _this.message.length; i++) {
+            output.push(_this.getLetter(_this.message.charAt(i)));
+            output.push(_this.getLetter('-'));
+        }
+        output.forEach(function(letter) {
+            _this.size += letter[0].length;
+        });
+        return output;
+    }
     _this.letters = {
         'A': [
             [0, 1, 0],
@@ -281,17 +298,5 @@ var Alphabet = function() {
             [0],
             [0]
         ]
-    }
-    _this.getLetter = function(char) {
-        return _this.letters[char];
-    }
-    _this.textToBin = function(message) {
-        var output = [];
-        message = message.toUpperCase();
-        for (var i = 0; i < message.length; i++) {
-            output.push(_this.getLetter(message.charAt(i)));
-            output.push(_this.getLetter('-'));
-        }
-        return output;
     }
 }
