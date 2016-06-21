@@ -14,5 +14,5 @@ frontWall.init();
 rightWall.init();
 
 //fun goes here
-var scroll = new ScrollText('SKOL', 13, 5, [rightWall, leftWall], false);
+var scroll = new ScrollText('SKOL', 13, 5, [leftWall, rightWall], false);
 scroll.init();
