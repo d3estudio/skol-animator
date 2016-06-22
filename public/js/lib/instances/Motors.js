@@ -180,12 +180,4 @@ var Motor = function(x, y, color, parent, id) {
         }
         _this.command = cmd;
     }
-
-    /* this will be deprecated and must be deleted */
-    _this.setAnimation = function(animation) {
-        _this.body.addClass(animation);
-    }
-    _this.removeAnimation = function(animation) {
-        _this.body.removeClass(animation);
-    }
 }

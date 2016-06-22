@@ -4,7 +4,7 @@ var ScrollText = function(message, width, height, where, overflow, loop) {
     _this.width = parseInt(width);
     _this.height = parseInt(height);
     _this.where = where;
-    _this.message = new Alphabet(message);
+    _this.message = new Alphabet(message + '--');
     _this.currentCol = _this.width - 1;
     _this.idleCurrentCol = 0;
     _this.idleCommand = 0x14;
@@ -18,8 +18,7 @@ var ScrollText = function(message, width, height, where, overflow, loop) {
                 letter.forEach(function(line, lineIndex) {
                     line.forEach(function(dot, dotIndex) {
                         var x = _this.currentCol + dotIndex + shift,
-                            y = lineIndex,
-                            bit;
+                            y = lineIndex;
                         [_this.where[0], _this.where[2]].forEach(function(wall, wallIndex) {
                             wall.motors.forEach(function(motor) {
                                 if (motor.x == (x + wall.offset) && motor.y == y) {
@@ -85,27 +84,23 @@ var ScrollText = function(message, width, height, where, overflow, loop) {
                 shift += letter[0].length;
             });
         }
-    //general finish
+        //general finish
     _this.finish = function() {
-            _this.where.forEach(function(wall, wallIndex) {
-                wall.motors.forEach(function(motor) {
-                    motor.sendCommand(0x14);
-                });
-                _this.running = false;
-                console.info(_this.name, _this.message, 'FINISHED (waiting last command)');
-            });
-        }
-        //animated behavior
+        _this.resetIdle();
+        _this.idle();
+        console.info(_this.name, _this.message, 'FINISHED (waiting last command)');
+    }
+    //animated behavior
     _this.step4 = function() {
         _this.currentCol += 1
         _this.moveLetters();
-        // if (_this.loop) {
-        //     var steps = 20; // 1 step is 9deg // 3000 is an animation delay after roration
-        //     setTimeout(_this.step2, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 3000);
-        // }
-        _this.idleCommand = 0x14;
-        _this.idleCurrentCol = 0;
-        _this.idle();
+        if (_this.loop) {
+            _this.currentCol -= 1;
+            var steps = 20; // 1 step is 9deg // 3000 is an animation delay after roration
+            setTimeout(_this.step2, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 6000);
+        } else {
+            _this.finish();
+        }
     }
     _this.step3 = function() {
         [_this.where[0], _this.where[2]].forEach(function(wall, wallIndex) {
@@ -128,8 +123,16 @@ var ScrollText = function(message, width, height, where, overflow, loop) {
         });
         var steps = 20; // 1 step is 9deg // 3000 is an animation delay after roration
         setTimeout(_this.step3, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 3000);
-        _this.idleCommand = 0x1E;
+        _this.resetIdle();
         _this.idle();
+    }
+    _this.resetIdle = function() {
+        _this.idleCurrentCol = 0;
+        if (_this.idleCommand == 0x1E) {
+            _this.idleCommand = 0x14;
+        } else {
+            _this.idleCommand = 0x1E;
+        }
     }
     _this.idle = function() {
         if (_this.idleCurrentCol < 17) {
@@ -137,6 +140,7 @@ var ScrollText = function(message, width, height, where, overflow, loop) {
                 wall.motors.forEach(function(motor) {
                     var y = wall.name == 'top' ? (33 - _this.idleCurrentCol) : _this.idleCurrentCol;
                     if (motor.y == y) {
+                        console.debug('CURRENT MOTOR COMMAND', motor.command);
                         motor.sendCommand(_this.idleCommand);
                     }
                 });
@@ -172,7 +176,7 @@ var ScrollText = function(message, width, height, where, overflow, loop) {
         if (!_this.running) {
             _this.draw();
         } else {
-            console.warn(_this.name, _this.message, 'already RUNNING');
+            console.debug(_this.name, _this.message, 'already RUNNING');
         }
     }
 }
