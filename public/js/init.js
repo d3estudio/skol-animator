@@ -17,28 +17,3 @@ roof.init();
 leftWall.init();
 frontWall.init();
 rightWall.init();
-
-//menu controllers
-var ContextMenu = function() {
-    var _this = this;
-    this.message = 'SKOL';
-    this.continuous = false;
-    this.loop = false;
-    this.START = function() {
-        if (_this.message.length > 0) {
-            var scroll = new ScrollText(_this.message, 13, 5, [rightWall, frontWall, leftWall, roof], _this.continuous, _this.loop);
-            scroll.init();
-        } else {
-            window.alert('Type a message!');
-        }
-    };
-};
-var options = new ContextMenu();
-var gui = new dat.GUI();
-
-var scrollText = gui.addFolder('Scroll Text');
-scrollText.add(options, 'message');
-scrollText.add(options, 'continuous');
-scrollText.add(options, 'loop');
-scrollText.add(options, 'START');
-scrollText.open();

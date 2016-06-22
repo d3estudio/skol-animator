@@ -132,8 +132,6 @@ var ScrollText = function(message, width, height, where, overflow, loop) {
         _this.idle();
     }
     _this.idle = function() {
-        //0x1E
-        console.debug(_this.idleCurrentCol);
         if (_this.idleCurrentCol < 17) {
             [_this.where[1], _this.where[3]].forEach(function(wall, wallIndex) {
                 wall.motors.forEach(function(motor) {
