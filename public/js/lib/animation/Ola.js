@@ -40,7 +40,7 @@ var Ola = function(type, width, where, loop) {
                     });
                 }
                 _this.currentColErase--;
-                var steps = 5; // 1 step is 9deg // 3000 is an animation delay after roration
+                var steps = 5; // 1 step is 9deg
                 setTimeout(_this.eraseWave, (_this.where[0].motors[0].getFPS() * steps) + 10);
             } else {
                 if (_this.loop) {
@@ -48,7 +48,7 @@ var Ola = function(type, width, where, loop) {
                     _this.currentColErase = _this.width + 3;
                     _this.wave();
                 } else {
-                    console.info(_this.name, _this.message, 'FINISHED (waiting last command)');
+                    console.info(_this.name, 'FINISHED (waiting last command)');
                 }
             }
         } else {
@@ -84,15 +84,16 @@ var Ola = function(type, width, where, loop) {
                     });
                 }
                 _this.currentColErase--;
-                var steps = 5; // 1 step is 9deg // 3000 is an animation delay after roration
+                var steps = 5; // 1 step is 9deg
                 setTimeout(_this.eraseWave, (_this.where[0].motors[0].getFPS() * steps) + 10);
             } else {
                 if (_this.loop) {
                     _this.currentCol = _this.width + 3;
                     _this.currentColErase = _this.width + 3;
-                    _this.wave();
+                    var steps = 1100;
+                    setTimeout(_this.wave(), (_this.where[0].motors[0].getFPS() * steps) + 10);
                 } else {
-                    console.info(_this.name, _this.message, 'FINISHED (waiting last command)');
+                    console.info(_this.name, 'FINISHED (waiting last command)');
                 }
             }
         }
@@ -134,7 +135,7 @@ var Ola = function(type, width, where, loop) {
                     });
                 }
                 _this.currentCol--;
-                var steps = 5; // 1 step is 9deg // 3000 is an animation delay after roration
+                var steps = 5; // 1 step is 9deg
                 setTimeout(_this.wave, (_this.where[0].motors[0].getFPS() * steps) + 10);
             }
         } else {
@@ -142,14 +143,14 @@ var Ola = function(type, width, where, loop) {
                 _this.where[0].motors.forEach(function(motor) {
                     var x = _this.currentCol + _this.where[0].offset;
                     if (motor.x == x) {
-                        motor.sendCommand(0xF0);
+                        motor.sendCommand(0xE4);
                     }
                 });
 
                 _this.where[3].motors.forEach(function(motor) {
                     var y = 17 + ((_this.currentCol - 16) * - 1);
                     if (motor.y == y) {
-                        motor.sendCommand(0xF0);
+                        motor.sendCommand(0xE4);
                     }
                 });
 
@@ -157,24 +158,20 @@ var Ola = function(type, width, where, loop) {
                     _this.where[1].motors.forEach(function(motor) {
                         var x = _this.currentCol + _this.where[1].width + _this.where[1].offset;
                         if (motor.x == x) {
-                            motor.sendCommand(0xF0);
+                            motor.sendCommand(0xE4);
                         }
                     });
-                }
-                if (_this.currentCol == -6) {
-                    _this.eraseWave();
                 }
                 if (_this.currentCol < -6) {
                     _this.where[2].motors.forEach(function(motor) {
                         var x = _this.currentCol + _this.where[2].width + _this.where[2].offset - 10;
                         if (motor.x == x) {
-                            motor.sendCommand(0xF0);
+                            motor.sendCommand(0xE4);
                         }
                     });
                 }
                 _this.currentCol--;
-                console.debug('COL', _this.currentCol);
-                var steps = 5; // 1 step is 9deg // 3000 is an animation delay after roration
+                var steps = 10; // 1 step is 9deg
                 setTimeout(_this.wave, (_this.where[0].motors[0].getFPS() * steps) + 10);
             }
         }
@@ -182,8 +179,12 @@ var Ola = function(type, width, where, loop) {
     _this.init = function() {
         if (!_this.running) {
             _this.wave();
+            var steps = 1100;
+            setTimeout(function() {
+                _this.eraseWave();
+            }, (_this.where[0].motors[0].getFPS() * steps) + 10);
         } else {
-            console.warn(_this.name, _this.message, 'already RUNNING');
+            console.warn(_this.name, 'already RUNNING');
         }
     }
 }
