@@ -1,23 +1,7 @@
-//menu controllers
-var ContextMenu = function() {
-    var _this = this;
-    this.message = 'SKOL';
-    this.continuous = false;
-    this.START = function() {
-        var scroll = new ScrollText(_this.message, 13, 5, [leftWall, rightWall], _this.continuous);
-        scroll.init();
-    };
-};
-var options = new ContextMenu();
-var gui = new dat.GUI();
-gui.add(options, 'message');
-gui.add(options, 'continuous');
-gui.add(options, 'START');
-
 //3D ambient
 var ambient = new Ambient(document.body, {
     x: 750*-1,
-    y: 375,
+    y: 375*2,
     z: -1200,
     distance: 45
 }, window.innerWidth, window.innerHeight);
@@ -33,3 +17,28 @@ roof.init();
 leftWall.init();
 frontWall.init();
 rightWall.init();
+
+//menu controllers
+var ContextMenu = function() {
+    var _this = this;
+    this.message = 'SKOL';
+    this.continuous = false;
+    this.loop = false;
+    this.START = function() {
+        if (_this.message.length > 0) {
+            var scroll = new ScrollText(_this.message, 13, 5, [rightWall, frontWall, leftWall, roof], _this.continuous, _this.loop);
+            scroll.init();
+        } else {
+            window.alert('Type a message!');
+        }
+    };
+};
+var options = new ContextMenu();
+var gui = new dat.GUI();
+
+var scrollText = gui.addFolder('Scroll Text');
+scrollText.add(options, 'message');
+scrollText.add(options, 'continuous');
+scrollText.add(options, 'loop');
+scrollText.add(options, 'START');
+scrollText.open();
