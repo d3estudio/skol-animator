@@ -1,6 +1,9 @@
 body {
     overflow: hidden;
 }
+select{
+    color: #000000;
+}
 .dg.ac{
     z-index: 999 !important;
 }

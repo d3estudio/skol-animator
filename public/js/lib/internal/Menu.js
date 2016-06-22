@@ -17,12 +17,12 @@ var ContextMenuScrollText = function() {
 };
 var optionsScrollText = new ContextMenuScrollText();
 
-var scrollText = gui.addFolder('Scroll Text');
-scrollText.add(optionsScrollText, 'message');
-scrollText.add(optionsScrollText, 'continuous');
-scrollText.add(optionsScrollText, 'loop');
-scrollText.add(optionsScrollText, 'START');
-scrollText.open();
+var scrollTextMenu = gui.addFolder('Scroll Text');
+scrollTextMenu.add(optionsScrollText, 'message');
+scrollTextMenu.add(optionsScrollText, 'continuous');
+scrollTextMenu.add(optionsScrollText, 'loop');
+scrollTextMenu.add(optionsScrollText, 'START');
+scrollTextMenu.open();
 
 //SCORE BOARD
 var ContextMenuScoreBoard = function() {
@@ -39,7 +39,7 @@ var ContextMenuScoreBoard = function() {
                 score1: _this.score1,
                 country2: _this.country2,
                 score2: _this.score2
-            }, 13, 5, [rightWall, frontWall, leftWall, roof],_this.loop);
+            }, [rightWall, frontWall, leftWall, roof],_this.loop);
             scroll.init();
         } else {
             window.alert('We need two countries and two scores!');
@@ -48,11 +48,29 @@ var ContextMenuScoreBoard = function() {
 };
 var optionsScoreBoard = new ContextMenuScoreBoard();
 
-var scoreBoard = gui.addFolder('Score Board');
-scoreBoard.add(optionsScoreBoard, 'country1');
-scoreBoard.add(optionsScoreBoard, 'score1');
-scoreBoard.add(optionsScoreBoard, 'country2');
-scoreBoard.add(optionsScoreBoard, 'score2');
-scoreBoard.add(optionsScoreBoard, 'loop');
-scoreBoard.add(optionsScoreBoard, 'START');
-scoreBoard.open();
+var scoreBoardMenu = gui.addFolder('Score Board');
+scoreBoardMenu.add(optionsScoreBoard, 'country1');
+scoreBoardMenu.add(optionsScoreBoard, 'score1');
+scoreBoardMenu.add(optionsScoreBoard, 'country2');
+scoreBoardMenu.add(optionsScoreBoard, 'score2');
+scoreBoardMenu.add(optionsScoreBoard, 'loop');
+scoreBoardMenu.add(optionsScoreBoard, 'START');
+scoreBoardMenu.open();
+
+//OLA
+var ContextMenuOla = function() {
+    var _this = this;
+    this.type = 'little';
+    this.loop = false;
+    this.START = function() {
+        var ola = new Ola(_this.type, 13, [rightWall, frontWall, leftWall, roof], _this.loop);
+        ola.init();
+    };
+};
+var optionsOla = new ContextMenuOla();
+
+var olaMenu = gui.addFolder('Ola');
+olaMenu.add(optionsOla, 'type', [ 'little', 'full' ]);
+olaMenu.add(optionsOla, 'loop');
+olaMenu.add(optionsOla, 'START');
+olaMenu.open();

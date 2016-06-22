@@ -86,9 +86,12 @@ var ScrollText = function(message, width, height, where, overflow, loop) {
         }
         //general finish
     _this.finish = function() {
-        _this.resetIdle();
-        _this.idle();
-        console.info(_this.name, _this.message, 'FINISHED (waiting last command)');
+        _this.idleCurrentCol = 0;
+        _this.idleCommand = 0x14;
+        if (!_this.overflow) {
+            _this.idle();
+        }
+        console.warn(_this.name, 'FINISHED (waiting last command)');
     }
     //animated behavior
     _this.step4 = function() {
@@ -140,7 +143,6 @@ var ScrollText = function(message, width, height, where, overflow, loop) {
                 wall.motors.forEach(function(motor) {
                     var y = wall.name == 'top' ? (33 - _this.idleCurrentCol) : _this.idleCurrentCol;
                     if (motor.y == y) {
-                        console.debug('CURRENT MOTOR COMMAND', motor.command);
                         motor.sendCommand(_this.idleCommand);
                     }
                 });

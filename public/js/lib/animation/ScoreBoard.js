@@ -1,8 +1,6 @@
-var ScoreBoard = function(message, width, height, where, loop) {
+var ScoreBoard = function(message, where, loop) {
     var _this = this;
     _this.name = 'ScoreBoardAnimation';
-    _this.width = parseInt(width);
-    _this.height = parseInt(height);
     _this.where = where;
     _this.message = [
         new Alphabet(message.country1),
@@ -66,12 +64,14 @@ var ScoreBoard = function(message, width, height, where, loop) {
                         motor.sendCommand(0x14);
                     });
                 });
+                _this.running = false;
                 console.info(_this.name, _this.message, 'FINISHED (waiting last command)');
             }
         }
     }
     _this.init = function() {
         if (!_this.running) {
+            _this.running = true;
             _this.draw();
         } else {
             console.warn(_this.name, _this.message, 'already RUNNING');
