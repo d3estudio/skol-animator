@@ -22,7 +22,7 @@ scrollTextMenu.add(optionsScrollText, 'message');
 scrollTextMenu.add(optionsScrollText, 'continuous');
 scrollTextMenu.add(optionsScrollText, 'loop');
 scrollTextMenu.add(optionsScrollText, 'START');
-//scrollTextMenu.open();
+scrollTextMenu.open();
 
 //SCORE BOARD
 var ContextMenuScoreBoard = function() {
@@ -55,7 +55,7 @@ scoreBoardMenu.add(optionsScoreBoard, 'country2');
 scoreBoardMenu.add(optionsScoreBoard, 'score2');
 scoreBoardMenu.add(optionsScoreBoard, 'loop');
 scoreBoardMenu.add(optionsScoreBoard, 'START');
-//scoreBoardMenu.open();
+scoreBoardMenu.open();
 
 //OLA
 var ContextMenuOla = function() {
@@ -76,7 +76,7 @@ olaMenu.add(optionsOla, 'type', {
 });
 olaMenu.add(optionsOla, 'loop');
 olaMenu.add(optionsOla, 'START');
-//olaMenu.open();
+olaMenu.open();
 
 //IDLE
 var ContextMenuIdle = function() {
@@ -97,12 +97,12 @@ idleMenu.add(optionsIdle, 'type', {
 });
 idleMenu.add(optionsIdle, 'loop');
 idleMenu.add(optionsIdle, 'START');
-//idleMenu.open();
+idleMenu.open();
 
 //MUSIC
 var ContextMenuMusic = function() {
     var _this = this;
-    this.type = 'fast_boom';
+    this.type = 'very_fast_boom';
     this.loop = false;
     this.auto = false;
     this.START = function() {
@@ -118,7 +118,8 @@ var optionsMusic = new ContextMenuMusic();
 
 var idleMusic = gui.addFolder('MUSIC');
 idleMusic.add(optionsMusic, 'type', {
-    'Fastest (~135bpm)': 'fast_boom',
+    'TooFast (~166bpm)': 'very_fast_boom',
+    'Fastest (~120bpm)': 'fast_boom',
     'Slow (~65bpm)': 'boom',
     'Slower (~35bmp)': 'long_boom'
 });

@@ -16,10 +16,10 @@ function updateAnalysers(time) {
         magnitude += freqByteData[j];
     }
     magnitude = magnitude / multiplier;
-    if (magnitude > 40) {
+    if (magnitude > 35) {
         var music = new Music('fast_boom', 18, [rightWall, frontWall, leftWall, roof], true, false);
         music.init();
-        var steps = 6; // 1 step is 9deg
+        var steps = 10; // 1 step is 9deg
         setTimeout(updateAnalysers, (roof.motors[0].getFPS() * steps) + 10);
     } else {
         window.requestAnimationFrame(updateAnalysers);

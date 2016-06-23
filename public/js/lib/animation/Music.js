@@ -127,6 +127,10 @@ var Music = function(type, width, where, auto, loop) {
     }
     _this.init = function() {
         if (!_this.running) {
+            if (_this.type == 'very_fast_boom') {
+                _this.command = 0x16;
+                _this.boom();
+            }
             if (_this.type == 'fast_boom') {
                 _this.command = 0x19;
                 _this.boom();
