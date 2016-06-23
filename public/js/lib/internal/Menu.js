@@ -74,3 +74,21 @@ olaMenu.add(optionsOla, 'type', [ 'little', 'full' ]);
 olaMenu.add(optionsOla, 'loop');
 olaMenu.add(optionsOla, 'START');
 olaMenu.open();
+
+//OLA
+var ContextMenuIdle = function() {
+    var _this = this;
+    this.type = 'shuffle';
+    this.loop = false;
+    this.START = function() {
+        var idle = new Idle(_this.type, 18, [rightWall, frontWall, leftWall, roof], _this.loop);
+        idle.init();
+    };
+};
+var optionsIdle = new ContextMenuIdle();
+
+var idleMenu = gui.addFolder('IDLE');
+idleMenu.add(optionsIdle, 'type', [ 'shuffle', 'open' ]);
+idleMenu.add(optionsIdle, 'loop');
+idleMenu.add(optionsIdle, 'START');
+idleMenu.open();

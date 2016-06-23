@@ -48,7 +48,7 @@ var Ola = function(type, width, where, loop) {
                     _this.currentColErase = _this.width + 3;
                     _this.wave();
                 } else {
-                    console.info(_this.name, 'FINISHED (waiting last command)');
+                    console.debug(_this.name, 'FINISHED (waiting last command)');
                 }
             }
         } else {
@@ -93,7 +93,7 @@ var Ola = function(type, width, where, loop) {
                     var steps = 1100;
                     setTimeout(_this.wave(), (_this.where[0].motors[0].getFPS() * steps) + 10);
                 } else {
-                    console.info(_this.name, 'FINISHED (waiting last command)');
+                    console.debug(_this.name, 'FINISHED (waiting last command)');
                 }
             }
         }
