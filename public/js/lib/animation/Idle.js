@@ -55,7 +55,6 @@ var Idle = function(type, width, where, loop) {
             }
         } else {
             if (_this.currentCol > -6) {
-                console.debug(_this.currentCol);
                 _this.where[0].motors.forEach(function(motor) {
                     var x = _this.currentCol + _this.where[0].offset;
                     if (motor.x == x) {
@@ -112,7 +111,7 @@ var Idle = function(type, width, where, loop) {
                     var steps = 10; // 1 step is 9deg
                     setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps) + 10);
                 } else {
-                    console.debug(_this.name, 'FINISHED (waiting last command)');
+                    console.warn(_this.name, 'FINISHED (waiting last command)');
                 }
             }
         }

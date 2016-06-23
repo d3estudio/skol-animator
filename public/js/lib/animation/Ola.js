@@ -48,7 +48,8 @@ var Ola = function(type, width, where, loop) {
                     _this.currentColErase = _this.width + 3;
                     _this.wave();
                 } else {
-                    console.debug(_this.name, 'FINISHED (waiting last command)');
+                    _this.running = false;
+                    console.warn(_this.name, 'FINISHED (waiting last command)');
                 }
             }
         } else {
@@ -61,7 +62,7 @@ var Ola = function(type, width, where, loop) {
                 });
 
                 _this.where[3].motors.forEach(function(motor) {
-                    var y = 17 + ((_this.currentColErase - 16) * - 1);
+                    var y = 17 + ((_this.currentColErase - 16) * -1);
                     if (motor.y == y) {
                         motor.sendCommand(0x14);
                     }
@@ -93,7 +94,8 @@ var Ola = function(type, width, where, loop) {
                     var steps = 1100;
                     setTimeout(_this.wave(), (_this.where[0].motors[0].getFPS() * steps) + 10);
                 } else {
-                    console.debug(_this.name, 'FINISHED (waiting last command)');
+                    _this.running = false;
+                    console.warn(_this.name, 'FINISHED (waiting last command)');
                 }
             }
         }
@@ -109,7 +111,7 @@ var Ola = function(type, width, where, loop) {
                 });
 
                 _this.where[3].motors.forEach(function(motor) {
-                    var y = 17 + ((_this.currentCol - 16) * - 1);
+                    var y = 17 + ((_this.currentCol - 16) * -1);
                     if (motor.y == y) {
                         motor.sendCommand(0x3C);
                     }
@@ -148,7 +150,7 @@ var Ola = function(type, width, where, loop) {
                 });
 
                 _this.where[3].motors.forEach(function(motor) {
-                    var y = 17 + ((_this.currentCol - 16) * - 1);
+                    var y = 17 + ((_this.currentCol - 16) * -1);
                     if (motor.y == y) {
                         motor.sendCommand(0xE4);
                     }
@@ -180,6 +182,7 @@ var Ola = function(type, width, where, loop) {
         if (!_this.running) {
             _this.wave();
             var steps = 1100;
+            _this.running = true;
             setTimeout(function() {
                 _this.eraseWave();
             }, (_this.where[0].motors[0].getFPS() * steps) + 10);

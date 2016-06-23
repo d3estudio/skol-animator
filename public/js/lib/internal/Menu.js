@@ -39,7 +39,7 @@ var ContextMenuScoreBoard = function() {
                 score1: _this.score1,
                 country2: _this.country2,
                 score2: _this.score2
-            }, [rightWall, frontWall, leftWall, roof],_this.loop);
+            }, [rightWall, frontWall, leftWall, roof], _this.loop);
             scroll.init();
         } else {
             window.alert('We need two countries and two scores!');
@@ -70,12 +70,15 @@ var ContextMenuOla = function() {
 var optionsOla = new ContextMenuOla();
 
 var olaMenu = gui.addFolder('Ola');
-olaMenu.add(optionsOla, 'type', [ 'little', 'full' ]);
+olaMenu.add(optionsOla, 'type', {
+    '45º short': 'little',
+    '90º long': 'full'
+});
 olaMenu.add(optionsOla, 'loop');
 olaMenu.add(optionsOla, 'START');
 olaMenu.open();
 
-//OLA
+//IDLE
 var ContextMenuIdle = function() {
     var _this = this;
     this.type = 'shuffle';
@@ -88,7 +91,34 @@ var ContextMenuIdle = function() {
 var optionsIdle = new ContextMenuIdle();
 
 var idleMenu = gui.addFolder('IDLE');
-idleMenu.add(optionsIdle, 'type', [ 'shuffle', 'open' ]);
+idleMenu.add(optionsIdle, 'type', {
+    Randomized: 'shuffle',
+    Linear: 'open'
+});
 idleMenu.add(optionsIdle, 'loop');
 idleMenu.add(optionsIdle, 'START');
 idleMenu.open();
+
+//MUSIC
+var ContextMenuMusic = function() {
+    var _this = this;
+    this.type = 'fast_boom';
+    this.loop = false;
+    this.auto = false;
+    this.START = function() {
+        var music = new Music(_this.type, 18, [rightWall, frontWall, leftWall, roof], _this.auto, _this.loop);
+        music.init();
+    };
+};
+var optionsMusic = new ContextMenuMusic();
+
+var idleMusic = gui.addFolder('MUSIC');
+idleMusic.add(optionsMusic, 'type', {
+    'Fastest (~135bpm)': 'fast_boom',
+    'Slow (~65bpm)': 'boom',
+    'Slower (~35bmp)': 'long_boom'
+});
+idleMusic.add(optionsMusic, 'loop');
+idleMusic.add(optionsMusic, 'auto');
+idleMusic.add(optionsMusic, 'START');
+idleMusic.open();
