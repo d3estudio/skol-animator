@@ -11,7 +11,6 @@ var Music = function(type, width, where, auto, loop) {
     _this.command = 0x1E;
 
     _this.boom = function() {
-        console.debug('BOOM');
         if (_this.currentCol < 22) {
             if (_this.currentCol < 5) {
                 _this.where[1].motors.forEach(function(motor) {

@@ -22,7 +22,7 @@ scrollTextMenu.add(optionsScrollText, 'message');
 scrollTextMenu.add(optionsScrollText, 'continuous');
 scrollTextMenu.add(optionsScrollText, 'loop');
 scrollTextMenu.add(optionsScrollText, 'START');
-scrollTextMenu.open();
+//scrollTextMenu.open();
 
 //SCORE BOARD
 var ContextMenuScoreBoard = function() {
@@ -55,7 +55,7 @@ scoreBoardMenu.add(optionsScoreBoard, 'country2');
 scoreBoardMenu.add(optionsScoreBoard, 'score2');
 scoreBoardMenu.add(optionsScoreBoard, 'loop');
 scoreBoardMenu.add(optionsScoreBoard, 'START');
-scoreBoardMenu.open();
+//scoreBoardMenu.open();
 
 //OLA
 var ContextMenuOla = function() {
@@ -76,7 +76,7 @@ olaMenu.add(optionsOla, 'type', {
 });
 olaMenu.add(optionsOla, 'loop');
 olaMenu.add(optionsOla, 'START');
-olaMenu.open();
+//olaMenu.open();
 
 //IDLE
 var ContextMenuIdle = function() {
@@ -97,7 +97,7 @@ idleMenu.add(optionsIdle, 'type', {
 });
 idleMenu.add(optionsIdle, 'loop');
 idleMenu.add(optionsIdle, 'START');
-idleMenu.open();
+//idleMenu.open();
 
 //MUSIC
 var ContextMenuMusic = function() {
@@ -106,8 +106,12 @@ var ContextMenuMusic = function() {
     this.loop = false;
     this.auto = false;
     this.START = function() {
-        var music = new Music(_this.type, 18, [rightWall, frontWall, leftWall, roof], _this.auto, _this.loop);
-        music.init();
+        if (_this.auto) {
+            initAudio();
+        } else {
+            var music = new Music(_this.type, 18, [rightWall, frontWall, leftWall, roof], _this.auto, _this.loop);
+            music.init();
+        }
     };
 };
 var optionsMusic = new ContextMenuMusic();
