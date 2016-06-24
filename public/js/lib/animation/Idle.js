@@ -53,7 +53,7 @@ var Idle = function(type, width, where, loop) {
                     console.warn(_this.name, 'FINISHED (waiting last command)');
                 }
             }
-        } else {
+        } else if (_this.type == 'open') {
             if (_this.currentCol > -6) {
                 _this.where[0].motors.forEach(function(motor) {
                     var x = _this.currentCol + _this.where[0].offset;
@@ -76,27 +76,27 @@ var Idle = function(type, width, where, loop) {
                 if (_this.currentCol < 0) {
                     _this.where[1].motors.forEach(function(motor) {
                         if (_this.currentCol == -1) {
-                            if (motor.x==0 || motor.x == 10 ||  motor.y == 0) {
+                            if (motor.x == 0 || motor.x == 10 || motor.y == 0) {
                                 motor.sendCommand(0x14);
                             }
                         }
                         if (_this.currentCol == -2) {
-                            if (motor.x==1 || motor.x == 9 ||  motor.y == 1) {
+                            if (motor.x == 1 || motor.x == 9 || motor.y == 1) {
                                 motor.sendCommand(0x14);
                             }
                         }
                         if (_this.currentCol == -3) {
-                            if (motor.x==2 || motor.x == 8 ||  motor.y == 2) {
+                            if (motor.x == 2 || motor.x == 8 || motor.y == 2) {
                                 motor.sendCommand(0x14);
                             }
                         }
                         if (_this.currentCol == -4) {
-                            if (motor.x==3 || motor.x == 7 ||  motor.y == 3) {
+                            if (motor.x == 3 || motor.x == 7 || motor.y == 3) {
                                 motor.sendCommand(0x14);
                             }
                         }
                         if (_this.currentCol == -5) {
-                            if (motor.x==4 || motor.x == 6 ||  motor.y == 4) {
+                            if (motor.x == 4 || motor.x == 6 || motor.y == 4) {
                                 motor.sendCommand(0x14);
                             }
                         }
@@ -110,6 +110,41 @@ var Idle = function(type, width, where, loop) {
                     _this.currentCol = width;
                     var steps = 10; // 1 step is 9deg
                     setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps) + 10);
+                } else {
+                    console.warn(_this.name, 'FINISHED (waiting last command)');
+                }
+            }
+        } else if (_this.type == 'breathing') {
+            if (_this.currentCol > -1) {
+                _this.where.forEach(function(wall) {
+                    wall.motors.forEach(function(motor) {
+                        //start with top wall
+                        var baseX = 5,
+                            baseY = 28;
+                        if (wall.name == 'front') {
+                            baseX = 5;
+                            baseY = 2;
+                        } else if (wall.name == 'right') {
+                            baseX = 5;
+                            baseY = 2;
+                        } else if (wall.name == 'left') {
+                            baseX = 28;
+                            baseY = 2;
+                        }
+                        if ((motor.x <= (baseX - _this.currentCol) || motor.x >= (baseX + _this.currentCol)) || (motor.y <= (baseY - _this.currentCol) || motor.y >= (baseY + _this.currentCol))) {
+                            motor.sendCommand(0x14);
+                        }
+                    });
+                });
+                console.debug(_this.currentCol);
+                _this.currentCol--;
+                var steps = 5; // 1 step is 9deg
+                setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 10);
+            } else {
+                if (_this.loop) {
+                    _this.currentCol = 0;
+                    var steps = 10; // 1 step is 9deg
+                    setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps) + 2010);
                 } else {
                     console.warn(_this.name, 'FINISHED (waiting last command)');
                 }
@@ -142,7 +177,7 @@ var Idle = function(type, width, where, loop) {
                 _this.reset();
                 _this.idleBack();
             }
-        } else {
+        } else if (_this.type == 'open') {
             _this.where.forEach(function(wall) {
                 wall.motors.forEach(function(motor) {
                     motor.sendCommand(0x1E);
@@ -150,11 +185,43 @@ var Idle = function(type, width, where, loop) {
             });
             var steps = 10; // 1 step is 9deg
             setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 10);
+        } else if (_this.type == 'breathing') {
+            if (_this.currentCol < 12) {
+                _this.where.forEach(function(wall) {
+                    wall.motors.forEach(function(motor) {
+                        //start with top wall
+                        var baseX = 5,
+                            baseY = 28;
+                        if (wall.name == 'front') {
+                            baseX = 5;
+                            baseY = 2;
+                        } else if (wall.name == 'right') {
+                            baseX = 5;
+                            baseY = 2;
+                        } else if (wall.name == 'left') {
+                            baseX = 28;
+                            baseY = 2;
+                        }
+                        if (motor.x >= (baseX - _this.currentCol) && motor.x <= (baseX + _this.currentCol) && motor.y >= (baseY - _this.currentCol) && motor.y <= (baseY + _this.currentCol)) {
+                            motor.sendCommand(0x19);
+                        }
+                    });
+                });
+                _this.currentCol++;
+                var steps = 5; // 1 step is 9deg
+                setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps) + 10);
+            } else {
+                var steps = 10; // 1 step is 9deg - 1000 is a delay
+                setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 1000);
+            }
         }
     }
     _this.init = function() {
         if (!_this.running) {
             _this.reset();
+            if (_this.type == 'breathing') {
+                _this.currentCol = 0;
+            }
             _this.idle();
         } else {
             console.warn(_this.name, 'already RUNNING');

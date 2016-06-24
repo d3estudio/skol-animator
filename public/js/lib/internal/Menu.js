@@ -93,7 +93,8 @@ var optionsIdle = new ContextMenuIdle();
 var idleMenu = gui.addFolder('IDLE');
 idleMenu.add(optionsIdle, 'type', {
     Randomized: 'shuffle',
-    Linear: 'open'
+    Linear: 'open',
+    Breathing: 'breathing'
 });
 idleMenu.add(optionsIdle, 'loop');
 idleMenu.add(optionsIdle, 'START');
