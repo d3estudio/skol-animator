@@ -17,6 +17,14 @@ var Idle = function(type, width, where, loop) {
     _this.loop = loop;
     _this.command = 0x3C;
     _this.currentCol = width;
+    _this.spiralTimer = 250;
+    _this.spiralCounter = 0;
+
+    _this.spiralXR = 5;
+    _this.spiralYR = 2;
+    _this.spiralXL = 28;
+    _this.spiralYL = 2;
+
     _this.reset = function() {
         _this.right = shuffle(where[0].motors.slice(0));
         _this.front = shuffle(where[1].motors.slice(0));
@@ -149,6 +157,71 @@ var Idle = function(type, width, where, loop) {
                     console.warn(_this.name, 'FINISHED (waiting last command)');
                 }
             }
+        } else if (_this.type == 'spiral') {
+            if (_this.spiralCounter > -1) {
+                [_this.where[0], _this.where[1], _this.where[2]].forEach(function(wall) {
+                    if (wall.name == 'right' || wall.name == 'front') {
+                        wall.motors.forEach(function(motor) {
+                            if (motor.x == _this.spiralXR && motor.y == _this.spiralYR) {
+                                motor.sendCommand(0x14);
+                            }
+                            if (motor.x == (10 - _this.spiralXR) && motor.y == (4 - _this.spiralYR)) {
+                                motor.sendCommand(0x14);
+                            }
+                            if ((10 - _this.spiralXR) == 10 && motor.x > 10 && motor.y == (4 - _this.spiralYR)) {
+                                motor.sendCommand(0x14);
+                            }
+                        });
+                    } else if (wall.name == 'left') {
+                        wall.motors.forEach(function(motor) {
+                            console.debug(motor.x, _this.spiralXL);
+                            if (motor.x == _this.spiralXL && motor.y == _this.spiralYL) {
+                                motor.sendCommand(0x14);
+                            }
+                            if (motor.x == (56 - _this.spiralXL) && motor.y == (4 - _this.spiralYL)) {
+                                motor.sendCommand(0x14);
+                            }
+                            if (_this.spiralXL == 23 && motor.x < 23 && motor.y == _this.spiralYL) {
+                                motor.sendCommand(0x14);
+                            }
+                        });
+                    }
+                });
+                if (_this.spiralCounter > 24) {
+                    _this.spiralYR++;
+                    _this.spiralYL++;
+                } else if (_this.spiralCounter > 15) {
+                    _this.spiralXR++;
+                    _this.spiralXL++;
+                } else if (_this.spiralCounter > 12) {
+                    _this.spiralYR--;
+                    _this.spiralYL--;
+                } else if (_this.spiralCounter > 5) {
+                    _this.spiralXR--;
+                    _this.spiralXL--;
+                } else if (_this.spiralCounter > 4) {
+                    _this.spiralYR++;
+                    _this.spiralYL++;
+                } else if (_this.spiralCounter > -1) {
+                    _this.spiralXR++;
+                    _this.spiralXL++;
+                }
+                _this.spiralCounter--;
+                _this.spiralTimer = _this.spiralTimer * 1.1111111111111112;
+                setTimeout(_this.idleBack, _this.spiralTimer);
+            } else {
+                if (_this.loop) {
+                    _this.spiralCounter = 0;
+                    _this.spiralTimer = 250;
+                    _this.spiralXR = 5;
+                    _this.spiralYR = 2;
+                    _this.spiralXL = 28;
+                    _this.spiralYL = 2;
+                    setTimeout(_this.idle, 2000);
+                } else {
+                    console.debug(_this.name, 'FINISHED (waiting last command)');
+                }
+            }
         }
     }
     _this.idle = function() {
@@ -211,8 +284,121 @@ var Idle = function(type, width, where, loop) {
                 var steps = 5; // 1 step is 9deg
                 setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps) + 10);
             } else {
-                var steps = 10; // 1 step is 9deg - 1000 is a delay
-                setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 1000);
+                var steps = 2; // 1 step is 9deg - 1000 is a delay
+                setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps));
+            }
+        } else if (_this.type == 'live') {
+            //[0x19, 0x16]
+            if ((_this.right.length + _this.front.length + _this.left.length + _this.roof.length) > 0) {
+                var command = [0x19];
+                if (_this.right[0] && !_this.right[0].locked) {
+                    _this.right[0].sendCommand(command[Math.floor(Math.random() * command.length)]);
+                    var motor_right = _this.right[0];
+                    _this.right.shift();
+                    setTimeout(function() {
+                        motor_right.sendCommand(0x14);
+                    }, _this.where[0].motors[0].getFPS() + 1000);
+                }
+                if (_this.front[0] && !_this.front[0].locked) {
+                    _this.front[0].sendCommand(command[Math.floor(Math.random() * command.length)]);
+                    var motor_front = _this.front[0];
+                    _this.front.shift();
+                    setTimeout(function() {
+                        motor_front.sendCommand(0x14);
+                    }, _this.where[0].motors[0].getFPS() + 1000);
+                }
+                if (_this.left[0] && !_this.left[0].locked) {
+                    _this.left[0].sendCommand(command[Math.floor(Math.random() * command.length)]);
+                    var motor_left = _this.left[0];
+                    _this.left.shift();
+                    setTimeout(function() {
+                        motor_left.sendCommand(0x14);
+                    }, _this.where[0].motors[0].getFPS() + 1000);
+                }
+                if (_this.roof[0] && !_this.roof[0].locked) {
+                    _this.roof[0].sendCommand(command[Math.floor(Math.random() * command.length)]);
+                    var motor_roof = _this.roof[0];
+                    _this.roof.shift();
+                    setTimeout(function() {
+                        motor_roof.sendCommand(0x14);
+                    }, _this.where[0].motors[0].getFPS() + 1000);
+                }
+                if (_this.roof[0] && !_this.roof[0].locked) {
+                    _this.roof[0].sendCommand(command[Math.floor(Math.random() * command.length)]);
+                    var motor_roof_2 = _this.roof[0];
+                    _this.roof.shift();
+                    setTimeout(function() {
+                        motor_roof_2.sendCommand(0x14);
+                    }, _this.where[0].motors[0].getFPS() + 1000);
+                }
+                var steps = 1; // 1 step is 9deg
+                setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps) + 250);
+            } else {
+                if (_this.loop) {
+                    _this.reset();
+                    _this.idle();
+                } else {
+                    console.warn(_this.name, 'FINISHED (waiting last command)');
+                }
+            }
+        } else if (_this.type == 'spiral') {
+            if (_this.spiralCounter < 28) {
+                [_this.where[0], _this.where[1], _this.where[2]].forEach(function(wall) {
+                    if (wall.name == 'right' || wall.name == 'front') {
+                        wall.motors.forEach(function(motor) {
+                            if (motor.x == _this.spiralXR && motor.y == _this.spiralYR) {
+                                motor.sendCommand(0x19);
+                            }
+                            if (motor.x == (10 - _this.spiralXR) && motor.y == (4 - _this.spiralYR)) {
+                                motor.sendCommand(0x19);
+                            }
+                            if ((10 - _this.spiralXR) == 10 && motor.x > 10 && motor.y == (4 - _this.spiralYR)) {
+                                motor.sendCommand(0x19);
+                            }
+                        });
+                    } else if (wall.name == 'left') {
+                        wall.motors.forEach(function(motor) {
+                            if (motor.x == _this.spiralXL && motor.y == _this.spiralYL) {
+                                motor.sendCommand(0x19);
+                            }
+                            if (motor.x == (56 - _this.spiralXL) && motor.y == (4 - _this.spiralYL)) {
+                                motor.sendCommand(0x19);
+                            }
+                            if (_this.spiralXL == 23 && motor.x < 23 && motor.y == _this.spiralYL) {
+                                motor.sendCommand(0x19);
+                            }
+                        });
+                    }
+                });
+                if (_this.spiralCounter < 3) {
+                    _this.spiralXR--;
+                    _this.spiralXL--;
+                } else if (_this.spiralCounter < 4) {
+                    _this.spiralYR--;
+                    _this.spiralYL--;
+                } else if (_this.spiralCounter < 11) {
+                    _this.spiralXR++;
+                    _this.spiralXL++;
+                } else if (_this.spiralCounter < 14) {
+                    _this.spiralYR++;
+                    _this.spiralYL++;
+                } else if (_this.spiralCounter < 23) {
+                    _this.spiralXR--;
+                    _this.spiralXL--;
+                } else if (_this.spiralCounter < 27) {
+                    _this.spiralYR--;
+                    _this.spiralYL--;
+                }
+                _this.spiralCounter++;
+                _this.spiralTimer = _this.spiralTimer * 0.9;
+                setTimeout(_this.idle, _this.spiralTimer);
+            } else {
+                _this.spiralYR = 0;
+                _this.spiralXR = 0;
+                _this.spiralYL = 0;
+                _this.spiralXL = 23;
+                var steps = 10;
+                setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 10);
             }
         }
     }

@@ -22,7 +22,7 @@ scrollTextMenu.add(optionsScrollText, 'message');
 scrollTextMenu.add(optionsScrollText, 'continuous');
 scrollTextMenu.add(optionsScrollText, 'loop');
 scrollTextMenu.add(optionsScrollText, 'START');
-scrollTextMenu.open();
+//scrollTextMenu.open();
 
 //SCORE BOARD
 var ContextMenuScoreBoard = function() {
@@ -55,7 +55,7 @@ scoreBoardMenu.add(optionsScoreBoard, 'country2');
 scoreBoardMenu.add(optionsScoreBoard, 'score2');
 scoreBoardMenu.add(optionsScoreBoard, 'loop');
 scoreBoardMenu.add(optionsScoreBoard, 'START');
-scoreBoardMenu.open();
+//scoreBoardMenu.open();
 
 //OLA
 var ContextMenuOla = function() {
@@ -76,12 +76,12 @@ olaMenu.add(optionsOla, 'type', {
 });
 olaMenu.add(optionsOla, 'loop');
 olaMenu.add(optionsOla, 'START');
-olaMenu.open();
+//olaMenu.open();
 
 //IDLE
 var ContextMenuIdle = function() {
     var _this = this;
-    this.type = 'shuffle';
+    this.type = 'spiral';
     this.loop = false;
     this.START = function() {
         var idle = new Idle(_this.type, 18, [rightWall, frontWall, leftWall, roof], _this.loop);
@@ -93,8 +93,10 @@ var optionsIdle = new ContextMenuIdle();
 var idleMenu = gui.addFolder('IDLE');
 idleMenu.add(optionsIdle, 'type', {
     Randomized: 'shuffle',
+    Live: 'live',
     Linear: 'open',
-    Breathing: 'breathing'
+    Breathing: 'breathing',
+    Spiral: 'spiral',
 });
 idleMenu.add(optionsIdle, 'loop');
 idleMenu.add(optionsIdle, 'START');
@@ -127,4 +129,4 @@ idleMusic.add(optionsMusic, 'type', {
 idleMusic.add(optionsMusic, 'loop');
 idleMusic.add(optionsMusic, 'auto');
 idleMusic.add(optionsMusic, 'START');
-idleMusic.open();
+//idleMusic.open();
