@@ -1,3 +1,5 @@
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
 var DEBUG = false;
 
 if (!DEBUG) {

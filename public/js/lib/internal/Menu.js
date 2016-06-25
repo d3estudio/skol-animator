@@ -100,19 +100,27 @@ idleMenu.add(optionsIdle, 'type', {
 });
 idleMenu.add(optionsIdle, 'loop');
 idleMenu.add(optionsIdle, 'START');
-idleMenu.open();
+//idleMenu.open();
 
 //MUSIC
+var realTimeMusic = null;
+var realTimeAudio = new RealTimeAudio(13);
+realTimeAudio.getSample = function(data) {
+    if (realTimeMusic.type == 'bpm') {
+        realTimeMusic.process(realTimeAudio.bpm);
+    } else {
+        realTimeMusic.process(data);
+    }
+}
 var ContextMenuMusic = function() {
     var _this = this;
-    this.type = 'very_fast_boom';
-    this.loop = false;
-    this.auto = false;
+    this.type = 'equalizer';
     this.START = function() {
-        if (_this.auto) {
-            initAudio();
+        if (_this.type == 'bpm' || _this.type == 'equalizer') {
+            realTimeMusic = new Music(_this.type, 13, [rightWall, frontWall, leftWall, roof])
+            realTimeAudio.init();
         } else {
-            var music = new Music(_this.type, 18, [rightWall, frontWall, leftWall, roof], _this.auto, _this.loop);
+            var music = new Music(_this.type, 18, [rightWall, frontWall, leftWall, roof]);
             music.init();
         }
     };
@@ -121,12 +129,13 @@ var optionsMusic = new ContextMenuMusic();
 
 var idleMusic = gui.addFolder('MUSIC');
 idleMusic.add(optionsMusic, 'type', {
+    'BPM': 'bpm',
+    'Equalizer': 'equalizer',
+    '---------': '',
     'TooFast (~166bpm)': 'very_fast_boom',
     'Fastest (~120bpm)': 'fast_boom',
     'Slow (~65bpm)': 'boom',
-    'Slower (~35bmp)': 'long_boom'
+    'Slower (~35bmp)': 'long_boom',
 });
-idleMusic.add(optionsMusic, 'loop');
-idleMusic.add(optionsMusic, 'auto');
 idleMusic.add(optionsMusic, 'START');
-//idleMusic.open();
+idleMusic.open();

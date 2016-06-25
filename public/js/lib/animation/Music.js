@@ -1,4 +1,4 @@
-var Music = function(type, width, where, auto, loop) {
+var Music = function(type, width, where) {
     var _this = this;
     _this.name = 'OlaAnimation';
     _this.type = type;
@@ -6,16 +6,15 @@ var Music = function(type, width, where, auto, loop) {
     _this.currentCol = 0;
     _this.where = where;
     _this.running = false;
-    _this.auto = auto;
-    _this.loop = loop;
     _this.command = 0x1E;
+    _this.maxPeak = 0;
 
     _this.boom = function() {
         if (_this.currentCol < 22) {
             if (_this.currentCol < 5) {
                 _this.where[1].motors.forEach(function(motor) {
                     if (_this.currentCol == 0) {
-                        if (motor.x>3 && motor.x < 7 && motor.y == 4) {
+                        if (motor.x > 3 && motor.x < 7 && motor.y == 4) {
                             if (motor.command == 0x14) {
                                 motor.sendCommand(_this.command);
                             } else {
@@ -116,14 +115,35 @@ var Music = function(type, width, where, auto, loop) {
             var steps = 5; // 1 step is 9deg
             setTimeout(_this.boom, (_this.where[0].motors[0].getFPS() * steps) + 10);
         } else {
-            if (_this.loop) {
-                _this.currentCol = 0;
-                var steps = 20; // 1 step is 9deg
-                setTimeout(_this.boom, (_this.where[0].motors[0].getFPS() * steps) + 10);
-            } else {
-                console.warn(_this.name, 'FINISHED (waiting last command)');
+            console.warn(_this.name, 'FINISHED (waiting last command)');
+        }
+    }
+    _this.bpm = function(bpm) {
+        console.debug(bpm);
+    }
+    _this.equalizer = function(frequency) {
+        var currentMax = _this.arrayMax(frequency);
+        if (_this.maxPeak < currentMax) {
+            _this.maxPeak = currentMax;
+        }
+        console.debug(_this.maxPeak, frequency);
+    }
+    _this.process = function(data) {
+        if (data instanceof Array) {
+            _this.equalizer(data);
+        } else {
+            _this.bpm(data);
+        }
+    }
+    _this.arrayMax = function(arr) {
+        var len = arr.length,
+            max = -Infinity;
+        while (len--) {
+            if (arr[len] > max) {
+                max = arr[len];
             }
         }
+        return max;
     }
     _this.init = function() {
         if (!_this.running) {
