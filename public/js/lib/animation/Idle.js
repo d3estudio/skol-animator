@@ -144,7 +144,6 @@ var Idle = function(type, width, where, loop) {
                         }
                     });
                 });
-                console.debug(_this.currentCol);
                 _this.currentCol--;
                 var steps = 5; // 1 step is 9deg
                 setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 10);
@@ -174,7 +173,6 @@ var Idle = function(type, width, where, loop) {
                         });
                     } else if (wall.name == 'left') {
                         wall.motors.forEach(function(motor) {
-                            console.debug(motor.x, _this.spiralXL);
                             if (motor.x == _this.spiralXL && motor.y == _this.spiralYL) {
                                 motor.sendCommand(0x14);
                             }
