@@ -117,7 +117,7 @@ var ContextMenuMusic = function() {
     this.type = 'equalizer';
     this.START = function() {
         if (_this.type == 'bpm' || _this.type == 'equalizer') {
-            realTimeMusic = new Music(_this.type, 13, [rightWall, frontWall, leftWall, roof])
+            realTimeMusic = new Music(_this.type, 13, [rightWall, frontWall, leftWall])
             realTimeAudio.init();
         } else {
             var music = new Music(_this.type, 18, [rightWall, frontWall, leftWall, roof]);

@@ -122,14 +122,29 @@ var Music = function(type, width, where) {
         console.debug(bpm);
     }
     _this.equalizer = function(frequency) {
-        var currentMax = _this.arrayMax(frequency);
-        if (_this.maxPeak < currentMax) {
-            _this.maxPeak = currentMax;
-        }
-        console.debug(_this.maxPeak, frequency);
+        _this.where.forEach(function(wall) {
+            wall.motors.forEach(function(motor) {
+                frequency.forEach(function(freq, index) {
+                    if (motor.x == (index + wall.offset)) {
+                        var height = Math.floor(4 * freq / _this.maxPeak);
+                        if (motor.y >= (4 - height)) {
+                            if (!motor.locked) {
+                                motor.sendCommand(0x19);
+                            }
+                        } else {
+                            motor.sendCommand(0x14);
+                        }
+                    }
+                })
+            });
+        });
     }
     _this.process = function(data) {
         if (data instanceof Array) {
+            var currentMax = _this.arrayMax(data);
+            if (_this.maxPeak < currentMax) {
+                _this.maxPeak = currentMax;
+            }
             _this.equalizer(data);
         } else {
             _this.bpm(data);
