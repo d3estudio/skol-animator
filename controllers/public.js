@@ -3,6 +3,6 @@ module.exports = {
         res.render('index.html');
     },
     prototype: (req, res) => {
-        res.render('index.html');
+        res.render('prototype.html');
     }
 };

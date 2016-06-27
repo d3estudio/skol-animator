@@ -30,3 +30,14 @@ app
 // run
 http.listen(3000);
 console.log('Listening on port 3000');
+
+
+// io.emit('finish', {
+//     u: user
+// });
+//
+// io.on('connection', (socket) => {
+//     socket.on('new_user', (username) => {
+//         initNewUser(username);
+//     })
+// });
