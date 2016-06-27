@@ -17,6 +17,7 @@ var Idle = function(type, width, where, loop) {
     _this.loop = loop;
     _this.command = 0x3C;
     _this.currentCol = width;
+    _this.currentColTopGlass = 33;
     _this.spiralTimer = 250;
     _this.spiralCounter = 0;
 
@@ -30,6 +31,48 @@ var Idle = function(type, width, where, loop) {
         _this.front = shuffle(where[1].motors.slice(0));
         _this.left = shuffle(where[2].motors.slice(0));
         _this.roof = shuffle(where[3].motors.slice(0));
+    }
+    _this.idleGlass = function() {
+        var flipDelay = 7;
+        _this.where.forEach(function(wall) {
+            if (wall.name == 'top') {
+                wall.motors.forEach(function(motor) {
+                    if (motor.y == _this.currentColTopGlass) {
+                        setTimeout(function() {
+                            motor.sendCommand(0x41);
+                            setTimeout(function() {
+                                motor.sendCommand(0x37);
+                            }, _this.where[0].motors[0].getFPS() * flipDelay);
+                        }, motor.x * 2 * 50);
+                    }
+                });
+            } else {
+                var offset= wall.offset;
+                if (wall.name == 'left') {
+                    offset -= 4;
+                }
+                wall.motors.forEach(function(motor) {
+                    if (motor.x == _this.currentCol + offset) {
+                        setTimeout(function() {
+                            motor.sendCommand(0x41);
+                            setTimeout(function() {
+                                motor.sendCommand(0x37);
+                            }, _this.where[0].motors[0].getFPS() * flipDelay);
+                        }, motor.y * 2 * 50);
+                    }
+                });
+            }
+        });
+        _this.currentColTopGlass--;
+        if (_this.currentColTopGlass < 17) {
+            _this.currentColTopGlass = 33;
+        }
+        _this.currentCol++;
+        if (_this.currentCol == 17) {
+            _this.currentCol = 0;
+        }
+        var steps = 1;
+        setTimeout(_this.idleGlass, (_this.where[0].motors[0].getFPS() * steps) + 10);
     }
     _this.idleBack = function() {
         if (_this.type == 'shuffle') {
@@ -398,6 +441,15 @@ var Idle = function(type, width, where, loop) {
                 var steps = 10;
                 setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 10);
             }
+        } else if (_this.type == 'glass') {
+            _this.where.forEach(function(wall, wallIndex) {
+                wall.motors.forEach(function(motor, motorIndex) {
+                    motor.sendCommand(0x37);
+                });
+            });
+            _this.currentCol = 0;
+            var steps = 35;
+            setTimeout(_this.idleGlass, (_this.where[0].motors[0].getFPS() * steps) + 250);
         }
     }
     _this.init = function() {

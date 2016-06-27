@@ -81,7 +81,7 @@ olaMenu.add(optionsOla, 'START');
 //IDLE
 var ContextMenuIdle = function() {
     var _this = this;
-    this.type = 'spiral';
+    this.type = 'glass';
     this.loop = false;
     this.START = function() {
         var idle = new Idle(_this.type, 18, [rightWall, frontWall, leftWall, roof], _this.loop);
@@ -97,10 +97,11 @@ idleMenu.add(optionsIdle, 'type', {
     Linear: 'open',
     Breathing: 'breathing',
     Spiral: 'spiral',
+    Glass: 'glass'
 });
 idleMenu.add(optionsIdle, 'loop');
 idleMenu.add(optionsIdle, 'START');
-//idleMenu.open();
+idleMenu.open();
 
 //MUSIC
 var realTimeMusic = null;
@@ -114,7 +115,7 @@ realTimeAudio.getSample = function(data) {
 }
 var ContextMenuMusic = function() {
     var _this = this;
-    this.type = 'equalizer';
+    this.type = 'Equalizer';
     this.START = function() {
         if (_this.type == 'bpm' || _this.type == 'equalizer') {
             realTimeMusic = new Music(_this.type, 13, [rightWall, frontWall, leftWall])
@@ -127,15 +128,15 @@ var ContextMenuMusic = function() {
 };
 var optionsMusic = new ContextMenuMusic();
 
-var idleMusic = gui.addFolder('MUSIC');
-idleMusic.add(optionsMusic, 'type', {
-    'BPM': 'bpm',
+var musicMenu = gui.addFolder('MUSIC');
+musicMenu.add(optionsMusic, 'type', {
     'Equalizer': 'equalizer',
+    //'BPM': 'bpm',
     '---------': '',
     'TooFast (~166bpm)': 'very_fast_boom',
     'Fastest (~120bpm)': 'fast_boom',
     'Slow (~65bpm)': 'boom',
     'Slower (~35bmp)': 'long_boom',
 });
-idleMusic.add(optionsMusic, 'START');
-idleMusic.open();
+musicMenu.add(optionsMusic, 'START');
+//musicMenu.open();
