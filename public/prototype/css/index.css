@@ -12,7 +12,7 @@ select{
 }
 .floor {
     border: 1px solid #000000;
-    background: url(/img/concrete.jpg);
+    background: url(../img/concrete.jpg);
     background-size: 60px 60px;
 }
 .block {

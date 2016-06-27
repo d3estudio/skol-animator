@@ -1,5 +1,8 @@
-// modules
-var express = require('express'),
+//base http and socket
+var app = require('express')(),
+    express = require('express'),
+    http = require('http').Server(app),
+    io = require('socket.io')(http),
     bodyParser = require('body-parser'),
     swig = require('swig'),
     consolidate = require('consolidate');
@@ -8,7 +11,6 @@ var express = require('express'),
 var publicController = require('./controllers/public');
 
 // webserver configuration
-var app = express();
 app
     .set('views', __dirname + '/views')
     .set('view engine', 'ejs')
@@ -22,8 +24,9 @@ app
 
 // public routes
 app
-    .get('/', publicController.index);
+    .get('/', publicController.index)
+    .get('/prototype', publicController.prototype);
 
 // run
-app.listen(3000);
+http.listen(3000);
 console.log('Listening on port 3000');

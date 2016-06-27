@@ -10,6 +10,8 @@
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "lwip": "0.0.9",
+    "socket.io": "^1.4.8",
+    "socket.io-client": "^1.4.8",
     "swig": "^1.4.2"
   }
 }
