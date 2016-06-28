@@ -1,1 +1,12 @@
-{}
+{
+    "FIFOS": [
+        "left.png",
+        "top.png",
+        "right.png",
+        "front.png",
+        "left-simulator.png",
+        "top-simulator.png",
+        "right-simulator.png",
+        "front-simulator.png"
+    ]
+}

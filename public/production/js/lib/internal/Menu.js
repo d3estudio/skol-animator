@@ -7,12 +7,12 @@ var ContextMenuScrollText = function() {
     this.continuous = false;
     this.loop = false;
     this.START = function() {
-        if (_this.message.length > 0) {
-            var scroll = new ScrollText(_this.message, 13, 5, [rightWall, frontWall, leftWall, roof], _this.continuous, _this.loop);
-            scroll.init();
-        } else {
-            window.alert('Type a message!');
-        }
+        // if (_this.message.length > 0) {
+        //     var scroll = new ScrollText(_this.message, 13, 5, [rightWall, frontWall, leftWall, roof], _this.continuous, _this.loop);
+        //     scroll.init();
+        // } else {
+        //     window.alert('Type a message!');
+        // }
     };
 };
 var optionsScrollText = new ContextMenuScrollText();
@@ -33,17 +33,17 @@ var ContextMenuScoreBoard = function() {
     this.score2 = '0';
     this.loop = false;
     this.START = function() {
-        if (_this.country1.length > 0 && _this.score1.length > 0 && _this.country2.length > 0 && _this.score2.length > 0) {
-            var scroll = new ScoreBoard({
-                country1: _this.country1,
-                score1: _this.score1,
-                country2: _this.country2,
-                score2: _this.score2
-            }, [rightWall, frontWall, leftWall, roof], _this.loop);
-            scroll.init();
-        } else {
-            window.alert('We need two countries and two scores!');
-        }
+        // if (_this.country1.length > 0 && _this.score1.length > 0 && _this.country2.length > 0 && _this.score2.length > 0) {
+        //     var scroll = new ScoreBoard({
+        //         country1: _this.country1,
+        //         score1: _this.score1,
+        //         country2: _this.country2,
+        //         score2: _this.score2
+        //     }, [rightWall, frontWall, leftWall, roof], _this.loop);
+        //     scroll.init();
+        // } else {
+        //     window.alert('We need two countries and two scores!');
+        // }
     };
 };
 var optionsScoreBoard = new ContextMenuScoreBoard();
@@ -63,8 +63,8 @@ var ContextMenuOla = function() {
     this.type = 'little';
     this.loop = false;
     this.START = function() {
-        var ola = new Ola(_this.type, 13, [rightWall, frontWall, leftWall, roof], _this.loop);
-        ola.init();
+        // var ola = new Ola(_this.type, 13, [rightWall, frontWall, leftWall, roof], _this.loop);
+        // ola.init();
     };
 };
 var optionsOla = new ContextMenuOla();
@@ -84,8 +84,8 @@ var ContextMenuIdle = function() {
     this.type = 'glass';
     this.loop = false;
     this.START = function() {
-        var idle = new Idle(_this.type, 18, [rightWall, frontWall, leftWall, roof], _this.loop);
-        idle.init();
+        // var idle = new Idle(_this.type, 18, [rightWall, frontWall, leftWall, roof], _this.loop);
+        // idle.init();
     };
 };
 var optionsIdle = new ContextMenuIdle();
@@ -104,26 +104,26 @@ idleMenu.add(optionsIdle, 'START');
 idleMenu.open();
 
 //MUSIC
-var realTimeMusic = null;
-var realTimeAudio = new RealTimeAudio(13);
-realTimeAudio.getSample = function(data) {
-    if (realTimeMusic.type == 'bpm') {
-        realTimeMusic.process(realTimeAudio.bpm);
-    } else {
-        realTimeMusic.process(data);
-    }
-}
+// var realTimeMusic = null;
+// var realTimeAudio = new RealTimeAudio(13);
+// realTimeAudio.getSample = function(data) {
+//     if (realTimeMusic.type == 'bpm') {
+//         realTimeMusic.process(realTimeAudio.bpm);
+//     } else {
+//         realTimeMusic.process(data);
+//     }
+// }
 var ContextMenuMusic = function() {
     var _this = this;
     this.type = 'equalizer';
     this.START = function() {
-        if (_this.type == 'bpm' || _this.type == 'equalizer') {
-            realTimeMusic = new Music(_this.type, 13, [rightWall, frontWall, leftWall])
-            realTimeAudio.init();
-        } else {
-            var music = new Music(_this.type, 18, [rightWall, frontWall, leftWall, roof]);
-            music.init();
-        }
+        // if (_this.type == 'bpm' || _this.type == 'equalizer') {
+        //     realTimeMusic = new Music(_this.type, 13, [rightWall, frontWall, leftWall])
+        //     realTimeAudio.init();
+        // } else {
+        //     var music = new Music(_this.type, 18, [rightWall, frontWall, leftWall, roof]);
+        //     music.init();
+        // }
     };
 };
 var optionsMusic = new ContextMenuMusic();

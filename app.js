@@ -8,7 +8,7 @@ var app = require('express')(),
     consolidate = require('consolidate');
 
 // controllers
-var publicController = require('./controllers/public');
+var publicController = require('./controllers/Public');
 
 // webserver configuration
 app
@@ -31,13 +31,9 @@ app
 http.listen(3000);
 console.log('Listening on port 3000');
 
-
-// io.emit('finish', {
-//     u: user
-// });
-//
 // io.on('connection', (socket) => {
-//     socket.on('new_user', (username) => {
-//         initNewUser(username);
-//     })
+//     socket.emit('test', 'message');
+//     socket.on('test', (msg) => {
+//         console.log(msg);
+//     });
 // });

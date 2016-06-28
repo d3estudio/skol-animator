@@ -17,3 +17,8 @@ roof.init();
 leftWall.init();
 frontWall.init();
 rightWall.init();
+
+var socket = io();
+socket.on('test', function (data) {
+    console.debug('test');
+});

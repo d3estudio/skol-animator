@@ -68,7 +68,7 @@ var Motor = function(x, y, color, parent, id) {
         _this.virtualTimer = setInterval(function() {
             _this.computeAngle();
         }, _this.getFPS);
-        console.info(_this.name, 'INITIATED');
+        //console.info(_this.name, 'INITIATED');
     }
 
     //restart this motor
@@ -78,7 +78,7 @@ var Motor = function(x, y, color, parent, id) {
         });
         clearInterval(_this.virtualTimer);
         _this.init();
-        console.info(_this.name, 'CREATED');
+        //console.info(_this.name, 'CREATED');
     }
 
     //remove this motor from preview
@@ -88,19 +88,19 @@ var Motor = function(x, y, color, parent, id) {
             background: color
         });
         clearInterval(_this.virtualTimer);
-        console.info(_this.name, 'DESTROYED');
+        //console.info(_this.name, 'DESTROYED');
     }
 
     //lock this motor to wait the current command
     _this.lock = function() {
         _this.locked = true;
-        console.info(_this.name, 'LOCKED');
+        //console.info(_this.name, 'LOCKED');
     }
 
     //unlock this motor and allow another command
     _this.unlock = function() {
         _this.locked = false;
-        console.info(_this.name, 'UNLOCKED');
+        //console.info(_this.name, 'UNLOCKED');
     }
 
     //compute the real time angle of the motor to show the mirror
@@ -137,7 +137,7 @@ var Motor = function(x, y, color, parent, id) {
         if (currentAngle == newAngle) {
             _this.unlock();
             var date = new Date();
-            console.info(_this.name, 'finidhed COMMAND at ', date, date.getMilliseconds(), 'with angle', currentAngle);
+            //console.info(_this.name, 'finidhed COMMAND at ', date, date.getMilliseconds(), 'with angle', currentAngle);
         } else {
             if (newAngle > currentAngle) {
                 currentAngle += 9;
@@ -170,10 +170,10 @@ var Motor = function(x, y, color, parent, id) {
             if (!_this.locked) {
                 _this.lock();
                 var date = new Date();
-                console.info(_this.name, 'started COMMAND at ', date, date.getMilliseconds(), 'with angle', currentAngle);
+                //console.info(_this.name, 'started COMMAND at ', date, date.getMilliseconds(), 'with angle', currentAngle);
                 _this.animateToAngle(currentAngle, newAngle);
             } else {
-                console.warn(_this.name, 'BUSY');
+                //console.warn(_this.name, 'BUSY');
             }
         } else {
 
