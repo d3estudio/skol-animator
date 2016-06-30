@@ -1,9 +1,20 @@
 //main functions
 var helper = require('./lib/Shared');
+var Wall = require('./lib/Wall');
 
 //libs
-var ioc = require('socket.io-client'),
-    client = ioc.connect('http://localhost:3000');
+var ioc = require('socket.io-client');
+var client = ioc.connect('http://localhost:3000');
+
+//walls with motors
+var roof = new Wall(374, 11, 'top', 0),
+    leftWall = new Wall(170, 34, 'left', 21),
+    frontWall = new Wall(55, 11, 'front', 0),
+    rightWall = new Wall(170, 34, 'right', 0);
+roof.init();
+leftWall.init();
+frontWall.init();
+rightWall.init();
 
 client.on('connect', function() {
         helper.logger.debug('[Processor] Connected to port 3000');
@@ -11,16 +22,6 @@ client.on('connect', function() {
     .on('disconnect', function() {
         helper.logger.debug('[Processor] Disconnected from port 3000');
     });
-
-// var command = 0x14;
-// client.emit('update',{
-//     wall: 'rightWall',
-//     x: 0,
-//     y: 0,
-//     command: command
-// });
-// helper.logger.debug(command);
-
 
 // MESSAGE TEMPLATE
 // {
