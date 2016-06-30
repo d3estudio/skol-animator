@@ -19,6 +19,11 @@ frontWall.init();
 rightWall.init();
 
 var socket = io();
-socket.on('test', function (data) {
-    console.debug('test');
+socket.on('command', function (command) {
+    console.debug(command);
+    window[command.wall].motors.forEach(function(motor) {
+        if (motor.x == command.x && motor.y == command.y) {
+            motor.sendCommand(command.command);
+        }
+    })
 });

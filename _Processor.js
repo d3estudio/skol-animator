@@ -1,73 +1,33 @@
 //main functions
-var helper = require('./_Functions');
+var helper = require('./lib/Shared');
 
 //libs
-var lwip = require('lwip');
-var fs = require('fs');
+var ioc = require('socket.io-client'),
+    client = ioc.connect('http://localhost:3000');
 
-helper.logger.debug('Will write');
-lwip.create(17, 5, {
-    r: 0x14,
-    g: 0x14,
-    b: 0x14
-}, function(err, image) {
-    writePixels(image, 17, 0, 'left.png');
-});
-
-lwip.create(17, 5, {
-    r: 0x14,
-    g: 0x14,
-    b: 0x14
-}, function(err, image) {
-    writePixels(image, 17, 0, 'right.png');
-});
-
-lwip.create(17, 5, {
-    r: 0x14,
-    g: 0x14,
-    b: 0x14
-}, function(err, image) {
-    writePixels(image, 17, 0, 'front.png');
-});
-
-lwip.create(17, 5, {
-    r: 0x14,
-    g: 0x14,
-    b: 0x14
-}, function(err, image) {
-    writePixels(image, 17, 0, 'top.png');
-});
-
-function writePixels(image, size, i, name) {
-    var color = Math.floor(Math.random() * 255);
-    var y = Math.floor(i / size),
-        x = Math.floor(i - (size * y));
-    if (y > 4) {
-        finish(image, name);
-    } else {
-        image.setPixel(x, y, {
-            r: color,
-            g: color,
-            b: color
-        }, function(err, image) {
-            i++;
-            writePixels(image, size, i, name);
-        });
-    }
-}
-
-function finish(image, name) {
-    image.toBuffer('png', (err, buffer) => {
-        if (err) {
-            helper.logger.error(err);
-        } else {
-            var stream = fs.createWriteStream(name);
-            stream.write(buffer);
-            helper.logger.debug('Written File ' + name);
-            stream = fs.createWriteStream(name.replace('.png','-simulator.png'));
-            stream.write(buffer);
-            helper.logger.debug('Written File ' + name.replace('.png','-simulator.png'));
-            stream.close();
-        }
+client.on('connect', function() {
+        helper.logger.debug('[Processor] Connected to port 3000');
+    })
+    .on('disconnect', function() {
+        helper.logger.debug('[Processor] Disconnected from port 3000');
     });
-}
+
+// var command = 0x14;
+// client.emit('update',{
+//     wall: 'rightWall',
+//     x: 0,
+//     y: 0,
+//     command: command
+// });
+// helper.logger.debug(command);
+
+
+// MESSAGE TEMPLATE
+// {
+//     "d": "d3skol.router.map.in",
+//     "s": "your.reply.to.channel.id.here",
+//     "c": "FACE_BITMAP",
+//     "p": ["{\"map\":[[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]}"],
+//     "a": 0,
+//     "sq": 1
+// }
