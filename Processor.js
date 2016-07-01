@@ -11,6 +11,7 @@ var ScrollText = require('./animations/ScrollText');
 var ScoreBoard = require('./animations/ScoreBoard');
 var Ola = require('./animations/Ola');
 var Music = require('./animations/Music');
+var Idle = require('./animations/Idle');
 
 //walls with motors
 var roof = new Wall(374, 11, 'top', 0, socket),
@@ -45,6 +46,9 @@ socket.on('connect', () => {
         } else if (command.animation == 'Music') {
             var music = new Music(command.type, 13, [rightWall, frontWall, leftWall, roof]);
             music.init();
+        } else if (command.animation == 'Idle') {
+            var idle = new Idle(command.type, 18, [rightWall, frontWall, leftWall, roof], command.loop);
+            idle.init();
         }
     })
     .on('disconnect', () => {

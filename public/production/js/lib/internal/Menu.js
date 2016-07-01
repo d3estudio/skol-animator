@@ -86,30 +86,33 @@ olaMenu.add(optionsOla, 'loop');
 olaMenu.add(optionsOla, 'START');
 olaMenu.open();
 
-// //IDLE
-// var ContextMenuIdle = function() {
-//     var _this = this;
-//     this.type = 'glass';
-//     this.loop = false;
-//     this.START = function() {
-//         // var idle = new Idle(_this.type, 18, [rightWall, frontWall, leftWall, roof], _this.loop);
-//         // idle.init();
-//     };
-// };
-// var optionsIdle = new ContextMenuIdle();
-//
-// var idleMenu = gui.addFolder('IDLE');
-// idleMenu.add(optionsIdle, 'type', {
-//     Randomized: 'shuffle',
-//     Live: 'live',
-//     Linear: 'open',
-//     Breathing: 'breathing',
-//     Spiral: 'spiral',
-//     Glass: 'glass'
-// });
-// idleMenu.add(optionsIdle, 'loop');
-// idleMenu.add(optionsIdle, 'START');
-// idleMenu.open();
+//IDLE
+var ContextMenuIdle = function() {
+    var _this = this;
+    this.type = 'shuffle';
+    this.loop = false;
+    this.START = function() {
+        socket.emit('animation', {
+            animation: 'Idle',
+            type: _this.type,
+            loop: _this.loop
+        });
+    };
+};
+var optionsIdle = new ContextMenuIdle();
+
+var idleMenu = gui.addFolder('IDLE');
+idleMenu.add(optionsIdle, 'type', {
+    Randomized: 'shuffle',
+    Live: 'live',
+    Linear: 'open',
+    Breathing: 'breathing',
+    Spiral: 'spiral',
+    Glass: 'glass'
+});
+idleMenu.add(optionsIdle, 'loop');
+idleMenu.add(optionsIdle, 'START');
+idleMenu.open();
 
 //MUSIC
 var ContextMenuMusic = function() {
