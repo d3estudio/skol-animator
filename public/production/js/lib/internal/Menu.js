@@ -28,39 +28,40 @@ scrollTextMenu.add(optionsScrollText, 'loop');
 scrollTextMenu.add(optionsScrollText, 'START');
 scrollTextMenu.open();
 
-// //SCORE BOARD
-// var ContextMenuScoreBoard = function() {
-//     var _this = this;
-//     this.country1 = 'BRA';
-//     this.score1 = '1';
-//     this.country2 = 'USA';
-//     this.score2 = '0';
-//     this.loop = false;
-//     this.START = function() {
-//         // if (_this.country1.length > 0 && _this.score1.length > 0 && _this.country2.length > 0 && _this.score2.length > 0) {
-//         //     var scroll = new ScoreBoard({
-//         //         country1: _this.country1,
-//         //         score1: _this.score1,
-//         //         country2: _this.country2,
-//         //         score2: _this.score2
-//         //     }, [rightWall, frontWall, leftWall, roof], _this.loop);
-//         //     scroll.init();
-//         // } else {
-//         //     window.alert('We need two countries and two scores!');
-//         // }
-//     };
-// };
-// var optionsScoreBoard = new ContextMenuScoreBoard();
-//
-// var scoreBoardMenu = gui.addFolder('Score Board');
-// scoreBoardMenu.add(optionsScoreBoard, 'country1');
-// scoreBoardMenu.add(optionsScoreBoard, 'score1');
-// scoreBoardMenu.add(optionsScoreBoard, 'country2');
-// scoreBoardMenu.add(optionsScoreBoard, 'score2');
-// scoreBoardMenu.add(optionsScoreBoard, 'loop');
-// scoreBoardMenu.add(optionsScoreBoard, 'START');
-// scoreBoardMenu.open();
-//
+//SCORE BOARD
+var ContextMenuScoreBoard = function() {
+    var _this = this;
+    this.country1 = 'BRA';
+    this.score1 = '0';
+    this.country2 = 'USA';
+    this.score2 = '0';
+    this.loop = false;
+    this.START = function() {
+        if (_this.country1.length > 0 && _this.score1.length > 0 && _this.country2.length > 0 && _this.score2.length > 0) {
+            socket.emit('animation', {
+                animation: 'ScoreBoard',
+                country1: _this.country1,
+                score1: _this.score1,
+                country2: _this.country2,
+                score2: _this.score2,
+                loop: _this.loop
+            });
+        } else {
+            window.alert('We need two countries and two scores!');
+        }
+    };
+};
+var optionsScoreBoard = new ContextMenuScoreBoard();
+
+var scoreBoardMenu = gui.addFolder('Score Board');
+scoreBoardMenu.add(optionsScoreBoard, 'country1');
+scoreBoardMenu.add(optionsScoreBoard, 'score1');
+scoreBoardMenu.add(optionsScoreBoard, 'country2');
+scoreBoardMenu.add(optionsScoreBoard, 'score2');
+scoreBoardMenu.add(optionsScoreBoard, 'loop');
+scoreBoardMenu.add(optionsScoreBoard, 'START');
+scoreBoardMenu.open();
+
 // //OLA
 // var ContextMenuOla = function() {
 //     var _this = this;
