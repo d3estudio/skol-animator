@@ -38,13 +38,12 @@ serverSocket.on('connection', (clientSocket) => {
     helper.logger.debug(`[CLIENT] ${clientSocket.id} CONNECTED`);
     //socket.emit('test', 'message');
     clientSocket.on('update', (command) => {
-        //helper.logger.debug(command);
-        //clientSocket.emit('test', 'from server to client');
-        serverSocket.emit('command', command);
-    });
-    clientSocket.on('animation', (command) => {
-        //helper.logger.debug(command);
-        //clientSocket.emit('test', 'from server to client');
-        serverSocket.emit('exec', command);
-    });
+            serverSocket.emit('command', command);
+        })
+        .on('animation', (command) => {
+            serverSocket.emit('exec', command);
+        })
+        .on('stop', (command) => {
+            serverSocket.emit('freeze', command);
+        })
 });

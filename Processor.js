@@ -23,33 +23,48 @@ leftWall.init();
 frontWall.init();
 rightWall.init();
 
+//all animations
+var currentAnimations = [];
+
 //init socket
 socket.on('connect', () => {
         helper.logger.debug('[Processor] Connected to port 3000');
     })
     .on('exec', (command) => {
         helper.logger.debug(`[Processor] Received Command ${command.animation}`);
+        var animation;
         if (command.animation == 'ScrollText') {
-            var skol = new ScrollText(command.message, 13, [rightWall, frontWall, leftWall, roof], command.continuous, command.loop);
-            skol.init();
+            animation = new ScrollText(command.message, 13, [rightWall, frontWall, leftWall, roof], command.continuous, command.loop);
+            animation.init();
         } else if (command.animation == 'ScoreBoard') {
-            var score = new ScoreBoard({
+            animation = new ScoreBoard({
                 country1: command.country1,
                 score1: command.score1,
                 country2: command.country2,
                 score2: command.score2
             }, [rightWall, frontWall, leftWall, roof], command.loop);
-            score.init();
+            animation.init();
         } else if (command.animation == 'Ola') {
-            var ola = new Ola(command.type, 13, [rightWall, frontWall, leftWall, roof], command.loop);
-            ola.init();
+            animation = new Ola(command.type, 13, [rightWall, frontWall, leftWall, roof], command.loop);
+            animation.init();
         } else if (command.animation == 'Music') {
-            var music = new Music(command.type, 13, [rightWall, frontWall, leftWall, roof]);
-            music.init();
+            animation = new Music(command.type, 13, [rightWall, frontWall, leftWall, roof]);
+            animation.init();
         } else if (command.animation == 'Idle') {
-            var idle = new Idle(command.type, 18, [rightWall, frontWall, leftWall, roof], command.loop);
+            animation = new Idle(command.type, 18, [rightWall, frontWall, leftWall, roof], command.loop);
             idle.init();
         }
+        if (animation.name) {
+            currentAnimations.push(animation);
+        }
+    })
+    .on('freeze', () => {
+        var noop = () => {};
+        currentAnimations.forEach((animation) => {
+            Object.keys(animation).forEach((key) => animation[key] = noop);
+            animation = null;
+        });
+        currentAnimations = [];
     })
     .on('disconnect', () => {
         helper.logger.debug('[Processor] Disconnected from port 3000');
