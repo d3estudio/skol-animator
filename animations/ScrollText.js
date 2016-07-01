@@ -32,6 +32,8 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
                                     } else {
                                         motor.sendCommand(0x14);
                                     }
+                                } else if (motor.x < wall.offset) {
+                                    motor.sendCommand(0x14);
                                 }
                             });
                         });
@@ -73,7 +75,7 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
                         }
                         if (_this.currentCol < -11) {
                             _this.where[2].motors.forEach((motor) => {
-                                var x = (_this.currentCol + 11) + dotIndex + shift + _this.where[2].width,
+                                var x = _this.currentCol + dotIndex + shift + _this.where[2].width - 6,
                                     y = lineIndex;
                                 if (motor.x == x && motor.y == y) {
                                     if (dot) {
@@ -91,14 +93,20 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
         }
         //general finish
     _this.finish = () => {
-        _this.idleCurrentCol = 0;
-        _this.idleCommand = 0x14;
-        if (!_this.overflow) {
-            _this.idle();
+            _this.idleCurrentCol = 0;
+            _this.idleCommand = 0x14;
+            if (!_this.overflow) {
+                _this.idle();
+                helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+            } else {
+                if (_this.loop) {
+                    _this.currentCol = _this.width - 1;
+                    _this.draw();
+                }
+            }
+
         }
-        helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
-    }
-    //animated behavior
+        //animated behavior
     _this.step4 = () => {
         _this.currentCol += 1
         _this.moveLetters();
@@ -146,7 +154,7 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
         if (_this.idleCurrentCol < 17) {
             [_this.where[1], _this.where[3]].forEach((wall, wallIndex) => {
                 wall.motors.forEach((motor) => {
-                    var y = wall.name == 'top' ? (33 - _this.idleCurrentCol) : _this.idleCurrentCol;
+                    var y = wall.name == 'top' ? (16 - _this.idleCurrentCol) : _this.idleCurrentCol;
                     if (motor.y == y) {
                         motor.sendCommand(_this.idleCommand);
                     }

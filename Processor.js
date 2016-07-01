@@ -9,73 +9,31 @@ var socket = ioc.connect('http://localhost:3000');
 //animations
 var ScrollText = require('./animations/ScrollText');
 
-//init socket
-socket.on('connect', function() {
-        helper.logger.debug('[Processor] Connected to port 3000');
-    })
-    .on('disconnect', function() {
-        helper.logger.debug('[Processor] Disconnected from port 3000');
-    });
-
 //walls with motors
-var roof = new Wall(374, 11, 'top', socket),
-    leftWall = new Wall(170, 34, 'left', socket),
-    frontWall = new Wall(55, 11, 'front', socket),
-    rightWall = new Wall(170, 34, 'right', socket);
+var roof = new Wall(374, 11, 'top', 0, socket),
+    leftWall = new Wall(170, 34, 'left', 4, socket),
+    frontWall = new Wall(55, 11, 'front', 0, socket),
+    rightWall = new Wall(170, 34, 'right', 0, socket);
 roof.init();
 leftWall.init();
 frontWall.init();
 rightWall.init();
 
-var skol = new ScrollText('SKOL', 11, [rightWall, frontWall, leftWall, roof], false, false);
-skol.init();
+//init socket
+socket.on('connect', () => {
+        helper.logger.debug('[Processor] Connected to port 3000');
+    })
+    .on('exec', (command) => {
+        helper.logger.debug('[Processor] Received Command');
+        if (command.animation == 'ScrollText') {
+            var skol = new ScrollText(command.message, 13, [rightWall, frontWall, leftWall, roof], command.continuous, command.loop);
+            skol.init();
+        }
+    })
+    .on('disconnect', () => {
+        helper.logger.debug('[Processor] Disconnected from port 3000');
+    });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// client.on('connect', function() {
-//         helper.logger.debug('[Processor] Connected to port 3000');
-//     })
-//     .on('disconnect', function() {
-//         helper.logger.debug('[Processor] Disconnected from port 3000');
-//     });
 
 // MESSAGE TEMPLATE
 // {

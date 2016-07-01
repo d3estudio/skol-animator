@@ -17,16 +17,3 @@ roof.init();
 leftWall.init();
 frontWall.init();
 rightWall.init();
-
-var socket = io();
-socket.on('command', function (command) {
-    if (command.wall == 'rightWall') {
-        //console.debug(command);
-    }
-    window[command.wall].motors.forEach(function(motor, index) {
-        if (command.wall == 'rightWall') {
-            console.debug(command.motors[index]);
-        }
-        motor.sendCommand(command.motors[index]);
-    })
-});

@@ -48,7 +48,7 @@ var Motor = function(x, y, color, parent, id) {
         } else {
             time = (_this.SLOW__TIME / 360) * 9;
         }
-        return time/2;
+        return time;
     }
 
     //add this motor to the 3D preview

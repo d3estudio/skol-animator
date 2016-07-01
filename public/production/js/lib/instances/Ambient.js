@@ -89,15 +89,6 @@ var Ambient = function(where, cameraPosition, width, height) {
         element.className = 'floor';
         element.setAttribute("style", "width:640px;height:1560px");
 
-        //CSS Object
-        floor = new THREE.CSS3DObject(element);
-        floor.position.x = 0;
-        floor.position.y = -100;
-        floor.position.z = 0;
-        floor.rotation.x = Math.PI / 2;
-        floor.rotation.y = Math.PI;
-        _this.scene.add(floor);
-
         //CSS3D Renderer
         _this.css_renderer = new THREE.CSS3DRenderer();
         _this.css_renderer.setSize(window.innerWidth, window.innerHeight);

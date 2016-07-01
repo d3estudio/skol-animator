@@ -13,68 +13,57 @@ var Wall = function(size, width, className, offset) {
             for (var i = 0; i < _this.size; i++) {
                 var y = parseInt(i / _this.width),
                     x = parseInt(i - (_this.width * y)),
-                    color = new Color(_this.name, i),
-                    motor = new Motor(x, y, color.getColor(), '.' + _this.name, _this.globalID++);
+                    color = new Color(_this.name, i);
+                if (_this.name == 'left') {
+                    x = x - 17;
+                }
+                if (_this.name == 'top') {
+                    y = y - 17;
+                }
+
+                var motor = new Motor(x, y, color.getColor(), '.' + _this.name, _this.globalID++);
                 motor.init();
 
-                if (y < 23 && _this.name == 'top') {
-                    if (y == 22 && (x == 0 || x == 2 || x == 4 || x == 5 || x == 6 || x == 8 || x == 9 || x == 10)) {
+                if (y < 6 && _this.name == 'top') {
+                    if (y == 5 && (x == 0 || x == 2 || x == 4 || x == 5 || x == 6 || x == 8 || x == 9 || x == 10)) {
                         motor.create();
                         _this.motors.push(motor);
-                    } else if (y == 21 && (x == 0 || x == 1 || x == 3 || x == 4 || x == 6 || x == 7 || x == 10)) {
+                    } else if (y == 4 && (x == 0 || x == 1 || x == 3 || x == 6 || x == 7 || x == 10)) {
                         motor.create();
                         _this.motors.push(motor);
-                    } else if (y == 20 && (x == 2 || x == 3 || x == 5 || x == 7 || x == 9 || x == 10)) {
+                    } else if (y == 3 && (x == 2 || x == 3 || x == 5 || x == 7 || x == 10)) {
                         motor.create();
                         _this.motors.push(motor);
-                    } else if (y == 19 && (x == 1 || x == 4 || x == 6 || x == 7 || x == 9)) {
+                    } else if (y == 2 && (x == 1 || x == 6 || x == 7 || x == 9)) {
                         motor.create();
                         _this.motors.push(motor);
-                    } else if (y == 18 && (x == 0 || x == 4 || x == 6)) {
+                    } else if (y == 1 && (x == 0 || x == 4 || x == 6)) {
                         motor.create();
                         _this.motors.push(motor);
-                    } else if (y == 17 && (x == 1 || x == 8)) {
-                        motor.create();
-                        _this.motors.push(motor);
-                    } else if (y == 16 && (x == 0 || x == 5)) {
+                    } else if (y == 0 && (x == 3)) {
                         motor.create();
                         _this.motors.push(motor);
                     } else {
                         motor.destroy();
                     }
-                } else if (x < 22 && _this.name == 'left') {
-                    if (x == 15 && (y == 2)) {
+                } else if (x < 4 && _this.name == 'left') {
+                    if (x == 0 && y == 1) {
                         motor.create();
                         _this.motors.push(motor);
-                    } else if (x == 16 && (y == 1)) {
+                    } else if (x == 1 && (y == 0 || y == 3)) {
                         motor.create();
                         _this.motors.push(motor);
-                    } else if (x == 17 && (y == 0 || y == 3)) {
+                    } else if (x == 2 && (y == 1 || y == 4)) {
                         motor.create();
                         _this.motors.push(motor);
-                    } else if (x == 18 && (y == 1 || y == 4)) {
-                        motor.create();
-                        _this.motors.push(motor);
-                    } else if (x == 19 && (y == 1 || y == 3)) {
-                        motor.create();
-                        _this.motors.push(motor);
-                    } else if (x == 20 && (y == 0 || y == 2 || y == 4)) {
-                        motor.create();
-                        _this.motors.push(motor);
-                    } else if (x == 21 && (y == 1 || y == 2 || y == 4)) {
+                    } else if (x == 3 && (y == 1 || y == 3)) {
                         motor.create();
                         _this.motors.push(motor);
                     } else {
                         motor.destroy();
                     }
-                } else if (x > 10 && _this.name == 'right') {
-                    if (x == 11 && (y == 0 || y == 1 || y == 2 || y == 4)) {
-                        motor.create();
-                        _this.motors.push(motor);
-                    } else if (x == 12 && (y == 0 || y == 3)) {
-                        motor.create();
-                        _this.motors.push(motor);
-                    } else if (x == 13 && (y == 0 || y == 1 || y == 4)) {
+                } else if (x > 12 && _this.name == 'right') {
+                    if (x == 13 && (y == 0 || y == 1 || y == 4)) {
                         motor.create();
                         _this.motors.push(motor);
                     } else if (x == 14 && y == 2) {

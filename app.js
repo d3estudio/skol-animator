@@ -41,4 +41,9 @@ serverSocket.on('connection', (clientSocket) => {
         //clientSocket.emit('test', 'from server to client');
         serverSocket.emit('command', command);
     });
+    clientSocket.on('animation', (command) => {
+        //helper.logger.debug(command);
+        //clientSocket.emit('test', 'from server to client');
+        serverSocket.emit('exec', command);
+    });
 });
