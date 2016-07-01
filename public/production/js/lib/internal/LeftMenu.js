@@ -43,8 +43,13 @@ var AdminCommands = function() {
 }
 
 var BasicAngles = function() {
-    this.SEND = function() {};
-    this.type = 'little';
+    this.SEND = function() {
+        socket.emit('animation', {
+            animation: 'BasicAngle',
+            angle: this.angle
+        });
+    };
+    this.angle = 0x14;
 }
 
 var ServerStatus = function() {
@@ -78,9 +83,16 @@ createFolder('Admin Commands', new AdminCommands(), [
 ]);
 createFolder('Basic Angles', new BasicAngles(), ['SEND'], {
     before: function(folder, prop) {
-        folder.add(prop, 'type', {
-            '45º short': 'little',
-            '90º long': 'full'
+        folder.add(prop, 'angle', {
+            '0º': 0x14,
+            '45º': 0x19,
+            '90º': 0x1E,
+            '135º': 0x23,
+            '180º': 0x28,
+            '225º': 0x2D,
+            '270º': 0x32,
+            '315º': 0x37,
+            '360º': 0x3C
         });
     }
 });

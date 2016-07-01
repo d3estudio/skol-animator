@@ -53,6 +53,12 @@ socket.on('connect', () => {
         } else if (command.animation == 'Idle') {
             animation = new Idle(command.type, 18, [rightWall, frontWall, leftWall, roof], command.loop);
             idle.init();
+        } else if (command.animation == 'BasicAngle') {
+            [rightWall, frontWall, leftWall, roof].forEach((wall) => {
+                wall.motors.forEach((motor) => {
+                    motor.sendCommand(command.angle);
+                });
+            });
         } else {
             if (command >= 0xFB && command <= 0xFF) {
                 [rightWall, frontWall, leftWall, roof].forEach((wall) => {
