@@ -43,7 +43,7 @@ serverSocket.on('connection', (clientSocket) => {
         .on('animation', (command) => {
             serverSocket.emit('exec', command);
         })
-        .on('stop', (command) => {
-            serverSocket.emit('freeze', command);
+        .on('stop', () => {
+            serverSocket.emit('freeze');
         })
 });

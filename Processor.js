@@ -32,7 +32,7 @@ socket.on('connect', () => {
     })
     .on('exec', (command) => {
         helper.logger.debug(`[Processor] Received Command ${command.animation}`);
-        var animation;
+        var animation = '';
         if (command.animation == 'ScrollText') {
             animation = new ScrollText(command.message, 13, [rightWall, frontWall, leftWall, roof], command.continuous, command.loop);
             animation.init();
@@ -53,8 +53,17 @@ socket.on('connect', () => {
         } else if (command.animation == 'Idle') {
             animation = new Idle(command.type, 18, [rightWall, frontWall, leftWall, roof], command.loop);
             idle.init();
+        } else {
+            if (command >= 0xFB && command <= 0xFF) {
+                [rightWall, frontWall, leftWall, roof].forEach((wall) => {
+                    wall.motors.forEach((motor) => {
+                        motor.sendCommand(command);
+                    })
+                    wall.locked = false;
+                });
+            }
         }
-        if (animation.name) {
+        if (animation && animation.name) {
             currentAnimations.push(animation);
         }
     })
