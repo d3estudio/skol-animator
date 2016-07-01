@@ -110,41 +110,29 @@ olaMenu.open();
 // idleMenu.add(optionsIdle, 'loop');
 // idleMenu.add(optionsIdle, 'START');
 // idleMenu.open();
-//
-// //MUSIC
-// // var realTimeMusic = null;
-// // var realTimeAudio = new RealTimeAudio(13);
-// // realTimeAudio.getSample = function(data) {
-// //     if (realTimeMusic.type == 'bpm') {
-// //         realTimeMusic.process(realTimeAudio.bpm);
-// //     } else {
-// //         realTimeMusic.process(data);
-// //     }
-// // }
-// var ContextMenuMusic = function() {
-//     var _this = this;
-//     this.type = 'equalizer';
-//     this.START = function() {
-//         // if (_this.type == 'bpm' || _this.type == 'equalizer') {
-//         //     realTimeMusic = new Music(_this.type, 13, [rightWall, frontWall, leftWall])
-//         //     realTimeAudio.init();
-//         // } else {
-//         //     var music = new Music(_this.type, 18, [rightWall, frontWall, leftWall, roof]);
-//         //     music.init();
-//         // }
-//     };
-// };
-// var optionsMusic = new ContextMenuMusic();
-//
-// var musicMenu = gui.addFolder('MUSIC');
-// musicMenu.add(optionsMusic, 'type', {
-//     'Equalizer': 'equalizer',
-//     //'BPM': 'bpm',
-//     '---------': '',
-//     'TooFast (~166bpm)': 'very_fast_boom',
-//     'Fastest (~120bpm)': 'fast_boom',
-//     'Slow (~65bpm)': 'boom',
-//     'Slower (~35bmp)': 'long_boom',
-// });
-// musicMenu.add(optionsMusic, 'START');
-// musicMenu.open();
+
+//MUSIC
+var ContextMenuMusic = function() {
+    var _this = this;
+    this.type = 'equalizer';
+    this.START = function() {
+        socket.emit('animation', {
+            animation: 'Music',
+            type: _this.type
+        });
+    };
+};
+var optionsMusic = new ContextMenuMusic();
+
+var musicMenu = gui.addFolder('MUSIC');
+musicMenu.add(optionsMusic, 'type', {
+    'Equalizer': 'equalizer',
+    //'BPM': 'bpm',
+    '---------': '',
+    'TooFast (~166bpm)': 'very_fast_boom',
+    'Fastest (~120bpm)': 'fast_boom',
+    'Slow (~65bpm)': 'boom',
+    'Slower (~35bmp)': 'long_boom',
+});
+musicMenu.add(optionsMusic, 'START');
+musicMenu.open();
