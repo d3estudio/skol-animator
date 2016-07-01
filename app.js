@@ -37,7 +37,7 @@ console.log('Listening on port 3000');
 serverSocket.on('connection', (clientSocket) => {
     //socket.emit('test', 'message');
     clientSocket.on('update', (command) => {
-        helper.logger.debug(command);
+        //helper.logger.debug(command);
         //clientSocket.emit('test', 'from server to client');
         serverSocket.emit('command', command);
     });

@@ -20,10 +20,13 @@ rightWall.init();
 
 var socket = io();
 socket.on('command', function (command) {
-    console.debug(command);
-    window[command.wall].motors.forEach(function(motor) {
-        if (motor.x == command.x && motor.y == command.y) {
-            motor.sendCommand(command.command);
+    if (command.wall == 'rightWall') {
+        //console.debug(command);
+    }
+    window[command.wall].motors.forEach(function(motor, index) {
+        if (command.wall == 'rightWall') {
+            console.debug(command.motors[index]);
         }
+        motor.sendCommand(command.motors[index]);
     })
 });
