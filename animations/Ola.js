@@ -1,4 +1,7 @@
-var Ola = function(type, width, where, loop) {
+// main functions
+var helper = require('../lib/Shared');
+
+module.exports = function Ola(type, width, where, loop) {
     var _this = this;
     _this.name = 'OlaAnimation';
     _this.type = type;
@@ -8,17 +11,17 @@ var Ola = function(type, width, where, loop) {
     _this.where = where;
     _this.running = false;
     _this.loop = loop;
-    _this.eraseWave = function() {
+    _this.eraseWave = () => {
         if (_this.type == 'little') {
             if (_this.currentColErase > -37) {
-                _this.where[0].motors.forEach(function(motor) {
+                _this.where[0].motors.forEach((motor) => {
                     var x = _this.currentColErase + _this.where[0].offset;
                     if (motor.x == (x - motor.y)) {
                         motor.sendCommand(0x14);
                     }
                 });
                 if (_this.currentColErase < 5) {
-                    _this.where[1].motors.forEach(function(motor) {
+                    _this.where[1].motors.forEach((motor) => {
                         var x = _this.currentColErase + _this.where[1].width + _this.where[1].offset;
                         if (motor.x == (x - motor.y)) {
                             motor.sendCommand(0x14);
@@ -26,14 +29,14 @@ var Ola = function(type, width, where, loop) {
                     });
                 }
                 if (_this.currentColErase < -6) {
-                    _this.where[2].motors.forEach(function(motor) {
+                    _this.where[2].motors.forEach((motor) => {
                         var x = _this.currentColErase + _this.where[2].width + _this.where[2].offset - 10;
                         if (motor.x == (x - motor.y)) {
                             motor.sendCommand(0x14);
                         }
                     });
-                    _this.where[3].motors.forEach(function(motor) {
-                        var y = 45 - (_this.currentColErase * -1);
+                    _this.where[3].motors.forEach((motor) => {
+                        var y = 28 - (_this.currentColErase * -1);
                         if (motor.y == y) {
                             motor.sendCommand(0x14);
                         }
@@ -49,27 +52,27 @@ var Ola = function(type, width, where, loop) {
                     _this.wave();
                 } else {
                     _this.running = false;
-                    console.warn(_this.name, 'FINISHED (waiting last command)');
+                    helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
                 }
             }
         } else {
             if (_this.currentColErase > -37) {
-                _this.where[0].motors.forEach(function(motor) {
+                _this.where[0].motors.forEach((motor) => {
                     var x = _this.currentColErase + _this.where[0].offset;
                     if (motor.x == x) {
                         motor.sendCommand(0x14);
                     }
                 });
 
-                _this.where[3].motors.forEach(function(motor) {
-                    var y = 17 + ((_this.currentColErase - 16) * -1);
+                _this.where[3].motors.forEach((motor) => {
+                    var y = ((_this.currentColErase - 16) * -1);
                     if (motor.y == y) {
                         motor.sendCommand(0x14);
                     }
                 });
 
                 if (_this.currentColErase < 5) {
-                    _this.where[1].motors.forEach(function(motor) {
+                    _this.where[1].motors.forEach((motor) => {
                         var x = _this.currentColErase + _this.where[1].width + _this.where[1].offset;
                         if (motor.x == x) {
                             motor.sendCommand(0x14);
@@ -77,7 +80,7 @@ var Ola = function(type, width, where, loop) {
                     });
                 }
                 if (_this.currentColErase < -6) {
-                    _this.where[2].motors.forEach(function(motor) {
+                    _this.where[2].motors.forEach((motor) => {
                         var x = _this.currentColErase + _this.where[2].width + _this.where[2].offset - 10;
                         if (motor.x == x) {
                             motor.sendCommand(0x14);
@@ -95,30 +98,30 @@ var Ola = function(type, width, where, loop) {
                     setTimeout(_this.wave(), (_this.where[0].motors[0].getFPS() * steps) + 10);
                 } else {
                     _this.running = false;
-                    console.warn(_this.name, 'FINISHED (waiting last command)');
+                    helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
                 }
             }
         }
     }
-    _this.wave = function() {
+    _this.wave = () => {
         if (_this.type == 'little') {
             if (_this.currentCol > -37) {
-                _this.where[0].motors.forEach(function(motor) {
+                _this.where[0].motors.forEach((motor) => {
                     var x = _this.currentCol + _this.where[0].offset;
                     if (motor.x == (x - motor.y)) {
                         motor.sendCommand(0x3C);
                     }
                 });
 
-                _this.where[3].motors.forEach(function(motor) {
-                    var y = 17 + ((_this.currentCol - 16) * -1);
+                _this.where[3].motors.forEach((motor) => {
+                    var y = ((_this.currentCol - 16) * -1);
                     if (motor.y == y) {
                         motor.sendCommand(0x3C);
                     }
                 });
 
                 if (_this.currentCol < 5) {
-                    _this.where[1].motors.forEach(function(motor) {
+                    _this.where[1].motors.forEach((motor) => {
                         var x = _this.currentCol + _this.where[1].width + _this.where[1].offset;
                         if (motor.x == (x - motor.y)) {
                             motor.sendCommand(0x3C);
@@ -129,7 +132,7 @@ var Ola = function(type, width, where, loop) {
                     _this.eraseWave();
                 }
                 if (_this.currentCol < -6) {
-                    _this.where[2].motors.forEach(function(motor) {
+                    _this.where[2].motors.forEach((motor) => {
                         var x = _this.currentCol + _this.where[2].width + _this.where[2].offset - 10;
                         if (motor.x == (x - motor.y)) {
                             motor.sendCommand(0x3C);
@@ -142,22 +145,22 @@ var Ola = function(type, width, where, loop) {
             }
         } else {
             if (_this.currentCol > -37) {
-                _this.where[0].motors.forEach(function(motor) {
+                _this.where[0].motors.forEach((motor) => {
                     var x = _this.currentCol + _this.where[0].offset;
                     if (motor.x == x) {
                         motor.sendCommand(0xE4);
                     }
                 });
 
-                _this.where[3].motors.forEach(function(motor) {
-                    var y = 17 + ((_this.currentCol - 16) * -1);
+                _this.where[3].motors.forEach((motor) => {
+                    var y = ((_this.currentCol - 16) * -1);
                     if (motor.y == y) {
                         motor.sendCommand(0xE4);
                     }
                 });
 
                 if (_this.currentCol < 5) {
-                    _this.where[1].motors.forEach(function(motor) {
+                    _this.where[1].motors.forEach((motor) => {
                         var x = _this.currentCol + _this.where[1].width + _this.where[1].offset;
                         if (motor.x == x) {
                             motor.sendCommand(0xE4);
@@ -165,7 +168,7 @@ var Ola = function(type, width, where, loop) {
                     });
                 }
                 if (_this.currentCol < -6) {
-                    _this.where[2].motors.forEach(function(motor) {
+                    _this.where[2].motors.forEach((motor) => {
                         var x = _this.currentCol + _this.where[2].width + _this.where[2].offset - 10;
                         if (motor.x == x) {
                             motor.sendCommand(0xE4);
@@ -178,16 +181,17 @@ var Ola = function(type, width, where, loop) {
             }
         }
     }
-    _this.init = function() {
+    _this.init = () => {
         if (!_this.running) {
             _this.wave();
+            helper.logger.debug(`${_this.name} STARTED`);
             var steps = 1100;
             _this.running = true;
-            setTimeout(function() {
+            setTimeout(() => {
                 _this.eraseWave();
             }, (_this.where[0].motors[0].getFPS() * steps) + 10);
         } else {
-            console.warn(_this.name, 'already RUNNING');
+            helper.logger.debug(`${_this.name} already RUNNING`);
         }
     }
 }

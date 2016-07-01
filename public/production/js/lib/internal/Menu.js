@@ -62,27 +62,30 @@ scoreBoardMenu.add(optionsScoreBoard, 'loop');
 scoreBoardMenu.add(optionsScoreBoard, 'START');
 scoreBoardMenu.open();
 
-// //OLA
-// var ContextMenuOla = function() {
-//     var _this = this;
-//     this.type = 'little';
-//     this.loop = false;
-//     this.START = function() {
-//         // var ola = new Ola(_this.type, 13, [rightWall, frontWall, leftWall, roof], _this.loop);
-//         // ola.init();
-//     };
-// };
-// var optionsOla = new ContextMenuOla();
-//
-// var olaMenu = gui.addFolder('Ola');
-// olaMenu.add(optionsOla, 'type', {
-//     '45º short': 'little',
-//     '90º long': 'full'
-// });
-// olaMenu.add(optionsOla, 'loop');
-// olaMenu.add(optionsOla, 'START');
-// olaMenu.open();
-//
+//OLA
+var ContextMenuOla = function() {
+    var _this = this;
+    this.type = 'little';
+    this.loop = false;
+    this.START = function() {
+        socket.emit('animation', {
+            animation: 'Ola',
+            type: _this.type,
+            loop: _this.loop
+        });
+    };
+};
+var optionsOla = new ContextMenuOla();
+
+var olaMenu = gui.addFolder('Ola');
+olaMenu.add(optionsOla, 'type', {
+    '45º short': 'little',
+    '90º long': 'full'
+});
+olaMenu.add(optionsOla, 'loop');
+olaMenu.add(optionsOla, 'START');
+olaMenu.open();
+
 // //IDLE
 // var ContextMenuIdle = function() {
 //     var _this = this;

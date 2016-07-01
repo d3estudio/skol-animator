@@ -9,6 +9,7 @@ var socket = ioc.connect('http://localhost:3000');
 //animations
 var ScrollText = require('./animations/ScrollText');
 var ScoreBoard = require('./animations/ScoreBoard');
+var Ola = require('./animations/Ola');
 
 //walls with motors
 var roof = new Wall(374, 11, 'top', 0, socket),
@@ -38,6 +39,10 @@ socket.on('connect', () => {
                 score2: command.score2
             }, [rightWall, frontWall, leftWall, roof], command.loop);
             score.init();
+        }
+        if (command.animation == 'Ola') {
+            var ola = new Ola(command.type, 13, [rightWall, frontWall, leftWall, roof], command.loop);
+            ola.init();
         }
     })
     .on('disconnect', () => {
