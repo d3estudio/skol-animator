@@ -32,7 +32,7 @@ app
 
 // run
 http.listen(3000);
-console.log('Listening on port 3000');
+helper.logger.debug(`Listening on port 3000`);
 
 serverSocket.on('connection', (clientSocket) => {
     helper.logger.debug(`[CLIENT] ${clientSocket.id} CONNECTED`);
