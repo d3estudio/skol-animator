@@ -24,7 +24,7 @@ socket.on('connect', () => {
         helper.logger.debug('[Processor] Connected to port 3000');
     })
     .on('exec', (command) => {
-        helper.logger.debug('[Processor] Received Command');
+        helper.logger.debug(`[Processor] Received Command ${command.animation}`);
         if (command.animation == 'ScrollText') {
             var skol = new ScrollText(command.message, 13, [rightWall, frontWall, leftWall, roof], command.continuous, command.loop);
             skol.init();
