@@ -8,13 +8,16 @@ NotificationsManager.prototype = {
             Notification.requestPermission().then(function(result) {
                 console.log("[Notifications] Permission " + result);
             });
+            this.ready = true;
         } else if(!this.ready && !Notification) {
             console.warn("[Notifications] This browser does not support notifications.");
+            ready = false;
         }
-        ready = true;
     },
     fire: function(title, body, icon) {
-        var n = new Notification(title, { body: body, icon: icon });
+        if(this.ready) {
+            var n = new Notification(title, { body: body, icon: icon });
+        }
     }
 };
 
