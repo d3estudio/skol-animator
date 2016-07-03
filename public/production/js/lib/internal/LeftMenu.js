@@ -19,35 +19,49 @@ var createFolder = function(name, prop, items, custom) {
 
 var StopAllButton = function() {
     this.STOP_ALL = function() {
-        socket.emit('stop');
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL STOP THE CURRENT ANIMATION(S)')) {
+            socket.emit('stop');
+        }
     };
     this.STOP_ALL.dangerous = true;
 };
 
 var AdminCommands = function() {
-    this.DISABLE = function() {
-        socket.emit('animation', 0xFF);
+    this.DISABLE____0xFF = function() {
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL DISABLE ALL MOTORS')) {
+            socket.emit('animation', 0xFF);
+        }
     };
-    this.CALIBRATE = function() {
-        socket.emit('animation', 0xFE);
+    this.CALIBRATE____0xFE = function() {
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL RECALIBRATE ALL THE MOTORS TO ZERO')) {
+            socket.emit('animation', 0xFE);
+        }
     };
-    this.RESET = function() {
-        socket.emit('animation', 0xFC);
+    this.RESET____0xFC = function() {
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL RESET ALL MOTORS')) {
+            socket.emit('animation', 0xFC);
+        }
     };
-    this.SET_ZERO_TO_POS = function() {
-        socket.emit('animation', 0xFD);
+    this.SET_ZERO_TO_POS____0xFD = function() {
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL SET THE CURRENT ANGLE TO ACT AS ZERO')) {
+            socket.emit('animation', 0xFD);
+        }
     };
-    this.HALT = function() {
-        socket.emit('animation', 0xFB);
+    this.HALT____0xFB = function() {
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL (DONT REMEMBER) ALL THE MOTORS')) {
+            socket.emit('animation', 0xFB);
+        }
     };
 }
 
 var BasicAngles = function() {
     this.SEND = function() {
-        socket.emit('animation', {
-            animation: 'BasicAngle',
-            angle: this.angle
-        });
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL ROTATE ALL THE MOTORS TO THE SPECIFIED ANGLE')) {
+            socket.emit('animation', {
+                animation: 'BasicAngle',
+                angle: parseInt(this.angle)
+            });
+        }
     };
     this.angle = 0x14;
 }
@@ -69,11 +83,11 @@ var Statuses = function() {
 
 createFolder('Stop All', new StopAllButton(), ['STOP_ALL']);
 createFolder('Admin Commands', new AdminCommands(), [
-    'DISABLE',
-    'CALIBRATE',
-    'RESET',
-    'SET_ZERO_TO_POS',
-    'HALT'
+    'DISABLE____0xFF',
+    'CALIBRATE____0xFE',
+    'RESET____0xFC',
+    'SET_ZERO_TO_POS____0xFD',
+    'HALT____0xFB'
 ]);
 createFolder('Basic Angles', new BasicAngles(), ['SEND'], {
     before: function(folder, prop) {
@@ -95,19 +109,22 @@ createFolder('Statuses', new Statuses(), ['server', 'engines', 'socket']);
 var container = document.getElementById('left-menu');
 container.appendChild(leftGui.domElement);
 
-var noop = function() { };
+var noop = function() {};
 var updateStatusFactory = function(name) {
     console.log(leftGui.__folders.Statuses.__controllers);
     var target = leftGui.__folders.Statuses.__controllers.find(function(c) {
         return c.property === name;
     });
-    if(!target) {
+    if (!target) {
         console.warn("[LeftGui::updateStatusFactory] Cannot find status property named '" + name + "'. Returning a noop function!");
         return noop;
     }
 
     return function(color, status) {
-        target.setValue({ color: color, status: status });
+        target.setValue({
+            color: color,
+            status: status
+        });
     };
 };
 
