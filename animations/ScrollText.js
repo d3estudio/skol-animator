@@ -192,7 +192,7 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
             _this.draw();
             helper.logger.debug(`${_this.name} STARTED`);
         } else {
-            console.debug(_this.name, _this.message, 'already RUNNING');
+            helper.logger.debug(`${_this.name} already RUNNING`);
         }
     }
 }

@@ -8,8 +8,12 @@ var ContextMenuScrollText = function() {
     this.loop = false;
     this.START = function() {
         if (_this.message.length > 0) {
-            var scroll = new ScrollText(_this.message, 13, 5, [rightWall, frontWall, leftWall, roof], _this.continuous, _this.loop);
-            scroll.init();
+            socket.emit('animation', {
+                animation: 'ScrollText',
+                message: _this.message,
+                continuous: _this.continuous,
+                loop: _this.loop
+            });
         } else {
             window.alert('Type a message!');
         }
@@ -28,19 +32,20 @@ scrollTextMenu.open();
 var ContextMenuScoreBoard = function() {
     var _this = this;
     this.country1 = 'BRA';
-    this.score1 = '1';
+    this.score1 = '0';
     this.country2 = 'USA';
     this.score2 = '0';
     this.loop = false;
     this.START = function() {
         if (_this.country1.length > 0 && _this.score1.length > 0 && _this.country2.length > 0 && _this.score2.length > 0) {
-            var scroll = new ScoreBoard({
+            socket.emit('animation', {
+                animation: 'ScoreBoard',
                 country1: _this.country1,
                 score1: _this.score1,
                 country2: _this.country2,
-                score2: _this.score2
-            }, [rightWall, frontWall, leftWall, roof], _this.loop);
-            scroll.init();
+                score2: _this.score2,
+                loop: _this.loop
+            });
         } else {
             window.alert('We need two countries and two scores!');
         }
@@ -63,8 +68,11 @@ var ContextMenuOla = function() {
     this.type = 'little';
     this.loop = false;
     this.START = function() {
-        var ola = new Ola(_this.type, 13, [rightWall, frontWall, leftWall, roof], _this.loop);
-        ola.init();
+        socket.emit('animation', {
+            animation: 'Ola',
+            type: _this.type,
+            loop: _this.loop
+        });
     };
 };
 var optionsOla = new ContextMenuOla();
@@ -81,11 +89,14 @@ olaMenu.open();
 //IDLE
 var ContextMenuIdle = function() {
     var _this = this;
-    this.type = 'glass';
+    this.type = 'shuffle';
     this.loop = false;
     this.START = function() {
-        var idle = new Idle(_this.type, 18, [rightWall, frontWall, leftWall, roof], _this.loop);
-        idle.init();
+        socket.emit('animation', {
+            animation: 'Idle',
+            type: _this.type,
+            loop: _this.loop
+        });
     };
 };
 var optionsIdle = new ContextMenuIdle();
@@ -103,27 +114,39 @@ idleMenu.add(optionsIdle, 'loop');
 idleMenu.add(optionsIdle, 'START');
 idleMenu.open();
 
+//FLAG
+var ContextMenuFlag = function() {
+    var _this = this;
+    this.type = 'roof';
+    this.loop = false;
+    this.START = function() {
+        socket.emit('animation', {
+            animation: 'Flag',
+            type: _this.type,
+            loop: _this.loop
+        });
+    };
+};
+var optionsFlag = new ContextMenuFlag();
+
+var flagMenu = gui.addFolder('Flag');
+flagMenu.add(optionsFlag, 'type', {
+    'Roof': 'roof',
+    'Roof/Front': 'front'
+});
+flagMenu.add(optionsFlag, 'loop');
+flagMenu.add(optionsFlag, 'START');
+flagMenu.open();
+
 //MUSIC
-var realTimeMusic = null;
-var realTimeAudio = new RealTimeAudio(13);
-realTimeAudio.getSample = function(data) {
-    if (realTimeMusic.type == 'bpm') {
-        realTimeMusic.process(realTimeAudio.bpm);
-    } else {
-        realTimeMusic.process(data);
-    }
-}
 var ContextMenuMusic = function() {
     var _this = this;
     this.type = 'equalizer';
     this.START = function() {
-        if (_this.type == 'bpm' || _this.type == 'equalizer') {
-            realTimeMusic = new Music(_this.type, 13, [rightWall, frontWall, leftWall])
-            realTimeAudio.init();
-        } else {
-            var music = new Music(_this.type, 18, [rightWall, frontWall, leftWall, roof]);
-            music.init();
-        }
+        socket.emit('animation', {
+            animation: 'Music',
+            type: _this.type
+        });
     };
 };
 var optionsMusic = new ContextMenuMusic();

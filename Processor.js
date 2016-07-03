@@ -12,6 +12,7 @@ var ScoreBoard = require('./animations/ScoreBoard');
 var Ola = require('./animations/Ola');
 var Music = require('./animations/Music');
 var Idle = require('./animations/Idle');
+var Flag = require('./animations/Flag');
 
 //walls with motors
 var roof = new Wall(374, 11, 'top', 0, socket),
@@ -127,7 +128,10 @@ socket.on('connect', () => {
             animation.init();
         } else if (command.animation == 'Idle') {
             animation = new Idle(command.type, 18, [rightWall, frontWall, leftWall, roof], command.loop);
-            idle.init();
+            animation.init();
+        } else if (command.animation == 'Flag') {
+            animation = new Flag([roof, frontWall], command.type, command.loop);
+            animation.init();
         } else if (command.animation == 'BasicAngle') {
             [rightWall, frontWall, leftWall, roof].forEach((wall) => {
                 wall.motors.forEach((motor) => {

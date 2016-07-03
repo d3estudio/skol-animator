@@ -111,12 +111,10 @@ container.appendChild(leftGui.domElement);
 
 var noop = function() {};
 var updateStatusFactory = function(name) {
-    console.log(leftGui.__folders.Statuses.__controllers);
     var target = leftGui.__folders.Statuses.__controllers.find(function(c) {
         return c.property === name;
     });
     if (!target) {
-        console.warn("[LeftGui::updateStatusFactory] Cannot find status property named '" + name + "'. Returning a noop function!");
         return noop;
     }
 

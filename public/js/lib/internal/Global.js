@@ -1,6 +1,6 @@
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-var DEBUG = true;
+var DEBUG = false;
 
 if (!DEBUG) {
     console.log = function() {
@@ -10,6 +10,9 @@ if (!DEBUG) {
 
     }
     console.warn = function() {
+
+    }
+    console.debug = function() {
 
     }
 }
