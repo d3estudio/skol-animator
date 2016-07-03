@@ -14,15 +14,17 @@ if (!DEBUG) {
     }
 }
 
+var lastCommand = Date.now();
 var socket = io();
 socket.on('command', function (command) {
+    lastCommand = Date.now();
     window[command.wall].motors.forEach(function(motor, index) {
         motor.sendCommand(command.motors[index]);
     });
 });
 
-var checkSocketStatus = function() {
-    if(leftGui && checkSocketStatus.lastStatus !== socket.connected) {
+var checkStatuses = function() {
+    if(leftGui && checkStatuses.lastSocketStatus !== socket.connected) {
         var color, text;
         if(socket.connected) {
             color = '#00E029';
@@ -33,8 +35,23 @@ var checkSocketStatus = function() {
             notifications.fire('Socket Status', 'Connection lost!');
         }
         leftGui.updateStatusForSocket(color, text);
-        checkSocketStatus.lastStatus = socket.connected;
+        checkStatuses.lastSocketStatus = socket.connected;
     }
-}
 
-setInterval(checkSocketStatus, 1000);
+    if(socket.connected) {
+        if(Date.now() - lastCommand >= 1000) {
+            if(checkStatuses.lastCommandStatus) {
+                leftGui.updateStatusForServer('#CC0000', 'Too quiet!');
+                notifications.fire('Server Status', 'Isn\'t as fast as we expected!');
+                checkStatuses.lastCommandStatus = false;
+            }
+        } else {
+            leftGui.updateStatusForServer('#00E029', 'Healthy as fuck');
+            checkStatuses.lastCommandStatus = true;
+        }
+    }
+};
+
+checkStatuses.lastCommandStatus = true;
+
+setInterval(checkStatuses, 1000);
