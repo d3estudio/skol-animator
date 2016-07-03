@@ -26,7 +26,6 @@ socket
     })
     .on('ackHealth', function(data) {
         lastAckHealth = data;
-        console.log('Received ack data: ', lastAckHealth);
     });
 
 var checkStatuses = function() {
