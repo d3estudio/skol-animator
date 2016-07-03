@@ -23,11 +23,28 @@ leftWall.init();
 frontWall.init();
 rightWall.init();
 
-var Redis = require('./lib/redis');
-var r = new Redis();
-r.ackCallback = function() {
-    helper.logger.debug(`Send a message here with the status TRUE for the front-end`);
+var Redis = require('./lib/redis'),
+    r = new Redis(),
+    lastAck = Date.now(),
+    healthStatus = { healthy: true, lastAck: 0 };
+var emitHealthStatus = function(healthy) {
+    if(healthy !== undefined) {
+        healthStatus = { healthy, lastAck };
+    }
+    socket.emit('ackHealth', healthStatus);
 }
+r.ackCallback = function() {
+    lastAck = Date.now();
+}
+var enginesWatchDog = function() {
+    if(lastAck >= 2000 && healthStatus.healthy) {
+        emitHealthStatus(false);
+    } else if(lastAck <= 2000 && !healthStatus.healthStatus) {
+        emitHealthStatus(true);
+    }
+}
+
+setInterval(enginesWatchDog, 1000);
 
 //all animations
 var currentAnimations = [];
@@ -85,6 +102,7 @@ var TOP_BITMAP = {
 //init socket
 socket.on('connect', () => {
         helper.logger.debug('[Processor] Connected to port 3000');
+        emitHealthStatus();
     })
     .on('exec', (command) => {
         helper.logger.debug(`[Processor] Received Command ${command.animation}`);

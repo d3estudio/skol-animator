@@ -14,14 +14,20 @@ if (!DEBUG) {
     }
 }
 
-var lastCommand = Date.now();
+var lastCommand = Date.now(),
+    lastAckHealth = { healthy: true };
 var socket = io();
-socket.on('command', function (command) {
-    lastCommand = Date.now();
-    window[command.wall].motors.forEach(function(motor, index) {
-        motor.sendCommand(command.motors[index]);
+socket
+    .on('command', function (command) {
+        lastCommand = Date.now();
+        window[command.wall].motors.forEach(function(motor, index) {
+            motor.sendCommand(command.motors[index]);
+        });
+    })
+    .on('ackHealth', function(data) {
+        lastAckHealth = data;
+        console.log('Received ack data: ', lastAckHealth);
     });
-});
 
 var checkStatuses = function() {
     if(leftGui && checkStatuses.lastSocketStatus !== socket.connected) {
@@ -49,6 +55,20 @@ var checkStatuses = function() {
             leftGui.updateStatusForServer('#00E029', 'Healthy as fuck');
             checkStatuses.lastCommandStatus = true;
         }
+    }
+
+    if(checkStatuses.lastAckStatus !== lastAckHealth.healthy) {
+        var color, text;
+        if(lastAckHealth.healthy) {
+            color = '#00E029';
+            text = 'Acking as hell';
+        } else {
+            color = '#CC0000';
+            text = 'OMFG'
+            notifications.fire('Engines Status', 'Acks are not going through!');
+        }
+        leftGui.updateStatusForEngines(color, text);
+        checkStatuses.lastAckStatus = lastAckHealth.healthy;
     }
 };
 
