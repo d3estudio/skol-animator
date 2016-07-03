@@ -20,3 +20,21 @@ socket.on('command', function (command) {
         motor.sendCommand(command.motors[index]);
     });
 });
+
+var checkSocketStatus = function() {
+    if(leftGui && checkSocketStatus.lastStatus !== socket.connected) {
+        var color, text;
+        if(socket.connected) {
+            color = '#00E029';
+            text = 'Alive\'n\'kickin\'';
+        } else {
+            color = '#CC0000';
+            text = 'Something is wrong!'
+            notifications.fire('Socket Status', 'Connection lost!');
+        }
+        leftGui.updateStatusForSocket(color, text);
+        checkSocketStatus.lastStatus = socket.connected;
+    }
+}
+
+setInterval(checkSocketStatus, 1000);
