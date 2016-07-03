@@ -118,7 +118,6 @@ idleMenu.open();
 var ContextMenuFlag = function() {
     var _this = this;
     this.type = 'roof';
-    this.loop = false;
     this.START = function() {
         socket.emit('animation', {
             animation: 'Flag',
@@ -134,7 +133,6 @@ flagMenu.add(optionsFlag, 'type', {
     'Roof': 'roof',
     'Roof/Front': 'front'
 });
-flagMenu.add(optionsFlag, 'loop');
 flagMenu.add(optionsFlag, 'START');
 flagMenu.open();
 

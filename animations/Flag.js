@@ -4,14 +4,13 @@ var helper = require('../lib/Shared');
 //libs
 var Alphabet = require('../lib/Alphabet');
 
-module.exports = function Flag(where, type, loop) {
+module.exports = function Flag(where, type) {
     var _this = this;
     _this.name = 'FlagAnimation';
     _this.where = where;
     _this.type = type;
     _this.roof_flag = new Alphabet('!').textToBin()[0];
     _this.roof_front_flag = new Alphabet('_').textToBin()[0];
-    _this.loop = loop;
     _this.draw = () => {
         if (_this.type == 'roof') {
             _this.where[0].motors.forEach((motor) => {
