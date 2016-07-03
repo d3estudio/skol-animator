@@ -40,7 +40,7 @@ var enginesWatchDog = function() {
     var diff = Date.now() - lastAck;
     if(diff >= 2000 && healthStatus.healthy) {
         emitHealthStatus(false);
-    } else if(diff <= 2000 && !healthStatus.healthStatus) {
+    } else if(diff <= 2000 && !healthStatus.healthy) {
         emitHealthStatus(true);
     }
 }
