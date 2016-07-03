@@ -52,22 +52,16 @@ var BasicAngles = function() {
     this.angle = 0x14;
 }
 
-var ServerStatus = function() {
-    this.status = {
+var Statuses = function() {
+    this.server = {
         color: '#00E029',
         status: 'Healthy as fuck'
     };
-}
-
-var MotorAcks = function() {
-    this.status = {
+    this.engines = {
         color: '#00E029',
         status: 'Acking as hell'
     };
-}
-
-var SocketStatus = function() {
-    this.status = {
+    this.socket = {
         color: '#00E029',
         status: 'Alive\'n\'kickin\''
     };
@@ -96,9 +90,7 @@ createFolder('Basic Angles', new BasicAngles(), ['SEND'], {
         });
     }
 });
-createFolder('Server', new ServerStatus(), ['status']);
-createFolder('Motors', new MotorAcks(), ['status']);
-createFolder('Socket', new SocketStatus(), ['status']);
+createFolder('Statuses', new Statuses(), ['server', 'engines', 'socket']);
 
 var container = document.getElementById('left-menu');
 container.appendChild(leftGui.domElement);
