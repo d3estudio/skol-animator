@@ -37,9 +37,10 @@ r.ackCallback = function() {
     lastAck = Date.now();
 }
 var enginesWatchDog = function() {
-    if(lastAck >= 2000 && healthStatus.healthy) {
+    var diff = Date.now() - lastAck;
+    if(diff >= 2000 && healthStatus.healthy) {
         emitHealthStatus(false);
-    } else if(lastAck <= 2000 && !healthStatus.healthStatus) {
+    } else if(diff <= 2000 && !healthStatus.healthStatus) {
         emitHealthStatus(true);
     }
 }
