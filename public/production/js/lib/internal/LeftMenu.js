@@ -96,9 +96,9 @@ createFolder('Basic Angles', new BasicAngles(), ['SEND'], {
         });
     }
 });
-createFolder('Server Status', new ServerStatus(), ['status']);
-createFolder('Motor Acknowledgements', new MotorAcks(), ['status']);
-createFolder('Socket Status', new SocketStatus(), ['status']);
+createFolder('Server', new ServerStatus(), ['status']);
+createFolder('Motors', new MotorAcks(), ['status']);
+createFolder('Socket', new SocketStatus(), ['status']);
 
 var container = document.getElementById('left-menu');
 container.appendChild(leftGui.domElement);
