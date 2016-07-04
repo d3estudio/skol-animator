@@ -1,0 +1,6 @@
+socketIO-client
+pyserial
+numpy
+pysndfile
+scikits.audiolab
+pyalsaaudio
