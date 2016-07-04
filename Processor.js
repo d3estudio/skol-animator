@@ -24,13 +24,21 @@ leftWall.init();
 frontWall.init();
 rightWall.init();
 
+var globalMusic = null;
+
 var Redis = require('./lib/redis'),
     r = new Redis(),
     lastAck = Date.now(),
-    healthStatus = { healthy: true, lastAck: 0 };
+    healthStatus = {
+        healthy: true,
+        lastAck: 0
+    };
 var emitHealthStatus = function(healthy) {
-    if(healthy !== undefined) {
-        healthStatus = { healthy, lastAck };
+    if (healthy !== undefined) {
+        healthStatus = {
+            healthy,
+            lastAck
+        };
     }
     socket.emit('ackHealth', healthStatus);
 }
@@ -39,9 +47,9 @@ r.ackCallback = function() {
 }
 var enginesWatchDog = function() {
     var diff = Date.now() - lastAck;
-    if(diff >= 2000 && healthStatus.healthy) {
+    if (diff >= 2000 && healthStatus.healthy) {
         emitHealthStatus(false);
-    } else if(diff <= 2000 && !healthStatus.healthy) {
+    } else if (diff <= 2000 && !healthStatus.healthy) {
         emitHealthStatus(true);
     }
 }
@@ -88,10 +96,10 @@ var TOP_BITMAP = {
         TOP_BITMAP.map[motor.y][motor.x] = motor.command;
     });
     rightWall.motors.forEach((motor) => {
-        FACE_BITMAP.map[motor.y][motor.x+28] = motor.command;
+        FACE_BITMAP.map[motor.y][motor.x + 28] = motor.command;
     });
     frontWall.motors.forEach((motor) => {
-        FACE_BITMAP.map[motor.y][motor.x+17] = motor.command;
+        FACE_BITMAP.map[motor.y][motor.x + 17] = motor.command;
     });
     leftWall.motors.forEach((motor) => {
         FACE_BITMAP.map[motor.y][motor.x] = motor.command;
@@ -109,6 +117,7 @@ socket.on('connect', () => {
     .on('exec', (command) => {
         helper.logger.debug(`[Processor] Received Command ${command.animation}`);
         var animation = '';
+        globalMusic = null;
         if (command.animation == 'ScrollText') {
             animation = new ScrollText(command.message, 13, [rightWall, frontWall, leftWall, roof], command.continuous, command.loop);
             animation.init();
@@ -124,8 +133,12 @@ socket.on('connect', () => {
             animation = new Ola(command.type, 13, [rightWall, frontWall, leftWall, roof], command.loop);
             animation.init();
         } else if (command.animation == 'Music') {
-            animation = new Music(command.type, 13, [rightWall, frontWall, leftWall, roof]);
-            animation.init();
+            animation = new Music(command.type, 13, [rightWall, frontWall, leftWall, roof], null);
+            if (command.type == 'equalizer') {
+                globalMusic = animation;
+            } else {
+                animation.init();
+            }
         } else if (command.animation == 'Idle') {
             animation = new Idle(command.type, 18, [rightWall, frontWall, leftWall, roof], command.loop);
             animation.init();
@@ -150,6 +163,11 @@ socket.on('connect', () => {
         }
         if (animation && animation.name) {
             currentAnimations.push(animation);
+        }
+    })
+    .on('fft', (data) => {
+        if (globalMusic) {
+            globalMusic.process(data);
         }
     })
     .on('freeze', () => {

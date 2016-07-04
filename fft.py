@@ -3,13 +3,33 @@
 # import struct
 # import wave
 # import serial
-# import time
+import time
+from random import randint
 
-from socketIO_client import SocketIO, LoggingNamespace
+from socketIO_client import SocketIO
 
-with SocketIO('localhost', 3000, LoggingNamespace) as socketIO:
-    socketIO.emit('ackHealth', { "healthy": True })
-    socketIO.wait()
+socketIO = SocketIO('localhost', 3000)
+
+while True:
+    fftArray = [randint(0, 255),
+                               randint(0, 255),
+                               randint(0, 255),
+                               randint(0, 255),
+                               randint(0, 255),
+                               randint(0, 255),
+                               randint(0, 255),
+                               randint(0, 255),
+                               randint(0, 255),
+                               randint(0, 255),
+                               randint(0, 255),
+                               randint(0, 255),
+                               randint(0, 255)]
+    socketIO.emit('fftArray', fftArray)
+    print fftArray
+    # 6 steps from a motor (65*6=390)
+    time.sleep(390.0 / 1000.0)
+
+socketIO.wait()
 
 # serdev = '/dev/ttyACM0'
 # s = serial.Serial(serdev, baudrate=921600)

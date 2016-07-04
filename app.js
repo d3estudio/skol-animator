@@ -51,6 +51,9 @@ serverSocket.on('connection', (clientSocket) => {
         .on('animation', (command) => {
             serverSocket.emit('exec', command);
         })
+        .on('fftArray', (command) => {
+            serverSocket.emit('fft', command);
+        })
         .on('stop', () => {
             serverSocket.emit('freeze');
         })

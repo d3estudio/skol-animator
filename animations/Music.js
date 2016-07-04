@@ -125,7 +125,7 @@ module.exports = function Music(type, width, where) {
         helper.logger.debug(`${bpm}`);
     }
     _this.equalizer = (frequency) => {
-        _this.where.forEach((wall) => {
+        [_this.where[0], _this.where[1], _this.where[2]].forEach((wall) => {
             wall.motors.forEach((motor) => {
                 frequency.forEach((freq, index) => {
                     if (motor.x == (index + wall.offset)) {
@@ -135,7 +135,9 @@ module.exports = function Music(type, width, where) {
                                 motor.sendCommand(0x19);
                             }
                         } else {
-                            motor.sendCommand(0x14);
+                            if (!motor.locked) {
+                                motor.sendCommand(0x14);
+                            }
                         }
                     }
                 })
