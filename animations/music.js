@@ -1,5 +1,5 @@
 // main functions
-var helper = require('../lib/Shared');
+var helper = require('../lib/shared');
 
 module.exports = function Music(type, width, where) {
     var _this = this;

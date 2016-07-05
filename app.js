@@ -8,10 +8,10 @@ var app = require('express')(),
     consolidate = require('consolidate');
 
 // main functions
-var helper = require('./lib/Shared');
+var helper = require('./lib/shared');
 
 // controllers
-var publicController = require('./controllers/Public');
+var publicController = require('./controllers/public');
 
 // We keep the last engine health check, so we can emit it
 // as soon as the client connects.
