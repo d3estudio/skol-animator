@@ -1,8 +1,8 @@
 // main functions
-var helper = require('../lib/Shared');
+var helper = require('../lib/shared');
 
 //libs
-var Alphabet = require('../lib/Alphabet');
+var Alphabet = require('../lib/alphabet');
 
 module.exports = function ScoreBoard(message, where, loop) {
     var _this = this;

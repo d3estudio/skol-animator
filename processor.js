@@ -1,18 +1,18 @@
 //main functions
-var helper = require('./lib/Shared');
-var Wall = require('./lib/Wall');
+var helper = require('./lib/shared');
+var Wall = require('./lib/wall');
 
 //libs
 var ioc = require('socket.io-client');
 var socket = ioc.connect('http://localhost:3000');
 
 //animations
-var ScrollText = require('./animations/ScrollText');
-var ScoreBoard = require('./animations/ScoreBoard');
-var Ola = require('./animations/Ola');
-var Music = require('./animations/Music');
-var Idle = require('./animations/Idle');
-var Flag = require('./animations/Flag');
+var ScrollText = require('./animations/scroll-text');
+var ScoreBoard = require('./animations/score-board');
+var Ola = require('./animations/ola');
+var Music = require('./animations/music');
+var Idle = require('./animations/idle');
+var Flag = require('./animations/flag');
 
 //walls with motors
 var roof = new Wall(374, 11, 'top', 0, socket),
