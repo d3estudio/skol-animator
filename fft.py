@@ -1,115 +1,67 @@
-# import alsaaudio
-# import numpy
-# import struct
-# import wave
-# import serial
+import alsaaudio
+import numpy
+import struct
+import wave
+import serial
 import time
 from random import randint
-
 from socketIO_client import SocketIO
-
 socketIO = SocketIO('localhost', 3000)
 
-while True:
-    fftArray = [randint(0, 255),
-                               randint(0, 255),
-                               randint(0, 255),
-                               randint(0, 255),
-                               randint(0, 255),
-                               randint(0, 255),
-                               randint(0, 255),
-                               randint(0, 255),
-                               randint(0, 255),
-                               randint(0, 255),
-                               randint(0, 255),
-                               randint(0, 255),
-                               randint(0, 255)]
-    socketIO.emit('fftArray', fftArray)
-    print fftArray
-    # 6 steps from a motor (65*6=390)
-    time.sleep(390.0 / 1000.0)
+channels = 1
+informat = alsaaudio.PCM_FORMAT_S16_LE
+rate = 44100
+framesize = 1024
 
-socketIO.wait()
+matrix = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-# serdev = '/dev/ttyACM0'
-# s = serial.Serial(serdev, baudrate=921600)
-#
-# channels = 1
-# informat = alsaaudio.PCM_FORMAT_S16_LE
-# rate = 44100
-# framesize = 1024
-#
-# matrix = []
-# matrix.append(0)
-# #matrix = matrix * 42
-# matrix = matrix * 8
-#
-# teste = []
-# teste.append(0)
-# teste = teste * 8
-#
-# weighting = [50, 50, 500, 500, 500, 500, 500, 500]
-# #weighting = []
-# # weighting.append(100)
-# #weighting = weighting * 42
-#
-# bit_matrix = [[0 for x in xrange(8)] for x in xrange(8)]
-#
-# power = []
-#
-# #mic = 'sysdefault:CARD=Device'
-# #mic = 'dmix:CARD=SB,DEV=0'
-# #wavfile = wave.open('/home/pi/test.wav','r')
-#
-# #recorder = alsaaudio.PCM(type=alsaaudio.PCM_CAPTURE, mode=alsaaudio.PCM_NORMAL, card=mic)
-# recorder = alsaaudio.PCM(type=alsaaudio.PCM_CAPTURE, mode=alsaaudio.PCM_NORMAL)
-# recorder.setchannels(channels)
-# recorder.setrate(rate)
-# recorder.setformat(informat)
-# recorder.setperiodsize(framesize)
-#
-#
-# def piff(val):
-#     return int(2 * framesize * val / rate)
-#
-#
-# def calculate_levels(data, framesize, rate):
-#     global matrix
-#     data = struct.unpack("%dh" % (len(data) / 2), data)
-#     data = numpy.array(data, dtype='h')
-#     fourier = numpy.fft.rfft(data)
-#     fourier = numpy.delete(fourier, len(fourier) - 1)
-#     power = numpy.abs(fourier)
-#     matrix[0] = int(numpy.mean(power[piff(0)	:piff(100):1]))
-#     matrix[1] = int(numpy.mean(power[piff(100)	:piff(200):1]))
-#     matrix[2] = int(numpy.mean(power[piff(200)	:piff(300):1]))
-#     matrix[3] = int(numpy.mean(power[piff(300)	:piff(400):1]))
-#     matrix[4] = int(numpy.mean(power[piff(400)	:piff(500):1]))
-#     matrix[5] = int(numpy.mean(power[piff(500)	:piff(750):1]))
-#     matrix[6] = int(numpy.mean(power[piff(750)	:piff(1000):1]))
-#     matrix[7] = int(numpy.mean(power[piff(1000):piff(2000):1]))
-#     matrix = numpy.divide(numpy.multiply(matrix, weighting), 1000000)
-#     matrix = matrix.clip(0, 8)
-#     return matrix
-#
-# print "Processando.."
-# #data = wavfile.readframes(framesize)
-# l, data = recorder.read()
-#
-# print data
-# while data != '':
-#     matrix = calculate_levels(data, framesize, rate)
-#
-#     for y in range(0, 8):
-#         for x in range(0, 8):
-#             if x < matrix[y]:
-#                 bit_matrix[y][x] = 1
-#                 s.write(chr(255))
-#             else:
-#                 bit_matrix[y][x] = 0
-#                 s.write(chr(0))
-#             # time.sleep(0.0020)
-#     print matrix
-#
-#     l, data = recorder.read()
-#     #data = wavfile.readframes(framesize)
+# input liner here
+weighting = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+bit_matrix = [[0 for x in xrange(13)] for x in xrange(13)]
+
+power = []
+
+card = 'sysdefault:CARD=Device'
+
+recorder = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL, card)
+recorder.setchannels(channels)
+recorder.setrate(rate)
+recorder.setformat(informat)
+recorder.setperiodsize(framesize)
+
+
+def piff(val):
+    return int(2 * framesize * val / rate)
+
+
+def calculate_levels(data, framesize, rate):
+    global matrix
+    data = struct.unpack("%dh" % (len(data) / 2), data)
+    data = numpy.array(data, dtype='h')
+    fourier = numpy.fft.rfft(data)
+    fourier = numpy.delete(fourier, len(fourier) - 1)
+    power = numpy.abs(fourier)
+    matrix[0] = int(numpy.mean(power[piff(0):piff(250):1]))
+    matrix[1] = int(numpy.mean(power[piff(250):piff(500):1]))
+    matrix[2] = int(numpy.mean(power[piff(500):piff(750):1]))
+    matrix[3] = int(numpy.mean(power[piff(750):piff(1000):1]))
+    matrix[4] = int(numpy.mean(power[piff(1000):piff(1250):1]))
+    matrix[5] = int(numpy.mean(power[piff(1250):piff(1500):1]))
+    matrix[6] = int(numpy.mean(power[piff(1500):piff(1750):1]))
+    matrix[7] = int(numpy.mean(power[piff(1750):piff(2000):1]))
+    matrix[8] = int(numpy.mean(power[piff(2000):piff(2250):1]))
+    matrix[9] = int(numpy.mean(power[piff(2250):piff(2500):1]))
+    matrix[10] = int(numpy.mean(power[piff(2500):piff(2750):1]))
+    matrix[11] = int(numpy.mean(power[piff(2750):piff(3000):1]))
+    matrix[12] = int(numpy.mean(power[piff(3000):piff(3250):1]))
+    matrix = numpy.divide(numpy.multiply(matrix, weighting), 100000)
+    return [x for x in matrix]
+
+print "Processing..."
+l, data = recorder.read()
+
+while data != '':
+    matrix = calculate_levels(data, framesize, rate)
+    socketIO.emit('fftArray', matrix)
+    l, data = recorder.read()
