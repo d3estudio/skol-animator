@@ -1,2 +1,3 @@
 sudo forever stop app.js
-sudo forever stop Processor.js
+sudo forever stop processor.js
+sudo forever stop fft.py
