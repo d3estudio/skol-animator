@@ -6,7 +6,7 @@ import serial
 import time
 from random import randint
 from socketIO_client import SocketIO
-socketIO = SocketIO('localhost', 3000)
+socketIO = SocketIO('127.0.0.1', 3000)
 
 channels = 1
 informat = alsaaudio.PCM_FORMAT_S16_LE
@@ -55,12 +55,13 @@ def calculate_levels(data, framesize, rate):
     matrix[10] = int(numpy.mean(power[piff(2500):piff(2750):1]))
     matrix[11] = int(numpy.mean(power[piff(2750):piff(3000):1]))
     matrix[12] = int(numpy.mean(power[piff(3000):piff(3250):1]))
-    matrix = numpy.divide(numpy.multiply(matrix, weighting), 100000)
+    #we have to test this division with real data
+    #matrix = numpy.divide(numpy.multiply(matrix, weighting), 100000)
     return [x for x in matrix]
 
 print "Processing..."
 l, data = recorder.read()
-
+print data
 while data != '':
     matrix = calculate_levels(data, framesize, rate)
     socketIO.emit('fftArray', matrix)
