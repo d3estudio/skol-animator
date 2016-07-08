@@ -2,7 +2,7 @@ var Motor = function(x, y, color, parent, id) {
     var _this = this;
 
     //naming for LOGS
-    _this.name = parent.toUpperCase().replace('.', '') + '_[' + x + '][' + y + ']_' + id;
+    _this.name = parent.toUpperCase().replace('.', '') + '_[' + x + '][' + y + ']';
 
     //index on the matrix
     _this.x = x;

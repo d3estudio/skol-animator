@@ -174,6 +174,15 @@ socket.on('connect', () => {
             globalMusic.process(data);
         }
     })
+    .on('single', (data) => {
+        [rightWall, frontWall, leftWall, roof].forEach((wall) => {
+            wall.motors.forEach((motor) => {
+                if (motor.name == data) {
+                    motor.sendCommand(0xFE);
+                }
+            })
+        });
+    })
     .on('freeze', () => {
         var noop = () => {};
         currentAnimations.forEach((animation) => {

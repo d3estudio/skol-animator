@@ -66,6 +66,13 @@ var BasicAngles = function() {
     this.angle = 0x14;
 }
 
+var Unicast = function() {
+    this.SEND = function() {
+        socket.emit('unicast', this.motor);
+    };
+    this.motor = 'RIGHT_[0][0]';
+}
+
 var Statuses = function() {
     this.server = {
         color: '#00E029',
@@ -104,6 +111,21 @@ createFolder('Basic Angles', new BasicAngles(), ['SEND'], {
         });
     }
 });
+createFolder('Unicast', new Unicast(), ['SEND'], {
+    before: function(folder, prop) {
+        var motors = []
+        var _mappedMotors = {}
+        motors = motors.concat(rightWall.motors);
+        motors = motors.concat(frontWall.motors);
+        motors = motors.concat(leftWall.motors);
+        motors = motors.concat(roof.motors);
+        motors.forEach(function(motor) {
+            _mappedMotors[motor.name] = motor.name;
+        })
+        folder.add(prop, 'motor', _mappedMotors);
+    }
+});
+
 createFolder('Statuses', new Statuses(), ['server', 'engines', 'socket']);
 
 var container = document.getElementById('left-menu');
