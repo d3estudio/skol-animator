@@ -103,7 +103,9 @@ var Ambient = function(where, cameraPosition, width, height) {
         _this.controls.panSpeed = 0.8;
     }
     _this.animate = function() {
-        requestAnimationFrame(_this.animate);
+        setTimeout(function() {
+            requestAnimationFrame(_this.animate);
+        }, 100);
         _this.css_renderer.render(_this.scene, _this.camera);
         _this.renderer.render(_this.scene, _this.camera);
         _this.controls.update();
