@@ -19,10 +19,20 @@ var roof = new Wall(374, 11, 'top', 0, socket),
     leftWall = new Wall(170, 34, 'left', 4, socket),
     frontWall = new Wall(55, 11, 'front', 0, socket),
     rightWall = new Wall(170, 34, 'right', 0, socket);
+
+var walls = {
+    roof: roof,
+    leftWall: leftWall,
+    frontWall: frontWall,
+    rightWall: rightWall
+}
+
 roof.init();
 leftWall.init();
 frontWall.init();
 rightWall.init();
+
+var refreshRate = 100;
 
 var globalMusic = null;
 
@@ -110,7 +120,7 @@ var TOP_BITMAP = {
     });
     r.send('FACE_BITMAP', FACE_BITMAP);
     r.send('TOP_BITMAP', TOP_BITMAP);
-    setTimeout(UpdateBackend, roof.motors[0].getFPS());
+    setTimeout(UpdateBackend, refreshRate);
 }).call(this);
 
 //init socket
@@ -119,6 +129,7 @@ socket.on('connect', () => {
         emitHealthStatus();
     })
     .on('exec', (command) => {
+        refreshRate = 100;
         helper.logger.debug(`[Processor] Received Command ${command.animation}`);
         var animation = '';
         globalMusic = null;
@@ -157,6 +168,7 @@ socket.on('connect', () => {
             });
         } else {
             if (command >= 0xFB && command <= 0xFF) {
+                refreshRate = 4000;
                 [rightWall, frontWall, leftWall, roof].forEach((wall) => {
                     wall.motors.forEach((motor) => {
                         motor.sendCommand(command);
@@ -175,12 +187,10 @@ socket.on('connect', () => {
         }
     })
     .on('single', (data) => {
-        [rightWall, frontWall, leftWall, roof].forEach((wall) => {
-            wall.motors.forEach((motor) => {
-                if (motor.name == data) {
-                    motor.sendCommand(0xFE);
-                }
-            })
+        walls[data.wall].motors.forEach((motor) => {
+            if (motor.x == data.x && motor.y == data.y) {
+                motor.sendCommand(data.command);
+            }
         });
     })
     .on('freeze', () => {
