@@ -128,7 +128,7 @@ createFolder('Unicast', new Unicast(), ['SEND'], {
             'Right': 'rightWall'
         });
         folder.add(prop, 'x', 0);
-        folder.add(prop, 'x', 0);
+        folder.add(prop, 'y', 0);
         folder.add(prop, 'command', '0x14');
     }
 });
