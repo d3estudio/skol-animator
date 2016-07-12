@@ -21,7 +21,7 @@ var Ambient = function(where, cameraPosition, width, height) {
             antialias: true
         });
 
-        _this.renderer.setClearColor(0xF2F8FD, 1)
+        _this.renderer.setClearColor(0x666666, 1)
         _this.renderer.setSize(window.innerWidth, window.innerHeight);
         _this.renderer.domElement.style.zIndex = 5;
         _this.where.appendChild(_this.renderer.domElement);
