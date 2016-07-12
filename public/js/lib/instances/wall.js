@@ -63,7 +63,7 @@ var Wall = function(size, width, className, offset) {
                         motor.destroy();
                     }
                 } else if (x > 12 && _this.name == 'right') {
-                    if (x == 13 && (y == 0 || y == 1 || y == 4)) {
+                    if (x == 13 && (y == 0 || y == 1)) {
                         motor.create();
                         _this.motors.push(motor);
                     } else if (x == 14 && y == 2) {
