@@ -37,7 +37,7 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
                                 }
                             });
                         });
-                    })
+                    });
                 });
                 shift += letter[0].length;
             });
