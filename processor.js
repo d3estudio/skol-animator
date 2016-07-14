@@ -32,7 +32,7 @@ leftWall.init();
 frontWall.init();
 rightWall.init();
 
-var refreshRate = 100;
+var refreshRate = roof.motors[0].getFPS();
 
 var globalMusic = null;
 
@@ -129,7 +129,7 @@ socket.on('connect', () => {
         emitHealthStatus();
     })
     .on('exec', (command) => {
-        refreshRate = 100;
+        refreshRate = roof.motors[0].getFPS();
         helper.logger.debug(`[Processor] Received Command ${command.animation}`);
         var animation = '';
         globalMusic = null;
