@@ -268,6 +268,19 @@ module.exports = function Idle(type, width, where, loop) {
             }
         }
     }
+    _this.idleTest = () => {
+        _this.where.forEach((wall, wallIndex) => {
+            wall.motors.forEach((motor, motorIndex) => {
+                motor.sendCommand(0x14);
+            });
+        });
+        if (_this.loop) {
+            var steps = 45;
+            setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps));
+        } else {
+            helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+        }
+    }
     _this.idle = () => {
         if (_this.type == 'shuffle') {
             if ((_this.right.length + _this.front.length + _this.left.length + _this.roof.length) > 0) {
@@ -453,6 +466,14 @@ module.exports = function Idle(type, width, where, loop) {
             _this.currentCol = 0;
             var steps = 70;
             setTimeout(_this.idleGlass, (_this.where[0].motors[0].getFPS() * steps) + 250);
+        } else if (_this.type == 'TEST') {
+            _this.where.forEach((wall, wallIndex) => {
+                wall.motors.forEach((motor, motorIndex) => {
+                    motor.sendCommand(0x3c);
+                });
+            });
+            var steps = 45;
+            setTimeout(_this.idleTest, (_this.where[0].motors[0].getFPS() * steps));
         }
     }
     _this.init = () => {

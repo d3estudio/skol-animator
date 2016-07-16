@@ -108,7 +108,8 @@ idleMenu.add(optionsIdle, 'type', {
     Linear: 'open',
     Breathing: 'breathing',
     Spiral: 'spiral',
-    Glass: 'glass'
+    Glass: 'glass',
+    BackAndForth: 'TEST'
 });
 idleMenu.add(optionsIdle, 'loop');
 idleMenu.add(optionsIdle, 'START');
