@@ -275,7 +275,7 @@ module.exports = function Idle(type, width, where, loop) {
             });
         });
         if (_this.loop) {
-            var steps = 45;
+            var steps = 50;
             setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps));
         } else {
             helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
@@ -472,7 +472,7 @@ module.exports = function Idle(type, width, where, loop) {
                     motor.sendCommand(0x3c);
                 });
             });
-            var steps = 45;
+            var steps = 50;
             setTimeout(_this.idleTest, (_this.where[0].motors[0].getFPS() * steps));
         }
     }
