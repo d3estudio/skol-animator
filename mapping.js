@@ -45,4 +45,12 @@ var map = {
     "accMode": true
 }
 
-console.log(map);
+// var mapped = [];
+// var start = 0;
+
+// map.TOP_MAP.forEach((line) => {
+//     mapped.push(line[start]);
+//     mapped.push(line[start+1]);
+// });
+
+// console.log(mapped);
