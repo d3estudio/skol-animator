@@ -1,10 +1,10 @@
 body {
     overflow: hidden;
 }
-select{
+select {
     color: #000000;
 }
-.dg.ac{
+.dg.ac {
     z-index: 999 !important;
 }
 .top, .left, .right, .front {
@@ -28,7 +28,7 @@ select{
     top: 10%;
     border-radius: 100%;
     z-index: 1;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
 }
 .block .circle {
     position: absolute;
@@ -58,7 +58,6 @@ select{
     top: 50%;
     margin-top: -1px;
 }
-
 #left-menu {
     position: absolute;
     z-index: 9999;

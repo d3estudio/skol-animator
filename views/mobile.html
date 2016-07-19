@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Skol</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link rel="stylesheet" href="/css/reset.css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="/css/bootstrap.css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="/css/mobile.css" media="screen" charset="utf-8">
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            &nbsp;
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default adminCommand" data-command="stop">STOP</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default adminCommand" data-command="0xFF">0xFF</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default adminCommand" data-command="0xFE">0xFE</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default adminCommand" data-command="0xFD">0xFD</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default adminCommand" data-command="0xFC">0xFC</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default adminCommand" data-command="0xFB">0xFB</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            &nbsp;
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default basicAngle" data-command="0x14">0º</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default basicAngle" data-command="0x1E">90º</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default basicAngle" data-command="0x28">180º</button>
+                    </div>
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-default basicAngle" data-command="0x3C">360º</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            &nbsp;
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="input-group">
+                    <span class="input-group-addon">X</span>
+                    <input type="number" pattern="[0-9]*" class="form-control unicastX" placeholder="0" value="0">
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="input-group">
+                    <span class="input-group-addon">Y</span>
+                    <input type="number" pattern="[0-9]*" class="form-control unicastY" placeholder="0" value="0">
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="input-group">
+                    <span class="input-group-addon">C</span>
+                    <input type="text" class="form-control unicastCMD" placeholder="CMD" value="0x14">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="input-group">
+                    <span class="input-group-addon">W</span>
+                    <select class="unicastW" style="width:100%">
+                        <option value="roof">TOP</option>
+                        <option value="leftWall">LEFT</option>
+                        <option value="frontWall">FRONT</option>
+                        <option value="rightWall">RIGHT</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <button type="button" class="btn btn-default unicast">UNICAST</button>
+            </div>
+        </div>
+        <div class="row">
+            &nbsp;
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <input type="checkbox" class="ScrollTextContinuous">
+                            </span>
+                            <input type="text" class="ScrollTextText form-control" value="SKOL">
+                            <span class="input-group-btn">
+                              <button class="btn btn-default ScrollTextSend" type="button">ScrollText!</button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div class="row">
+                &nbsp;
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default ola" data-command="little">OLA 45º</button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-default ola" data-command="full">OLA 90º</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/lib/external/jQuery.js" charset="utf-8"></script>
+<script src="/js/init.mobile.js" charset="utf-8"></script>
+
+</html>

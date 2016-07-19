@@ -32,7 +32,7 @@ app
 // public routes
 app
     .get('/', publicController.index)
-    .get('/prototype', publicController.prototype);
+    .get('/mobile', publicController.mobile);
 
 // run
 http.listen(3000);
