@@ -193,6 +193,21 @@ socket.on('connect', () => {
             }
         });
     })
+    .on('magic', (action) => {
+        helper.logger.debug('[Processor] Myo Command');
+        [roof, leftWall, frontWall, rightWall].forEach((wall) => {
+            wall.motors.forEach((motor) => {
+                if (action.type == 'pose') {
+                    if (action.pose == 'fist') {
+                        motor.sendCommand(0x14);
+                    } else if (action.pose == 'fingers_spread') {
+                        motor.sendCommand(0x1e);
+                    }
+                }
+
+            });
+        })
+    })
     .on('freeze', () => {
         var noop = () => {};
         currentAnimations.forEach((animation) => {

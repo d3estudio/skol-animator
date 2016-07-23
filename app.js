@@ -60,6 +60,9 @@ serverSocket.on('connection', (clientSocket) => {
         .on('stop', () => {
             serverSocket.emit('freeze');
         })
+        .on('myo', (action) => {
+            serverSocket.emit('magic', action);
+        })
         .on('ackHealth', (data) => {
             lastHealthStatus = data;
             serverSocket.emit('ackHealth', lastHealthStatus);

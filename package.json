@@ -11,6 +11,7 @@
     "express": "^4.13.4",
     "ioredis": "^2.2.0",
     "log4js": "^0.6.37",
+    "myo": "^2.1.1",
     "socket.io": "^1.4.8",
     "socket.io-client": "^1.4.8",
     "swig": "^1.4.2"
