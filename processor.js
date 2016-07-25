@@ -32,7 +32,7 @@ leftWall.init();
 frontWall.init();
 rightWall.init();
 
-var refreshRate = 500;
+var refreshRate = 65;
 
 var globalMusic = null;
 
@@ -129,7 +129,7 @@ socket.on('connect', () => {
         emitHealthStatus();
     })
     .on('exec', (command) => {
-        refreshRate = 500;
+        refreshRate = 65;
         helper.logger.debug(`[Processor] Received Command ${command.animation}`);
         var animation = '';
         globalMusic = null;
@@ -194,7 +194,7 @@ socket.on('connect', () => {
         });
     })
     .on('magic', (action) => {
-        helper.logger.debug('[Processor] Myo Command');
+        //helper.logger.debug('[Processor] Myo Command ');
         [roof, leftWall, frontWall, rightWall].forEach((wall) => {
             wall.motors.forEach((motor) => {
                 if (action.type == 'pose') {
@@ -203,6 +203,60 @@ socket.on('connect', () => {
                     } else if (action.pose == 'fingers_spread') {
                         motor.sendCommand(0x1e);
                     }
+                } else if (action.type == 'move') {
+                    var x = action.x;
+                    var y = action.y;
+                    if (x > 17 && x < 29 && y < 6 && wall.name == 'front') {
+                        x = x - 18;
+                        y = 5 - y;
+                        if (motor.x === x && motor.y === y) {
+                            motor.sendCommand(0x1e);
+                        } else {
+                            motor.sendCommand(0x14);
+                        }
+                    } else if (x < 18 && y < 6 && wall.name == 'left') {
+                        y = 5 - y;
+                        if (motor.x === x && motor.y === y) {
+                            motor.sendCommand(0x1e);
+                        } else {
+                            motor.sendCommand(0x14);
+                        }
+                    } else if (x > 28 && y < 6 && wall.name == 'right') {
+                        x = 17 - (46 - x);
+                        y = 5 - y;
+                        if (motor.x === x && motor.y === y) {
+                            motor.sendCommand(0x1e);
+                        } else {
+                            motor.sendCommand(0x14);
+                        }
+                    } else if (x > 17 && x < 29 && y > 5 && wall.name == 'top') {
+                        x = x - 18;
+                        y = 17 - (y - 5);
+                        if (motor.x === x && motor.y === y) {
+                            motor.sendCommand(0x1e);
+                        } else {
+                            motor.sendCommand(0x14);
+                        }
+                    } else {
+                        motor.sendCommand(0x14);
+                    }
+                    // if (wall.name === 'front' && y < 6) {
+                    //     y = 5 - y;
+                    //     if (motor.x === x && motor.y === y) {
+                    //         motor.sendCommand(0x1e);
+                    //     } else {
+                    //         motor.sendCommand(0x14);
+                    //     }
+                    // } else if (wall.name == 'top' && y > 5) {
+                    //     y = 17 - (y - 5);
+                    //     if (motor.x === x && motor.y === y) {
+                    //         motor.sendCommand(0x1e);
+                    //     } else {
+                    //         motor.sendCommand(0x14);
+                    //     }
+                    // } else {
+                    //     motor.sendCommand(0x14);
+                    // }
                 }
 
             });
