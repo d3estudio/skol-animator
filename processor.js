@@ -240,23 +240,6 @@ socket.on('connect', () => {
                     } else {
                         motor.sendCommand(0x14);
                     }
-                    // if (wall.name === 'front' && y < 6) {
-                    //     y = 5 - y;
-                    //     if (motor.x === x && motor.y === y) {
-                    //         motor.sendCommand(0x1e);
-                    //     } else {
-                    //         motor.sendCommand(0x14);
-                    //     }
-                    // } else if (wall.name == 'top' && y > 5) {
-                    //     y = 17 - (y - 5);
-                    //     if (motor.x === x && motor.y === y) {
-                    //         motor.sendCommand(0x1e);
-                    //     } else {
-                    //         motor.sendCommand(0x14);
-                    //     }
-                    // } else {
-                    //     motor.sendCommand(0x14);
-                    // }
                 }
 
             });
