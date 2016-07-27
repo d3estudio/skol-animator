@@ -4,7 +4,7 @@ var helper = require('./lib/shared');
 //libs
 var Myo = require('myo');
 var ioc = require('socket.io-client');
-var socket = ioc.connect('http://localhost:3000');
+var socket = ioc.connect('http://simulator.local:3000');
 
 var move = false;
 var center_x = 23;
@@ -17,34 +17,18 @@ Myo.on('connected', () => {
     Myo.setLockingPolicy('none');
 });
 
-Myo.on('pose', (pose) => {
-    helper.logger.debug(`[MYO] ${pose}`);
-    if (pose === 'fist' || pose === 'fingers_spread') {
-        socket.emit('myo', {
-            type: 'pose',
-            pose: pose
-        });
-    } else if (pose === 'double_tap') {
-        if (move) {
-            move = false
-        } else {
-            center_x = 23;
-            move = true;
-        }
-    } else if (pose === 'wave_in') {
-        socket.emit('animation', {
-            animation: 'Music',
-            type: 'boom'
-        });
-    } else if (pose === 'wave_out') {
-        socket.emit('animation', {
-            animation: 'Music',
-            type: 'long_boom'
-        });
+//to receive the double_tap post from myo on iOS
+socket.on('pose', () => {
+    if (move) {
+        move = false
+    } else {
+        center_x = 23;
+        move = true;
     }
 });
 
-Myo.on('orientation', (data) => {
+//receive the myo orientation from the iOS
+socket.on('orientation', (data) => {
 
     var x = data.x;
     var y = data.y;

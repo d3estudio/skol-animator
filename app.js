@@ -43,7 +43,6 @@ serverSocket.on('connection', (clientSocket) => {
     if(lastHealthStatus !== undefined) {
         serverSocket.emit('ackHealth', lastHealthStatus);
     }
-    //socket.emit('test', 'message');
     clientSocket
         .on('update', (command) => {
             serverSocket.emit('command', command);
@@ -62,6 +61,12 @@ serverSocket.on('connection', (clientSocket) => {
         })
         .on('myo', (action) => {
             serverSocket.emit('magic', action);
+        })
+        .on('quaternion', (quaternion) => {
+            serverSocket.emit('orientation', quaternion);
+        })
+        .on('double_tap', (action) => {
+            serverSocket.emit('pose');
         })
         .on('ackHealth', (data) => {
             lastHealthStatus = data;

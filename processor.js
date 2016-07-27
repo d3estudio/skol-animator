@@ -4,7 +4,7 @@ var Wall = require('./lib/wall');
 
 //libs
 var ioc = require('socket.io-client');
-var socket = ioc.connect('http://localhost:3000');
+var socket = ioc.connect('http://simulator.local:3000');
 
 //animations
 var ScrollText = require('./animations/scroll-text');
