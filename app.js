@@ -64,6 +64,7 @@ serverSocket.on('connection', (clientSocket) => {
             serverSocket.emit('magic', action);
         })
         .on('quaternion', (quaternion) => {
+            console.log(quaternion);
             serverSocket.emit('orientation', quaternion);
         })
         .on('double_tap', (action) => {

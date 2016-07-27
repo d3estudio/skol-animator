@@ -3,7 +3,6 @@ var helper = require('./lib/shared');
 var settings = require('./settings.json');
 
 //libs
-var Myo = require('myo');
 var ioc = require('socket.io-client');
 var socket = ioc.connect(`http://${settings.SOCKET_IP}:${settings.SOCKET_PORT}`);
 
@@ -11,12 +10,14 @@ var move = false;
 var center_x = 23;
 var last_yaw = 0;
 
-Myo.connect('do.d3.skol');
+socket.on('connect', () => {
+        helper.logger.debug(`[Myo] Connected to port ${settings.SOCKET_PORT}`);
+    })
+    .on('disconnect', () => {
+        helper.logger.debug(`[Myo] Disconnected from port ${settings.SOCKET_PORT}`);
+    })
 
-Myo.on('connected', () => {
-    helper.logger.debug('[Myo] Connected');
-    Myo.setLockingPolicy('none');
-});
+
 
 //to receive the double_tap post from myo on iOS
 socket.on('pose', () => {
