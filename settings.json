@@ -1,6 +1,6 @@
 {
     "SPEED": 1,
     "MIN_ANGLE": 9,
-    "SOCKET_IP": "192.168.0.110",
+    "SOCKET_IP": "127.0.0.1",
     "SOCKET_PORT": 3000
 }
