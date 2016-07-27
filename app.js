@@ -9,6 +9,7 @@ var app = require('express')(),
 
 // main functions
 var helper = require('./lib/shared');
+var settings = require('./settings.json');
 
 // controllers
 var publicController = require('./controllers/public');
@@ -35,8 +36,8 @@ app
     .get('/mobile', publicController.mobile);
 
 // run
-http.listen(3000);
-helper.logger.debug(`Listening on port 3000`);
+http.listen(settings.SOCKET_PORT);
+helper.logger.debug(`Listening on port ${settings.SOCKET_PORT}`);
 
 serverSocket.on('connection', (clientSocket) => {
     helper.logger.debug(`[CLIENT] ${clientSocket.id} CONNECTED`);

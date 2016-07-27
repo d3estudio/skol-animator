@@ -1,10 +1,11 @@
 //main functions
 var helper = require('./lib/shared');
 var Wall = require('./lib/wall');
+var settings = require('./settings.json');
 
 //libs
 var ioc = require('socket.io-client');
-var socket = ioc.connect('http://simulator.local:3000');
+var socket = ioc.connect(`http://${settings.SOCKET_IP}:${settings.SOCKET_PORT}`);
 
 //animations
 var ScrollText = require('./animations/scroll-text');
@@ -125,7 +126,7 @@ var TOP_BITMAP = {
 
 //init socket
 socket.on('connect', () => {
-        helper.logger.debug('[Processor] Connected to port 3000');
+        helper.logger.debug(`[Processor] Connected to port ${settings.SOCKET_PORT}`);
         emitHealthStatus();
     })
     .on('exec', (command) => {
@@ -254,5 +255,5 @@ socket.on('connect', () => {
         currentAnimations = [];
     })
     .on('disconnect', () => {
-        helper.logger.debug('[Processor] Disconnected from port 3000');
+        helper.logger.debug(`[Processor] Disconnected from port ${settings.SOCKET_PORT}`);
     });

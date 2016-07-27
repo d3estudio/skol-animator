@@ -1,10 +1,11 @@
 //main functions
 var helper = require('./lib/shared');
+var settings = require('./settings.json');
 
 //libs
 var Myo = require('myo');
 var ioc = require('socket.io-client');
-var socket = ioc.connect('http://simulator.local:3000');
+var socket = ioc.connect(`http://${settings.SOCKET_IP}:${settings.SOCKET_PORT}`);
 
 var move = false;
 var center_x = 23;
