@@ -33,7 +33,11 @@ app
 // public routes
 app
     .get('/', publicController.index)
-    .get('/mobile', publicController.mobile);
+    .get('/mobile', publicController.mobile)
+    .get('/lidar/:upward/:downward', (req, res) => {
+        serverSocket.emit('lidar', parseFloat(req.params.upward)+parseFloat(req.params.downward));
+        res.status(200).end();
+    });
 
 // run
 http.listen(settings.SOCKET_PORT);
