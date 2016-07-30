@@ -15,8 +15,13 @@ framesize = 1024
 
 matrix = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-# input liner here
 weighting = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+def receive_lidar(*args):
+    weighting = [args[0], args[0], args[0], args[0], args[0], args[0], args[0], args[0], args[0], args[0], args[0], args[0], args[0]]
+socketIO.on('lidar', receive_lidar)
+
+socketIO.wait()
 
 bit_matrix = [[0 for x in xrange(13)] for x in xrange(13)]
 
@@ -30,10 +35,8 @@ recorder.setrate(rate)
 recorder.setformat(informat)
 recorder.setperiodsize(framesize)
 
-
 def piff(val):
     return int(2 * framesize * val / rate)
-
 
 def calculate_levels(data, framesize, rate):
     global matrix
@@ -56,12 +59,12 @@ def calculate_levels(data, framesize, rate):
     matrix[11] = int(numpy.mean(power[piff(2750):piff(3000):1]))
     matrix[12] = int(numpy.mean(power[piff(3000):piff(3250):1]))
     #we have to test this division with real data
-    #matrix = numpy.divide(numpy.multiply(matrix, weighting), 100000)
+    matrix = numpy.divide(numpy.multiply(matrix, weighting), 100000)
     return [x for x in matrix]
 
-print "Processing..."
 l, data = recorder.read()
 while data != '':
     matrix = calculate_levels(data, framesize, rate)
     socketIO.emit('fftArray', matrix)
+    time.sleep(0.3)
     l, data = recorder.read()
