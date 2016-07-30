@@ -36,6 +36,7 @@ rightWall.init();
 var refreshRate = roof.motors[0].getFPS();
 
 var globalMusic = null;
+var now = new Date().getTime();
 
 var Redis = require('./lib/redis'),
     r = new Redis(),
@@ -184,7 +185,10 @@ socket.on('connect', () => {
     })
     .on('fft', (data) => {
         if (globalMusic) {
-            globalMusic.process(data);
+            if (new Date().getTime() > now + 400) {
+                globalMusic.process(data);
+                now = new Date().getTime();
+            }
         }
     })
     .on('single', (data) => {

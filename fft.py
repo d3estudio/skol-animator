@@ -61,7 +61,6 @@ def calculate_levels(data, framesize, rate):
 
 print "Processing..."
 l, data = recorder.read()
-print data
 while data != '':
     matrix = calculate_levels(data, framesize, rate)
     socketIO.emit('fftArray', matrix)
