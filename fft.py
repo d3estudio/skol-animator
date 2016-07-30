@@ -66,5 +66,4 @@ l, data = recorder.read()
 while data != '':
     matrix = calculate_levels(data, framesize, rate)
     socketIO.emit('fftArray', matrix)
-    time.sleep(0.3)
     l, data = recorder.read()
