@@ -30,6 +30,7 @@ module.exports = function Idle(type, width, where, loop) {
     _this.spiralYL = 2;
 
     _this.timerOpen = _this.where[0].motors[0].getFPS() * 10;
+    _this.timerBreathing = _this.where[0].motors[0].getFPS() * 2;
 
     _this.reset = () => {
         _this.right = shuffle(where[0].motors.slice(0));
@@ -196,13 +197,12 @@ module.exports = function Idle(type, width, where, loop) {
                     });
                 });
                 _this.currentCol--;
-                var steps = 5; // 1 step is 9deg
-                setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 10);
+                setTimeout(_this.idleBack, _this.timerBreathing *= 0.9);
             } else {
                 if (_this.loop) {
                     _this.currentCol = 0;
-                    var steps = 10; // 1 step is 9deg
-                    setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps) + 2010);
+                    _this.timerBreathing = _this.where[0].motors[0].getFPS() * 2;
+                    setTimeout(_this.idle, _this.timerBreathing + 2000);
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
                 }
@@ -347,11 +347,9 @@ module.exports = function Idle(type, width, where, loop) {
                     });
                 });
                 _this.currentCol++;
-                var steps = 5; // 1 step is 9deg
-                setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps) + 10);
+                setTimeout(_this.idle, _this.timerBreathing *= 1.11111111111);
             } else {
-                var steps = 2; // 1 step is 9deg - 1000 is a delay
-                setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps));
+                setTimeout(_this.idleBack, _this.timerBreathing);
             }
         } else if (_this.type == 'live') {
             //[0x19, 0x16]
