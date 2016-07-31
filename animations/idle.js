@@ -29,6 +29,8 @@ module.exports = function Idle(type, width, where, loop) {
     _this.spiralXL = 28;
     _this.spiralYL = 2;
 
+    _this.timerOpen = _this.where[0].motors[0].getFPS() * 10;
+
     _this.reset = () => {
         _this.right = shuffle(where[0].motors.slice(0));
         _this.front = shuffle(where[1].motors.slice(0));
@@ -161,13 +163,12 @@ module.exports = function Idle(type, width, where, loop) {
                     });
                 }
                 _this.currentCol--;
-                var steps = 10; // 1 step is 9deg
-                setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 10);
+                setTimeout(_this.idleBack, _this.timerOpen *= 0.9);
             } else {
                 if (_this.loop) {
                     _this.currentCol = width;
-                    var steps = 10; // 1 step is 9deg
-                    setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps) + 10);
+                    _this.timerOpen = _this.where[0].motors[0].getFPS() * 10;
+                    setTimeout(_this.idle, _this.timerOpen + 1000);
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
                 }
