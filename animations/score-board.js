@@ -9,10 +9,10 @@ module.exports = function ScoreBoard(message, where, loop) {
     _this.name = 'ScoreBoardAnimation';
     _this.where = where;
     _this.message = [
-        new Alphabet(message.country1),
-        new Alphabet('--' + message.score1 + '--'),
-        new Alphabet(message.country2),
-        new Alphabet('--' + message.score2 + '--')
+        new Alphabet(message.country1 + '--'),
+        new Alphabet(message.score1 + '--'),
+        new Alphabet(message.country2 + '--'),
+        new Alphabet(message.score2 + '--')
     ];
     _this.currentCol = 0;
     _this.running = false;
@@ -21,7 +21,8 @@ module.exports = function ScoreBoard(message, where, loop) {
         var shift = 0;
         if (_this.message.length > 0) {
             var letterList = _this.message[0].textToBin();
-            _this.currentCol = parseInt(7 - (_this.message[0].size / 2));
+            //_this.currentCol = parseInt(7 - (_this.message[0].size / 2));
+            _this.currentCol = 0;
             if (_this.currentCol < 0) {
                 _this.currentCol = 0;
             }
@@ -41,7 +42,7 @@ module.exports = function ScoreBoard(message, where, loop) {
                             wall.motors.forEach((motor) => {
                                 if (motor.x == (x + wall.offset) && motor.y == y) {
                                     if (dot) {
-                                        motor.sendCommand(0x1E);
+                                        motor.sendCommand(0x28);
                                     } else {
                                         motor.sendCommand(0x14);
                                     }
@@ -53,7 +54,7 @@ module.exports = function ScoreBoard(message, where, loop) {
                 shift += letter[0].length;
             });
             _this.message.shift();
-            var steps = 20; // 1 step is 9deg // 3000 is an animation delay after roration
+            var steps = 40; // 1 step is 9deg // 3000 is an animation delay after roration
             setTimeout(() => {
                 _this.draw()
             }, (_this.where[0].motors[0].getFPS() * steps) + 3000);
@@ -61,10 +62,10 @@ module.exports = function ScoreBoard(message, where, loop) {
             if (_this.loop) {
                 _this.currentCol = 0;
                 _this.message = [
-                    new Alphabet(message.country1),
-                    new Alphabet('--' + message.score1 + '--'),
-                    new Alphabet(message.country2),
-                    new Alphabet('--' + message.score2 + '--')
+                    new Alphabet(message.country1 + '--'),
+                    new Alphabet(message.score1 + '--'),
+                    new Alphabet(message.country2 + '--'),
+                    new Alphabet(message.score2 + '--')
                 ];
                 setTimeout(_this.draw, 0);
             } else {

@@ -31,19 +31,19 @@ scrollTextMenu.open();
 //SCORE BOARD
 var ContextMenuScoreBoard = function() {
     var _this = this;
-    this.country1 = 'BRA';
-    this.score1 = '0';
-    this.country2 = 'USA';
-    this.score2 = '0';
+    this.text1 = 'BRA';
+    this.text2 = 'NOT';
+    this.text3 = 'FOR';
+    this.text4 = 'BEG';
     this.loop = false;
     this.START = function() {
-        if (_this.country1.length > 0 && _this.score1.length > 0 && _this.country2.length > 0 && _this.score2.length > 0) {
+        if (_this.text1.length > 0 && _this.text2.length > 0 && _this.text3.length > 0 && _this.text4.length > 0) {
             socket.emit('animation', {
                 animation: 'ScoreBoard',
-                country1: _this.country1,
-                score1: _this.score1,
-                country2: _this.country2,
-                score2: _this.score2,
+                country1: _this.text1,
+                score1: _this.text2,
+                country2: _this.text3,
+                score2: _this.text4,
                 loop: _this.loop
             });
         } else {
@@ -54,10 +54,10 @@ var ContextMenuScoreBoard = function() {
 var optionsScoreBoard = new ContextMenuScoreBoard();
 
 var scoreBoardMenu = gui.addFolder('Score Board');
-scoreBoardMenu.add(optionsScoreBoard, 'country1');
-scoreBoardMenu.add(optionsScoreBoard, 'score1');
-scoreBoardMenu.add(optionsScoreBoard, 'country2');
-scoreBoardMenu.add(optionsScoreBoard, 'score2');
+scoreBoardMenu.add(optionsScoreBoard, 'text1');
+scoreBoardMenu.add(optionsScoreBoard, 'text2');
+scoreBoardMenu.add(optionsScoreBoard, 'text3');
+scoreBoardMenu.add(optionsScoreBoard, 'text4');
 scoreBoardMenu.add(optionsScoreBoard, 'loop');
 scoreBoardMenu.add(optionsScoreBoard, 'START');
 scoreBoardMenu.open();
