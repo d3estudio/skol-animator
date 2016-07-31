@@ -80,7 +80,7 @@ var optionsOla = new ContextMenuOla();
 var olaMenu = gui.addFolder('Ola');
 olaMenu.add(optionsOla, 'type', {
     '45º short': 'little',
-    '90º long': 'full'
+    '45º long': 'full'
 });
 olaMenu.add(optionsOla, 'loop');
 olaMenu.add(optionsOla, 'START');
