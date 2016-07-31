@@ -11,6 +11,8 @@ module.exports = function Music(type, width, where) {
     _this.running = false;
     _this.command = 0x1E;
     _this.maxPeak = 0;
+    _this.y = 13;
+    _this.now = new Date().getTime();
 
     _this.boom = () => {
         if (_this.currentCol < 22) {
@@ -125,30 +127,41 @@ module.exports = function Music(type, width, where) {
         helper.logger.debug(`${bpm}`);
     }
     _this.equalizer = (frequency) => {
-        [_this.where[0], _this.where[1], _this.where[2]].forEach((wall) => {
-            wall.motors.forEach((motor) => {
-                frequency.forEach((freq, index) => {
-                    if (motor.x == (index + wall.offset)) {
-                        var height = Math.floor(4 * freq / _this.maxPeak);
-                        if (motor.y >= (4 - height)) {
-                            if (!motor.locked) {
-                                motor.sendCommand(0x19);
-                            }
+        var total = 0;
+        //frequency is a 13 items array
+        frequency.forEach((freq, index) => {
+            height = 13 * freq / _this.maxPeak;
+            if (height > total) {
+                total = height;
+            }
+        });
+        //this is where the animation should get place
+        if (total > 10 && _this.maxPeak > 50) {
+            _this.where.forEach((wall) => {
+                wall.motors.forEach((motor) => {
+                    if (motor.x == _this.y) {
+                        if (motor.command == 0x14) {
+                            motor.sendCommand(0x1c);
                         } else {
-                            if (!motor.locked) {
-                                motor.sendCommand(0x14);
-                            }
+                            motor.sendCommand(0x14);
                         }
                     }
-                })
+                });
             });
-        });
+            _this.y--;
+            if (_this.y < 0) {
+                _this.y = 13;
+            }
+        }
+
+
     }
     _this.process = (data) => {
         if (data instanceof Array) {
             var currentMax = _this.arrayMax(data);
-            if (_this.maxPeak < currentMax) {
+            if (_this.maxPeak < currentMax || new Date().getTime() > _this.now + 5000) {
                 _this.maxPeak = currentMax;
+                _this.now = new Date().getTime();
             }
             _this.equalizer(data);
         } else {

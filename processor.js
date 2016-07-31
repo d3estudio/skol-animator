@@ -185,7 +185,8 @@ socket.on('connect', () => {
     })
     .on('fft', (data) => {
         if (globalMusic) {
-            if (new Date().getTime() > now + 400) {
+            if (new Date().getTime() > now + 250) {
+                //console.log(data);
                 globalMusic.process(data);
                 now = new Date().getTime();
             }
