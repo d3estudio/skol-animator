@@ -116,26 +116,26 @@ idleMenu.add(optionsIdle, 'START');
 idleMenu.open();
 
 //FLAG
-var ContextMenuFlag = function() {
-    var _this = this;
-    this.type = 'roof';
-    this.START = function() {
-        socket.emit('animation', {
-            animation: 'Flag',
-            type: _this.type,
-            loop: _this.loop
-        });
-    };
-};
-var optionsFlag = new ContextMenuFlag();
-
-var flagMenu = gui.addFolder('Flag');
-flagMenu.add(optionsFlag, 'type', {
-    'Roof': 'roof',
-    'Roof/Front': 'front'
-});
-flagMenu.add(optionsFlag, 'START');
-flagMenu.open();
+// var ContextMenuFlag = function() {
+//     var _this = this;
+//     this.type = 'roof';
+//     this.START = function() {
+//         socket.emit('animation', {
+//             animation: 'Flag',
+//             type: _this.type,
+//             loop: _this.loop
+//         });
+//     };
+// };
+// var optionsFlag = new ContextMenuFlag();
+//
+// var flagMenu = gui.addFolder('Flag');
+// flagMenu.add(optionsFlag, 'type', {
+//     'Roof': 'roof',
+//     'Roof/Front': 'front'
+// });
+// flagMenu.add(optionsFlag, 'START');
+// flagMenu.open();
 
 //MUSIC
 var ContextMenuMusic = function() {
