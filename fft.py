@@ -6,7 +6,7 @@ import serial
 import time
 from random import randint
 from socketIO_client import SocketIO
-socketIO = SocketIO('127.0.0.1', 3000)
+socketIO = SocketIO('192.168.0.110', 3000)
 
 channels = 1
 informat = alsaaudio.PCM_FORMAT_S16_LE
@@ -15,21 +15,13 @@ framesize = 1024
 
 matrix = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-weighting = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-
-def receive_lidar(*args):
-    weighting = [args[0], args[0], args[0], args[0], args[0], args[0], args[0], args[0], args[0], args[0], args[0], args[0], args[0]]
-socketIO.on('lidar', receive_lidar)
-
-socketIO.wait()
+weighting = [500, 500, 500, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000]
 
 bit_matrix = [[0 for x in xrange(13)] for x in xrange(13)]
 
 power = []
 
-card = 'sysdefault:CARD=Device'
-
-recorder = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL, card)
+recorder = alsaaudio.PCM(alsaaudio.PCM_CAPTURE, alsaaudio.PCM_NORMAL, 'sysdefault:CARD=Device')
 recorder.setchannels(channels)
 recorder.setrate(rate)
 recorder.setformat(informat)
@@ -45,25 +37,30 @@ def calculate_levels(data, framesize, rate):
     fourier = numpy.fft.rfft(data)
     fourier = numpy.delete(fourier, len(fourier) - 1)
     power = numpy.abs(fourier)
-    matrix[0] = int(numpy.mean(power[piff(0):piff(250):1]))
-    matrix[1] = int(numpy.mean(power[piff(250):piff(500):1]))
-    matrix[2] = int(numpy.mean(power[piff(500):piff(750):1]))
-    matrix[3] = int(numpy.mean(power[piff(750):piff(1000):1]))
-    matrix[4] = int(numpy.mean(power[piff(1000):piff(1250):1]))
-    matrix[5] = int(numpy.mean(power[piff(1250):piff(1500):1]))
-    matrix[6] = int(numpy.mean(power[piff(1500):piff(1750):1]))
-    matrix[7] = int(numpy.mean(power[piff(1750):piff(2000):1]))
-    matrix[8] = int(numpy.mean(power[piff(2000):piff(2250):1]))
-    matrix[9] = int(numpy.mean(power[piff(2250):piff(2500):1]))
-    matrix[10] = int(numpy.mean(power[piff(2500):piff(2750):1]))
-    matrix[11] = int(numpy.mean(power[piff(2750):piff(3000):1]))
-    matrix[12] = int(numpy.mean(power[piff(3000):piff(3250):1]))
-    #we have to test this division with real data
-    matrix = numpy.divide(numpy.multiply(matrix, weighting), 100000)
+    max_piff = 10140/4 #this is the max piff for a power of length 470, so we do not be out of index
+
+    try:
+        matrix[0] = int(numpy.mean(power[piff(0):piff((max_piff/13)*1):1]))
+        matrix[1] = int(numpy.mean(power[piff((max_piff/13)*1):piff((max_piff/13)*2):1]))
+        matrix[2] = int(numpy.mean(power[piff((max_piff/13)*2):piff((max_piff/13)*3):1]))
+        matrix[3] = int(numpy.mean(power[piff((max_piff/13)*3):piff((max_piff/13)*4):1]))
+        matrix[4] = int(numpy.mean(power[piff((max_piff/13)*4):piff((max_piff/13)*5):1]))
+        matrix[5] = int(numpy.mean(power[piff((max_piff/13)*5):piff((max_piff/13)*6):1]))
+        matrix[6] = int(numpy.mean(power[piff((max_piff/13)*6):piff((max_piff/13)*7):1]))
+        matrix[7] = int(numpy.mean(power[piff((max_piff/13)*7):piff((max_piff/13)*8):1]))
+        matrix[8] = int(numpy.mean(power[piff((max_piff/13)*8):piff((max_piff/13)*9):1]))
+        matrix[9] = int(numpy.mean(power[piff((max_piff/13)*9):piff((max_piff/13)*10):1]))
+        matrix[10] = int(numpy.mean(power[piff((max_piff/13)*10):piff((max_piff/13)*11):1]))
+        matrix[11] = int(numpy.mean(power[piff((max_piff/13)*11):piff((max_piff/13)*12):1]))
+        matrix[12] = int(numpy.mean(power[piff((max_piff/13)*12):piff((max_piff/13)*13):1]))
+        matrix = numpy.divide(numpy.multiply(matrix, weighting), 100000)
+    except Exception as e:
+        pass
     return [x for x in matrix]
 
 l, data = recorder.read()
 while data != '':
     matrix = calculate_levels(data, framesize, rate)
+    print matrix
     socketIO.emit('fftArray', matrix)
     l, data = recorder.read()
