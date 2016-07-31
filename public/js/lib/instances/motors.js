@@ -25,8 +25,8 @@ var Motor = function(x, y, color, parent, id) {
 
     //motor acceleration mode, and 360 degress rotation time to sync with the real world
     _this.speed = 1;
-    _this.SPEED_TIME = 2.6 * 1000;
-    _this.SLOW__TIME = 5.2 * 1000;
+    _this.SPEED_TIME = 2.1 * 1000;
+    _this.SLOW__TIME = 4.2 * 1000;
 
     //motor current applied command
     _this.command = 0x14;
