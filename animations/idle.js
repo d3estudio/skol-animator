@@ -96,6 +96,10 @@ module.exports = function Idle(type, width, where, loop) {
                     _this.roof[0].sendCommand(_this.command);
                     _this.roof.shift();
                 }
+                if (_this.roof[0] && !_this.roof[0].locked) {
+                    _this.roof[0].sendCommand(_this.command);
+                    _this.roof.shift();
+                }
                 var steps = 2; // 1 step is 9deg
                 setTimeout(_this.idleBack, _this.where[0].motors[0].getFPS() * steps);
             } else {
@@ -295,6 +299,10 @@ module.exports = function Idle(type, width, where, loop) {
                 if (_this.left[0] && !_this.left[0].locked) {
                     _this.left[0].sendCommand(0x3C);
                     _this.left.shift();
+                }
+                if (_this.roof[0] && !_this.roof[0].locked) {
+                    _this.roof[0].sendCommand(0x3C);
+                    _this.roof.shift();
                 }
                 if (_this.roof[0] && !_this.roof[0].locked) {
                     _this.roof[0].sendCommand(0x3C);

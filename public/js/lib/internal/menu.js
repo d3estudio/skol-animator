@@ -109,7 +109,7 @@ idleMenu.add(optionsIdle, 'type', {
     Breathing: 'breathing',
     Spiral: 'spiral',
     Glass: 'glass',
-    BackAndForth: 'TEST'
+    //BackAndForth: 'TEST'
 });
 idleMenu.add(optionsIdle, 'loop');
 idleMenu.add(optionsIdle, 'START');
