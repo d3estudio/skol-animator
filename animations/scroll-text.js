@@ -28,7 +28,7 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
                             wall.motors.forEach((motor) => {
                                 if (motor.x == (x + wall.offset) && motor.y == y) {
                                     if (dot) {
-                                        motor.sendCommand(0x1E);
+                                        motor.sendCommand(0x28);
                                     } else {
                                         motor.sendCommand(0x14);
                                     }
@@ -54,7 +54,7 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
                                 y = lineIndex;
                             if (motor.x == (x + _this.where[0].offset) && motor.y == y) {
                                 if (dot) {
-                                    motor.sendCommand(0x1E);
+                                    motor.sendCommand(0x28);
                                 } else {
                                     motor.sendCommand(0x14);
                                 }
@@ -66,7 +66,7 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
                                     y = lineIndex;
                                 if (motor.x == (x + _this.where[1].offset) && motor.y == y) {
                                     if (dot) {
-                                        motor.sendCommand(0x1E);
+                                        motor.sendCommand(0x28);
                                     } else {
                                         motor.sendCommand(0x14);
                                     }
@@ -79,7 +79,7 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
                                     y = lineIndex;
                                 if (motor.x == x && motor.y == y) {
                                     if (dot) {
-                                        motor.sendCommand(0x1E);
+                                        motor.sendCommand(0x28);
                                     } else {
                                         motor.sendCommand(0x14);
                                     }
@@ -112,7 +112,7 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
         _this.moveLetters();
         if (_this.loop) {
             _this.currentCol -= 1;
-            var steps = 20; // 1 step is 9deg // 3000 is an animation delay after roration
+            var steps = 40; // 1 step is 9deg // 3000 is an animation delay after roration
             setTimeout(_this.step2, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 6000);
         } else {
             _this.finish();
@@ -125,7 +125,7 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
                 motor.sendCommand(0x28);
             });
         });
-        var steps = 20; // 1 step is 9deg // 3000 is an animation delay after roration
+        var steps = 40; // 1 step is 9deg // 3000 is an animation delay after roration
         setTimeout(_this.step4, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 3000);
     }
     _this.step2 = () => {
@@ -144,10 +144,10 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
     }
     _this.resetIdle = () => {
         _this.idleCurrentCol = 0;
-        if (_this.idleCommand == 0x1E) {
+        if (_this.idleCommand == 0x28) {
             _this.idleCommand = 0x14;
         } else {
-            _this.idleCommand = 0x1E;
+            _this.idleCommand = 0x28;
         }
     }
     _this.idle = () => {
@@ -161,12 +161,12 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
                 });
             });
             _this.idleCurrentCol += 1;
-            var steps = 5; // 1 step is 9deg // 3000 is an animation delay after roration
+            var steps = 5; // 1 step is 9deg
             setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps));
         }
     }
     _this.draw = () => {
-        var steps = 10; // 1 step is 9deg
+        var steps = 40; // 1 step is 9deg
         setTimeout(() => {
             if (_this.overflow) {
                 if (_this.currentCol > ((_this.message.size * -1) - 25)) {
