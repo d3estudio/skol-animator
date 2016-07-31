@@ -39,7 +39,9 @@ module.exports = function Idle(type, width, where, loop) {
         _this.roof = shuffle(where[3].motors.slice(0));
     }
     _this.idleGlass = () => {
-        var flipDelay = 3;
+        var multiply = 4;
+        var multiply_divisor = 4;
+        var flipDelay = 3 * multiply;
         _this.where.forEach((wall) => {
             if (wall.name == 'top') {
                 wall.motors.forEach((motor) => {
@@ -49,7 +51,7 @@ module.exports = function Idle(type, width, where, loop) {
                             setTimeout(() => {
                                 motor.sendCommand(0x37);
                             }, _this.where[0].motors[0].getFPS() * flipDelay);
-                        }, motor.x * 2 * 50);
+                        }, motor.x * 2 * 50 * (multiply/multiply_divisor));
                     }
                 });
             } else {
@@ -64,7 +66,7 @@ module.exports = function Idle(type, width, where, loop) {
                             setTimeout(() => {
                                 motor.sendCommand(0x37);
                             }, _this.where[0].motors[0].getFPS() * flipDelay);
-                        }, motor.y * 2 * 50);
+                        }, motor.y * 2 * 50 * (multiply/multiply_divisor));
                     }
                 });
             }
@@ -77,7 +79,7 @@ module.exports = function Idle(type, width, where, loop) {
         if (_this.currentCol == 17) {
             _this.currentCol = 0;
         }
-        var steps = 2;
+        var steps = 2 * (multiply/multiply_divisor);
         setTimeout(_this.idleGlass, (_this.where[0].motors[0].getFPS() * steps));
     }
     _this.idleBack = () => {
