@@ -13,7 +13,7 @@ var ScoreBoard = require('./animations/score-board');
 var Ola = require('./animations/ola');
 var Music = require('./animations/music');
 var Idle = require('./animations/idle');
-var Flag = require('./animations/flag');
+var RandomPosition = require('./animations/random-position');
 
 //walls with motors
 var roof = new Wall(374, 11, 'top', 0, socket),
@@ -159,8 +159,8 @@ socket.on('connect', () => {
         } else if (command.animation == 'Idle') {
             animation = new Idle(command.type, 18, [rightWall, frontWall, leftWall, roof], command.loop);
             animation.init();
-        } else if (command.animation == 'Flag') {
-            animation = new Flag([roof, frontWall], command.type, command.loop);
+        } else if (command.animation == 'RandomPosition') {
+            animation = new RandomPosition([rightWall, frontWall, leftWall, roof]);
             animation.init();
         } else if (command.animation == 'BasicAngle') {
             [rightWall, frontWall, leftWall, roof].forEach((wall) => {

@@ -122,7 +122,11 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
         [_this.where[0], _this.where[2]].forEach((wall, wallIndex) => {
             wall.motors.forEach((motor) => {
                 //go to 180deg
-                motor.sendCommand(0x28);
+                if (motor.command == 0x28) {
+                    motor.sendCommand(0x14);
+                } else if (motor.command == 0x14) {
+                    motor.sendCommand(0x28);
+                }
             });
         });
         var steps = 40; // 1 step is 9deg // 3000 is an animation delay after roration
@@ -131,8 +135,9 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
     _this.step2 = () => {
         [_this.where[0], _this.where[2]].forEach((wall, wallIndex) => {
             wall.motors.forEach((motor) => {
-                if (motor.command != 0x14) {
-                    //go to 180deg
+                if (motor.command == 0x28) {
+                    motor.sendCommand(0x14);
+                } else if (motor.command == 0x14) {
                     motor.sendCommand(0x28);
                 }
             });
