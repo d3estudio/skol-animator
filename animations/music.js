@@ -295,7 +295,6 @@ module.exports = function Music(type, width, where) {
                 _this.face = Math.round(Math.random() * 1);
                 _this.ready = 0;
             }
-            _this.type = 2;
             _this.getRandomBass(frequency);
         }
     }
