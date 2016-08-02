@@ -52,6 +52,13 @@ var AdminCommands = function() {
             socket.emit('animation', 0xFB);
         }
     };
+    this.RANDOM_POSITION = function() {
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL ROTATE ALL THE MOTORS TO A RANDOM POSITION')) {
+            socket.emit('animation', {
+                animation: 'RandomPosition'
+            });
+        }
+    };
 }
 
 var BasicAngles = function() {
@@ -102,7 +109,8 @@ createFolder('Admin Commands', new AdminCommands(), [
     'CALIBRATE____0xFE',
     'RESET____0xFC',
     'SET_ZERO_TO_POS____0xFD',
-    'HALT____0xFB'
+    'HALT____0xFB',
+    'RANDOM_POSITION'
 ]);
 createFolder('Basic Angles', new BasicAngles(), ['SEND'], {
     before: function(folder, prop) {
