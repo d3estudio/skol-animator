@@ -48,7 +48,7 @@ var AdminCommands = function() {
         }
     };
     this.HALT____0xFB = function() {
-        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL (DONT REMEMBER) ALL THE MOTORS')) {
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL (CAN\'T REMEMBER) ALL THE MOTORS')) {
             socket.emit('animation', 0xFB);
         }
     };
