@@ -311,7 +311,7 @@ module.exports = function Idle(type, width, where, loop) {
                     _this.roof[0].sendCommand(0x3C);
                     _this.roof.shift();
                 }
-                var steps = 2; // 1 step is 9deg
+                var steps = 2 + Math.floor(Math.random() * 20); // 1 step is 9deg
                 setTimeout(_this.idle, _this.where[0].motors[0].getFPS() * steps);
             } else {
                 _this.command = 0x14;
