@@ -152,7 +152,7 @@ var optionsMusic = new ContextMenuMusic();
 
 var musicMenu = gui.addFolder('MUSIC');
 musicMenu.add(optionsMusic, 'type', {
-    'Equalizer': 'equalizer',
+    'Bass Sync': 'equalizer',
     //'BPM': 'bpm',
     '---------': '',
     'TooFast (~166bpm)': 'very_fast_boom',
