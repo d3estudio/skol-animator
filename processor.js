@@ -14,6 +14,9 @@ var Ola = require('./animations/ola');
 var Music = require('./animations/music');
 var Idle = require('./animations/idle');
 var RandomPosition = require('./animations/random-position');
+var AutoPilot = require('./animations/auto-pilot');
+AutoPilot = new AutoPilot();
+AutoPilot.init();
 
 //walls with motors
 var roof = new Wall(374, 11, 'top', 0, socket),
@@ -37,6 +40,8 @@ var refreshRate = roof.motors[0].getFPS();
 
 var globalMusic = null;
 var now = new Date().getTime();
+
+var AUTO_PILOT_STATUS = false;
 
 var Redis = require('./lib/redis'),
     r = new Redis(),
@@ -197,6 +202,14 @@ socket.on('connect', () => {
                 motor.sendCommand(data.command);
             }
         });
+    })
+    .on('the_beast', () => {
+        if (AUTO_PILOT_STATUS) {
+            AUTO_PILOT_STATUS = false;
+        } else {
+            AUTO_PILOT_STATUS = true;
+        }
+        AutoPilot.status = AUTO_PILOT_STATUS;
     })
     .on('magic', (action) => {
         //helper.logger.debug('[Processor] Myo Command ');
