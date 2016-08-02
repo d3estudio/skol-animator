@@ -56,8 +56,8 @@ def calculate_levels(data, framesize, rate):
 
     return [x for x in matrix]
 
-l, data = recorder.read()
 def process():
+    l, data = recorder.read()
     while data != '':
         try:
             matrix = calculate_levels(data, framesize, rate)
