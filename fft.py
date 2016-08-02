@@ -39,28 +39,31 @@ def calculate_levels(data, framesize, rate):
     power = numpy.abs(fourier)
     max_piff = 10140/4 #this is the max piff for a power of length 470, so we do not be out of index
 
-    try:
-        matrix[0] = int(numpy.mean(power[piff(0):piff((max_piff/13)*1):1]))
-        matrix[1] = int(numpy.mean(power[piff((max_piff/13)*1):piff((max_piff/13)*2):1]))
-        matrix[2] = int(numpy.mean(power[piff((max_piff/13)*2):piff((max_piff/13)*3):1]))
-        matrix[3] = int(numpy.mean(power[piff((max_piff/13)*3):piff((max_piff/13)*4):1]))
-        matrix[4] = int(numpy.mean(power[piff((max_piff/13)*4):piff((max_piff/13)*5):1]))
-        matrix[5] = int(numpy.mean(power[piff((max_piff/13)*5):piff((max_piff/13)*6):1]))
-        matrix[6] = int(numpy.mean(power[piff((max_piff/13)*6):piff((max_piff/13)*7):1]))
-        matrix[7] = int(numpy.mean(power[piff((max_piff/13)*7):piff((max_piff/13)*8):1]))
-        matrix[8] = int(numpy.mean(power[piff((max_piff/13)*8):piff((max_piff/13)*9):1]))
-        matrix[9] = int(numpy.mean(power[piff((max_piff/13)*9):piff((max_piff/13)*10):1]))
-        matrix[10] = int(numpy.mean(power[piff((max_piff/13)*10):piff((max_piff/13)*11):1]))
-        matrix[11] = int(numpy.mean(power[piff((max_piff/13)*11):piff((max_piff/13)*12):1]))
-        matrix[12] = int(numpy.mean(power[piff((max_piff/13)*12):piff((max_piff/13)*13):1]))
-        matrix = numpy.divide(numpy.multiply(matrix, weighting), 100000)
-    except Exception as e:
-        pass
+    matrix[0] = int(numpy.mean(power[piff(0):piff((max_piff/13)*1):1]))
+    matrix[1] = int(numpy.mean(power[piff((max_piff/13)*1):piff((max_piff/13)*2):1]))
+    matrix[2] = int(numpy.mean(power[piff((max_piff/13)*2):piff((max_piff/13)*3):1]))
+    matrix[3] = int(numpy.mean(power[piff((max_piff/13)*3):piff((max_piff/13)*4):1]))
+    matrix[4] = int(numpy.mean(power[piff((max_piff/13)*4):piff((max_piff/13)*5):1]))
+    matrix[5] = int(numpy.mean(power[piff((max_piff/13)*5):piff((max_piff/13)*6):1]))
+    matrix[6] = int(numpy.mean(power[piff((max_piff/13)*6):piff((max_piff/13)*7):1]))
+    matrix[7] = int(numpy.mean(power[piff((max_piff/13)*7):piff((max_piff/13)*8):1]))
+    matrix[8] = int(numpy.mean(power[piff((max_piff/13)*8):piff((max_piff/13)*9):1]))
+    matrix[9] = int(numpy.mean(power[piff((max_piff/13)*9):piff((max_piff/13)*10):1]))
+    matrix[10] = int(numpy.mean(power[piff((max_piff/13)*10):piff((max_piff/13)*11):1]))
+    matrix[11] = int(numpy.mean(power[piff((max_piff/13)*11):piff((max_piff/13)*12):1]))
+    matrix[12] = int(numpy.mean(power[piff((max_piff/13)*12):piff((max_piff/13)*13):1]))
+    matrix = numpy.divide(numpy.multiply(matrix, weighting), 100000)
+
     return [x for x in matrix]
 
 l, data = recorder.read()
-while data != '':
-    matrix = calculate_levels(data, framesize, rate)
-    print matrix
-    socketIO.emit('fftArray', matrix)
-    l, data = recorder.read()
+def process():
+    while data != '':
+        try:
+            matrix = calculate_levels(data, framesize, rate)
+            print matrix
+            socketIO.emit('fftArray', matrix)
+        except Exception as e:
+            raise
+        l, data = recorder.read()
+process()
