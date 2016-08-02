@@ -397,7 +397,7 @@ module.exports = function Idle(type, width, where, loop) {
                         motor_roof_2.sendCommand(0x14);
                     }, _this.where[0].motors[0].getFPS() + 1000);
                 }
-                var steps = 1; // 1 step is 9deg
+                var steps = 4; // 1 step is 9deg
                 setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps) + 250);
             } else {
                 if (_this.loop) {
