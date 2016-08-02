@@ -11,7 +11,7 @@ module.exports = function Music(type, width, where) {
     _this.running = false;
     _this.command = 0x1E;
     _this.maxPeak = 0;
-    _this.y = 13;
+    _this.y = 16;
     _this.now = new Date().getTime();
 
     _this.boom = () => {
@@ -127,16 +127,10 @@ module.exports = function Music(type, width, where) {
         helper.logger.debug(`${bpm}`);
     }
     _this.equalizer = (frequency) => {
-        var total = 0;
-        //frequency is a 13 items array
-        frequency.forEach((freq, index) => {
-            height = 13 * freq / _this.maxPeak;
-            if (height > total) {
-                total = height;
-            }
-        });
+        var amp = parseInt(frequency);
+
         //this is where the animation should get place
-        if (total > 10 && _this.maxPeak > 50) {
+        if (amp > 0) {
             _this.where.forEach((wall) => {
                 wall.motors.forEach((motor) => {
                     if (motor.x == _this.y) {
@@ -150,23 +144,12 @@ module.exports = function Music(type, width, where) {
             });
             _this.y--;
             if (_this.y < 0) {
-                _this.y = 13;
+                _this.y = 16;
             }
         }
-
-
     }
     _this.process = (data) => {
-        if (data instanceof Array) {
-            var currentMax = _this.arrayMax(data);
-            if (_this.maxPeak < currentMax || new Date().getTime() > _this.now + 5000) {
-                _this.maxPeak = currentMax;
-                _this.now = new Date().getTime();
-            }
-            _this.equalizer(data);
-        } else {
-            _this.bpm(data);
-        }
+        _this.equalizer(data);
     }
     _this.arrayMax = (arr) => {
         var len = arr.length,
