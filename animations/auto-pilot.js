@@ -10,10 +10,10 @@ var Idle = require('../animations/idle');
 var globalMusic = null;
 
 var ANIMATIONS = [
-    //ScrollText,
-    //Ola,
+    ScrollText,
+    Ola,
     Music,
-    //Idle
+    Idle
 ]
 
 module.exports = function AutoPilot(where) {
@@ -25,7 +25,7 @@ module.exports = function AutoPilot(where) {
     _this.noop = () => {};
 
     _this.runAnimation = () => {
-        var animation = ANIMATIONS[Math.round(Math.random()*0)];
+        var animation = ANIMATIONS[Math.round(Math.random()*3)];
         helper.logger.debug(`${_this.name} PREPARING TO RUN ${animation.name}`);
         if (animation.name == 'ScrollText') {
             animation = new animation('SKOL', 13, _this.where, false, false);
@@ -39,7 +39,11 @@ module.exports = function AutoPilot(where) {
             var types = ['shuffle','live','open','breathing','spiral'][Math.round(Math.random()*5)];
             animation = new animation(types, 18, _this.where, false);
         }
-        helper.logger.debug(`${_this.name} WILL RUN ${animation.name}`);
+        if (animation.type) {
+            helper.logger.debug(`${_this.name} WILL RUN ${animation.name} OF TYPE ${animation.type}`);
+        } else {
+            helper.logger.debug(`${_this.name} WILL RUN ${animation.name}`);
+        }
         animation.ended = (timeToWait) => {
             helper.logger.debug(`${_this.name} AUTO_PILOT ENDED ${animation.name}`);
             Object.keys(animation).forEach((key) => animation[key] = _this.noop);
@@ -50,14 +54,32 @@ module.exports = function AutoPilot(where) {
                 timeToWait = 25000;
             }
             helper.logger.debug(`${_this.name} WILL WAIT ${timeToWait} AND LOOP`);
-            setTimeout(_this.pilot, timeToWait);
+            if (_this.animationCount == 4) {
+                setTimeout(() => {
+                    helper.logger.debug(`${_this.name} PREPARE TO CALIBRATE`);
+                    _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0x1e));
+                    setTimeout(() => {
+                        helper.logger.debug(`${_this.name} WILL CALIBRATE`);
+                        _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0xfe));
+                        setTimeout(() => {
+                            _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0x14));
+                            _this.animationCount = 0;
+                            helper.logger.debug(`${_this.name} WILL LOOP`);
+                            _this.pilot();
+                        }, 10000);
+                    }, 5000);
+                }, timeToWait);
+            } else {
+                _this.animationCount ++;
+                setTimeout(_this.pilot, timeToWait);
+            }
         }
         if (!globalMusic) {
             animation.init();
         } else {
             setTimeout(() => {
                 animation.ended(5000);
-            }, 180000);
+            }, 30000);
         }
     }
     _this.pilot = () => {
