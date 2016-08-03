@@ -4,7 +4,7 @@ var helper = require('./lib/shared');
 //libs
 var Myo = require('myo');
 var ioc = require('socket.io-client');
-var socket = ioc.connect('http://localhost:3000');
+var socket = ioc.connect('http://192.168.42.10:3000');
 
 var move = false;
 var center_x = 23;
