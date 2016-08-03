@@ -71,7 +71,11 @@ module.exports = function AutoPilot(where) {
                 }, timeToWait);
             } else {
                 _this.animationCount ++;
-                setTimeout(_this.pilot, timeToWait);
+                helper.logger.debug(`${_this.name} WILL ROTATE ALL MOTORS TO ZERO`);
+                _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0x14));
+                setTimeout(() => {
+                    _this.pilot();
+                }, timeToWait);
             }
         }
         if (!globalMusic) {
