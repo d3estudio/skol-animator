@@ -25,18 +25,18 @@ module.exports = function AutoPilot(where) {
     _this.noop = () => {};
 
     _this.runAnimation = () => {
-        var animation = ANIMATIONS[Math.round(Math.random()*3)];
+        var animation = ANIMATIONS[Math.round(Math.random() * 3)];
         helper.logger.debug(`${_this.name} PREPARING TO RUN ${animation.name}`);
         if (animation.name == 'ScrollText') {
             animation = new animation('SKOL', 13, _this.where, false, false);
         } else if (animation.name == 'Ola') {
-            var types = ['little','full'][Math.round(Math.random()*1)];
+            var types = ['little', 'full'][Math.round(Math.random() * 1)];
             animation = new animation(types, 13, _this.where, false);
         } else if (animation.name == 'Music') {
             animation = new Music('equalizer', 13, _this.where, null);
             globalMusic = animation;
         } else if (animation.name == 'Idle') {
-            var types = ['shuffle','live','open','breathing','spiral'][Math.round(Math.random()*5)];
+            var types = ['shuffle', 'live', 'open', 'breathing', 'spiral'][Math.round(Math.random() * 4)];
             animation = new animation(types, 18, _this.where, false);
         }
         if (animation.type) {
@@ -72,7 +72,7 @@ module.exports = function AutoPilot(where) {
                     }, 5000);
                 }, timeToWait);
             } else {
-                _this.animationCount ++;
+                _this.animationCount++;
                 helper.logger.debug(`${_this.name} WILL ROTATE ALL MOTORS TO ZERO`);
                 _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0x14));
                 setTimeout(() => {
