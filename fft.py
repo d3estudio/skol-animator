@@ -3,7 +3,7 @@ import numpy
 import struct
 import time
 from socketIO_client import SocketIO
-socketIO = SocketIO('192.168.0.110', 3000)
+socketIO = SocketIO('192.168.42.10', 3000)
 
 channels = 1
 informat = alsaaudio.PCM_FORMAT_S16_LE

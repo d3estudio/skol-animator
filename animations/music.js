@@ -138,7 +138,7 @@ module.exports = function Music(type, width, where) {
 
             var face = 0x3c;
             if (_this.face == 1) {
-                face = 0x28;
+                face = 0x2d;
             }
             if (_this.type == 0) {
                 _this.where.forEach((wall) => {
@@ -276,9 +276,9 @@ module.exports = function Music(type, width, where) {
         if (_this.ready == 0) {
             _this.ready = 1;
             var steps = 60;
-            var face = 0x3c;
+            var face = 0x2d;
             if (_this.face == 1) {
-                face = 0x28;
+                face = 0x2d;
             }
             _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(face));
             setTimeout(() => {
