@@ -114,6 +114,7 @@ module.exports = function Idle(type, width, where, loop) {
                     _this.idle();
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+                    _this.ended(5000);
                 }
             }
         } else if (_this.type == 'open') {
@@ -174,6 +175,7 @@ module.exports = function Idle(type, width, where, loop) {
                     setTimeout(_this.idle, _this.timerOpen + 1000);
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+                    _this.ended(5000);
                 }
             }
         } else if (_this.type == 'breathing') {
@@ -207,6 +209,7 @@ module.exports = function Idle(type, width, where, loop) {
                     setTimeout(_this.idle, _this.timerBreathing + 2000);
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+                    _this.ended(5000);
                 }
             }
         } else if (_this.type == 'spiral') {
@@ -220,9 +223,9 @@ module.exports = function Idle(type, width, where, loop) {
                             if (motor.x == (10 - _this.spiralXR) && motor.y == (4 - _this.spiralYR)) {
                                 motor.sendCommand(0x14);
                             }
-                            // if ((10 - _this.spiralXR) == 10 && motor.x > 10 && motor.y == (4 - _this.spiralYR)) {
-                            //     motor.sendCommand(0x14);
-                            // }
+                            if ((10 - _this.spiralXR) == 10 && motor.x > 10 && motor.y == (4 - _this.spiralYR)) {
+                                motor.sendCommand(0x14);
+                            }
                         });
                     } else if (wall.name == 'left') {
                         wall.motors.forEach((motor) => {
@@ -232,9 +235,9 @@ module.exports = function Idle(type, width, where, loop) {
                             if (motor.x == (56 - _this.spiralXL-17) && motor.y == (4 - _this.spiralYL)) {
                                 motor.sendCommand(0x14);
                             }
-                            // if (_this.spiralXL == 23 && motor.x < 23 && motor.y == _this.spiralYL) {
-                            //     motor.sendCommand(0x14);
-                            // }
+                            if (_this.spiralXL == 23 && motor.x < 23 && motor.y == _this.spiralYL) {
+                                motor.sendCommand(0x14);
+                            }
                         });
                     }
                 });
@@ -271,21 +274,9 @@ module.exports = function Idle(type, width, where, loop) {
                     setTimeout(_this.idle, 2000);
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+                    _this.ended(5000);
                 }
             }
-        }
-    }
-    _this.idleTest = () => {
-        _this.where.forEach((wall, wallIndex) => {
-            wall.motors.forEach((motor, motorIndex) => {
-                motor.sendCommand(0x14);
-            });
-        });
-        if (_this.loop) {
-            var steps = 50;
-            setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps));
-        } else {
-            helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
         }
     }
     _this.idle = () => {
@@ -405,6 +396,7 @@ module.exports = function Idle(type, width, where, loop) {
                     _this.idle();
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+                    _this.ended(5000);
                 }
             }
         } else if (_this.type == 'spiral') {
@@ -418,9 +410,9 @@ module.exports = function Idle(type, width, where, loop) {
                             if (motor.x == (10 - _this.spiralXR) && motor.y == (4 - _this.spiralYR)) {
                                 motor.sendCommand(0x19);
                             }
-                            // if ((10 - _this.spiralXR) == 10 && motor.x > 10 && motor.y == (4 - _this.spiralYR)) {
-                            //     motor.sendCommand(0x19);
-                            // }
+                            if ((10 - _this.spiralXR) == 10 && motor.x > 10 && motor.y == (4 - _this.spiralYR)) {
+                                motor.sendCommand(0x19);
+                            }
                         });
                     } else if (wall.name == 'left') {
                         wall.motors.forEach((motor) => {
@@ -430,9 +422,9 @@ module.exports = function Idle(type, width, where, loop) {
                             if (motor.x == (56 - _this.spiralXL-17) && motor.y == (4 - _this.spiralYL)) {
                                 motor.sendCommand(0x19);
                             }
-                            // if (_this.spiralXL-17 == 23 && motor.x < 23 && motor.y == _this.spiralYL) {
-                            //     motor.sendCommand(0x19);
-                            // }
+                            if (_this.spiralXL-17 == 23 && motor.x < 23 && motor.y == _this.spiralYL) {
+                                motor.sendCommand(0x19);
+                            }
                         });
                     }
                 });
@@ -475,6 +467,10 @@ module.exports = function Idle(type, width, where, loop) {
             _this.currentCol = 0;
             var steps = 70;
             setTimeout(_this.idleGlass, (_this.where[0].motors[0].getFPS() * steps) + 250);
+            setTimeout(() => {
+                helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+                _this.ended(5000);
+            },30000);
         } else if (_this.type == 'TEST') {
             _this.where.forEach((wall, wallIndex) => {
                 wall.motors.forEach((motor, motorIndex) => {
@@ -497,4 +493,5 @@ module.exports = function Idle(type, width, where, loop) {
             helper.logger.debug(`${_this.name} already RUNNING`);
         }
     }
+    _this.ended = (timeToWait) => {}
 }
