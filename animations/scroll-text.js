@@ -96,8 +96,9 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
             _this.idleCurrentCol = 0;
             _this.idleCommand = 0x14;
             if (!_this.overflow) {
-                _this.idle();
+                //_this.idle();
                 helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+                _this.ended(5000); // wait 10 senconds after i have finished
             } else {
                 if (_this.loop) {
                     _this.currentCol = _this.width - 1;
@@ -200,4 +201,5 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
             helper.logger.debug(`${_this.name} already RUNNING`);
         }
     }
+    _this.ended = (timeToWait) => {}
 }

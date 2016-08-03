@@ -15,8 +15,6 @@ var Music = require('./animations/music');
 var Idle = require('./animations/idle');
 var RandomPosition = require('./animations/random-position');
 var AutoPilot = require('./animations/auto-pilot');
-AutoPilot = new AutoPilot();
-AutoPilot.init();
 
 //walls with motors
 var roof = new Wall(374, 11, 'top', 0, socket),
@@ -35,6 +33,9 @@ roof.init();
 leftWall.init();
 frontWall.init();
 rightWall.init();
+
+AutoPilot = new AutoPilot([rightWall, frontWall, leftWall, roof]);
+AutoPilot.init();
 
 var refreshRate = roof.motors[0].getFPS();
 
