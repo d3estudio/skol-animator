@@ -59,6 +59,11 @@ var AdminCommands = function() {
             });
         }
     };
+    this.AUTO_PILOT = function() {
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL START OR STOP THE AUTO PILOT (IF RUNNING)')) {
+            socket.emit('auto_pilot');
+        }
+    };
 }
 
 var BasicAngles = function() {
@@ -110,7 +115,8 @@ createFolder('Admin Commands', new AdminCommands(), [
     'RESET____0xFC',
     'SET_ZERO_TO_POS____0xFD',
     'HALT____0xFB',
-    'RANDOM_POSITION'
+    'RANDOM_POSITION',
+    'AUTO_PILOT'
 ]);
 createFolder('Basic Angles', new BasicAngles(), ['SEND'], {
     before: function(folder, prop) {

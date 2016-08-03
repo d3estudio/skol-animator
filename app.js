@@ -64,6 +64,9 @@ serverSocket.on('connection', (clientSocket) => {
         .on('stop', () => {
             serverSocket.emit('freeze');
         })
+        .on('auto_pilot', () => {
+            serverSocket.emit('the_beast');
+        })
         .on('myo', (action) => {
             serverSocket.emit('magic', action);
         })

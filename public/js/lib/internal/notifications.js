@@ -15,9 +15,9 @@ NotificationsManager.prototype = {
         }
     },
     fire: function(title, body, icon) {
-        if(this.ready) {
-            var n = new Notification(title, { body: body, icon: icon });
-        }
+        // if(this.ready) {
+        //     var n = new Notification(title, { body: body, icon: icon });
+        // }
     }
 };
 
