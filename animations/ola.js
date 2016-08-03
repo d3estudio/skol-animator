@@ -53,6 +53,7 @@ module.exports = function Ola(type, width, where, loop) {
                 } else {
                     _this.running = false;
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+                    _this.ended(5000);
                 }
             }
         } else {
@@ -104,6 +105,7 @@ module.exports = function Ola(type, width, where, loop) {
                 } else {
                     _this.running = false;
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+                    _this.ended(45000);
                 }
             }
         }
@@ -373,4 +375,5 @@ module.exports = function Ola(type, width, where, loop) {
             helper.logger.debug(`${_this.name} already RUNNING`);
         }
     }
+    _this.ended = () => {}
 }

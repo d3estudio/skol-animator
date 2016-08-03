@@ -9,7 +9,7 @@ var Idle = require('../animations/idle');
 
 var ANIMATIONS = [
     ScrollText,
-    //Ola,
+    Ola,
     //Music,
     //Idle
 ]
@@ -19,25 +19,28 @@ module.exports = function AutoPilot(where) {
     _this.name = 'AutoPilot';
     _this.status = false;
     _this.where = where;
+    _this.animationCount = 0;
 
     _this.runAnimation = () => {
-        var animation = ANIMATIONS[Math.round(Math.random()*0)];
+        var animation = ANIMATIONS[Math.round(Math.random()*1)];
         helper.logger.debug(`${_this.name} PREPARING TO RUN ${animation.name}`);
-        if (animation.name == 'ScrollTextAnimation') {
-            animation = new animation('SKOL', 13, [rightWall, frontWall, leftWall, roof], false, false);
-        } else if (animation.name == 'OlaAnimation') {
-
+        if (animation.name == 'ScrollText') {
+            animation = new animation('SKOL', 13, _this.where, false, false);
+        } else if (animation.name == 'Ola') {
+            animation = new animation(['little','full'][Math.round(Math.random()*1)], 13, _this.where, false);
         } else if (animation.name == 'MusicAnimation') {
 
         } else if (animation.name == 'IdleAnimation') {
 
         }
+        helper.logger.debug(`${_this.name} WILL RUN ${animation.name}`);
         animation.init();
         animation.ended = (timeToWait) => {
             helper.logger.debug(`${_this.name} AUTO_PILOT ENDED ${animation.name}`);
             if (!timeToWait) {
-                timeToWait = 10000;
+                timeToWait = 25000;
             }
+            helper.logger.debug(`${_this.name} WILL WAIT ${timeToWait} TO LOOP`);
             setTimeout(_this.pilot, timeToWait);
         }
     }
