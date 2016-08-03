@@ -194,7 +194,6 @@ socket.on('connect', () => {
             if (globalMusic) {
                 globalMusic.process(data);
             }
-            console.log(data);
             AutoPilot.getBeatFromHell(data);
             now = new Date().getTime();
         }
