@@ -49,7 +49,8 @@ module.exports = function Ola(type, width, where, loop) {
                 if (_this.loop) {
                     _this.currentCol = _this.width + 3;
                     _this.currentColErase = _this.width + 3;
-                    _this.wave();
+                    var steps = 50;
+                    setTimeout(_this.wave, _this.where[0].motors[0].getFPS() * steps);
                 } else {
                     _this.running = false;
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
@@ -368,12 +369,12 @@ module.exports = function Ola(type, width, where, loop) {
                 var steps = 900;
                 setTimeout(() => {
                     helper.logger.debug(`${_this.name} WILL ERASE`);
-                   _this.eraseWave();
+                    _this.eraseWave();
                 }, _this.where[0].motors[0].getFPS() * steps);
             }
         } else {
             helper.logger.debug(`${_this.name} already RUNNING`);
         }
     }
-    _this.ended = () => {}
+    _this.ended = (timeToWait) => {}
 }

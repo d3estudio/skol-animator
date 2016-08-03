@@ -190,11 +190,13 @@ socket.on('connect', () => {
         }
     })
     .on('fft', (data) => {
-        if (globalMusic) {
-            if (new Date().getTime() > now + 150) {
+        if (new Date().getTime() > now + 150) {
+            if (globalMusic) {
                 globalMusic.process(data);
-                now = new Date().getTime();
             }
+            console.log(data);
+            AutoPilot.getBeatFromHell(data);
+            now = new Date().getTime();
         }
     })
     .on('single', (data) => {
