@@ -6,14 +6,18 @@
   "repository": "https://github.com/chr0nu5/skol-animator",
   "dependencies": {
     "body-parser": "^1.15.0",
+    "commander": "^2.9.0",
     "consolidate": "^0.14.0",
     "ejs": "^2.4.1",
     "express": "^4.13.4",
     "ioredis": "^2.2.0",
     "log4js": "^0.6.37",
     "myo": "^2.1.1",
+    "npmlog": "^4.0.0",
+    "progress": "^1.1.8",
     "socket.io": "^1.4.8",
     "socket.io-client": "^1.4.8",
+    "supervisord": "^0.1.0",
     "swig": "^1.4.2"
   }
 }
