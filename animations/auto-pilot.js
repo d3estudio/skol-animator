@@ -75,7 +75,7 @@ module.exports = function AutoPilot(where) {
                 _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0x14));
                 setTimeout(() => {
                     _this.pilot();
-                }, timeToWait);
+                }, 5000);
             }
         }
         if (!globalMusic) {
