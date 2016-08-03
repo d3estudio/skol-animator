@@ -2,5 +2,14 @@
     "SPEED": 1,
     "MIN_ANGLE": 9,
     "SOCKET_IP": "127.0.0.1",
-    "SOCKET_PORT": 3000
+    "SOCKET_PORT": 3000,
+    "BOOTUP": {
+        "SUPERVISOR_URI": "http://localhost:9001",
+        "GATEWAYS_COUNT": 16,
+        "GATEWAY_DISCOVER_TIMEOUT": 3,
+        "TOTAL_ENGINES_COUNT": 345,
+        "MINIMUM_ENGINES_COUNT": 340,
+        "ENGINE_DISCOVER_TIMEOUT": 180,
+        "CALIBRATION_OPERATION_TIME": 8
+    }
 }

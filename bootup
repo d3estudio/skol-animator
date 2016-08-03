@@ -1,18 +1,11 @@
 #!/usr/bin/env node
 var ProgressBar = require('progress'),
-    program = require('commander'),
     logger = require('npmlog'),
     Systemd = require('./lib/bootup/systemd'),
     Supervisord = require('supervisord'),
     config = require('./config.json'),
-    Tail = require('./lib/bootup/tail');
-
-program
-    .version('0.0.1')
-    .option('--supervisord [value]', 'Address of the supervisord to attach to. Defaults to http://localhost:9001')
-    .parse(process.argv);
-
-program.supervisord = program.supervisord || 'http://localhost:9001';
+    Tail = require('./lib/bootup/tail'),
+    settings = require('./settings.json').BOOTUP;
 
 var superv;
 
@@ -39,9 +32,9 @@ var checkRedis = function() {
 
 var connectToSupervisor = function() {
     return new Promise((resolve) => {
-        logger.info('Supervisord', `Attempting connection to ${program.supervisord}`);
+        logger.info('Supervisord', `Attempting connection to ${settings.SUPERVISOR_URI}`);
         try {
-            superv = Supervisord.connect(program.supervisord);
+            superv = Supervisord.connect(settings.SUPERVISOR_URI);
             superv.getAPIVersion((err, result) => {
                 if(err) {
                     logger.error('Supervisord', 'Error communicating to remote process:');
@@ -86,7 +79,7 @@ var ensureGateways = function() {
     return new Promise((resolve) => {
         logger.info('GatewayDiscover', 'Performing operations...');
         var knownGateways = [],
-            gauge = new ProgressBar(':bar (:current of :total)', { total: 16 }),
+            gauge = new ProgressBar(':bar (:current of :total)', { total: settings.GATEWAYS_COUNT }),
             t = new Tail('/tmp/x', 'Auth is GO'),
             regexp = /\[HandlerFSM:\d+:\d+:(\d+)\]: Auth is GO!$/g,
             timeout;
@@ -100,7 +93,7 @@ var ensureGateways = function() {
                 logger.error('GatewayDiscover', 'Cannot find all gateways.');
                 logger.error('Missing: ', Object.keys(config.NodeDistribution).filter(k => knownGateways.indexOf(k) === -1));
                 process.exit(1);
-            }, 30000);
+            }, settings.GATEWAY_DISCOVER_TIMEOUT * 1000);
         };
         t.onLineReceived((line) => {
             if(regexp.test(line)) {
@@ -114,7 +107,7 @@ var ensureGateways = function() {
                         }
                     }
                 }
-                if(knownGateways.length === 16) {
+                if(knownGateways.length === settings.GATEWAYS_COUNT) {
                     gauge.terminate();
                     logger.info('Succeeded.');
                     resolve();
@@ -155,14 +148,14 @@ var startAnimationMapRouter = () => {
 
 var waitRouterEngines = () => {
     return new Promise((resolve, reject) => {
-        var gauge = new ProgressBar(':bar (:current of :total)', { total:345 }),
+        var gauge = new ProgressBar(':bar (:current of :total)', { total: settings.TOTAL_ENGINES_COUNT }),
             timeout;
         var resetTimeout = () => {
             if(timeout) {
                 clearTimeout(timeout);
             }
             timeout = setTimeout(() => {
-                if(gauge.curr >= 340) {
+                if(gauge.curr >= settings.MINIMUM_ENGINES_COUNT) {
                     logger.warn('WaitRouterEngines', `Timeout exceeded. Continuing with minimum engine count (${gauge.curr})`);
                     gauge.terminate();
                     resolve();
@@ -171,7 +164,7 @@ var waitRouterEngines = () => {
                     process.exit(1);
                     reject();
                 }
-            }, 3 * 60 * 1000);
+            }, settings.ENGINE_DISCOVER_TIMEOUT * 1000);
         };
 
         var t = new Tail('/tmp/x', 'Garanteed'),
@@ -186,7 +179,7 @@ var waitRouterEngines = () => {
                         gauge.tick();
                     }
                 }
-                if(gauge.curr === 345) {
+                if(gauge.curr === settings.TOTAL_ENGINES_COUNT) {
                     clearTimeout(timeout);
                     gauge.terminate();
                     resolve();
@@ -237,7 +230,7 @@ var performCalibration = () => {
                     logger.info('Calibration', 'Completed.');
                     resolve();
                 });
-            }, 8 * 1000);
+            }, settings.CALIBRATION_OPERATION_TIME * 1000);
         });
     });
 }
@@ -247,9 +240,10 @@ checkRedis()
     .then(ensurePatchPanel)
     .then((shouldEnsureGateways) => {
         if(shouldEnsureGateways) {
-            logger.info('', '')
+            logger.info('bootup', 'PatchPanel state has changed. Processing gateways...');
             return ensureGateways(); // Auth
         } else {
+            logger.info('bootup', 'PatchPanel state hasn\'t changed. Won\'t process gateways.');
             return Promise.resolve();
         }
     })
