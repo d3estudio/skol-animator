@@ -114,7 +114,7 @@ module.exports = function Idle(type, width, where, loop) {
                     _this.idle();
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
-                    _this.ended(5000);
+                    _this.ended(10000);
                 }
             }
         } else if (_this.type == 'open') {
@@ -175,7 +175,7 @@ module.exports = function Idle(type, width, where, loop) {
                     setTimeout(_this.idle, _this.timerOpen + 1000);
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
-                    _this.ended(5000);
+                    _this.ended(10000);
                 }
             }
         } else if (_this.type == 'breathing') {
@@ -209,7 +209,7 @@ module.exports = function Idle(type, width, where, loop) {
                     setTimeout(_this.idle, _this.timerBreathing + 2000);
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
-                    _this.ended(5000);
+                    _this.ended(10000);
                 }
             }
         } else if (_this.type == 'spiral') {
@@ -274,7 +274,7 @@ module.exports = function Idle(type, width, where, loop) {
                     setTimeout(_this.idle, 2000);
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
-                    _this.ended(5000);
+                    _this.ended(10000);
                 }
             }
         }
@@ -396,7 +396,7 @@ module.exports = function Idle(type, width, where, loop) {
                     _this.idle();
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
-                    _this.ended(5000);
+                    _this.ended(10000);
                 }
             }
         } else if (_this.type == 'spiral') {
@@ -469,7 +469,7 @@ module.exports = function Idle(type, width, where, loop) {
             setTimeout(_this.idleGlass, (_this.where[0].motors[0].getFPS() * steps) + 250);
             setTimeout(() => {
                 helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
-                _this.ended(5000);
+                _this.ended(10000);
             },30000);
         } else if (_this.type == 'TEST') {
             _this.where.forEach((wall, wallIndex) => {

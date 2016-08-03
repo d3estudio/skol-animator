@@ -98,7 +98,7 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
             if (!_this.overflow) {
                 //_this.idle();
                 helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
-                _this.ended(5000); // wait 10 senconds after i have finished
+                _this.ended(10000); // wait 10 senconds after i have finished
             } else {
                 if (_this.loop) {
                     _this.currentCol = _this.width - 1;

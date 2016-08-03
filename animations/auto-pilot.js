@@ -63,10 +63,12 @@ module.exports = function AutoPilot(where) {
                         _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0xfe));
                         setTimeout(() => {
                             _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0x14));
-                            _this.animationCount = 0;
-                            helper.logger.debug(`${_this.name} WILL LOOP`);
-                            _this.pilot();
-                        }, 10000);
+                            setTimeout(() => {
+                                _this.animationCount = 0;
+                                helper.logger.debug(`${_this.name} WILL LOOP`);
+                                _this.pilot();
+                            }, 25000)
+                        }, 2000);
                     }, 5000);
                 }, timeToWait);
             } else {
