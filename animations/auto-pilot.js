@@ -40,7 +40,7 @@ module.exports = function AutoPilot(where) {
             if (!timeToWait) {
                 timeToWait = 25000;
             }
-            helper.logger.debug(`${_this.name} WILL WAIT ${timeToWait} TO LOOP`);
+            helper.logger.debug(`${_this.name} WILL WAIT ${timeToWait} AND LOOP`);
             setTimeout(_this.pilot, timeToWait);
         }
     }
