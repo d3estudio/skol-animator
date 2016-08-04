@@ -47,7 +47,7 @@ var ContextMenuScoreBoard = function() {
                 loop: _this.loop
             });
         } else {
-            window.alert('We need two countries and two scores!');
+            window.alert('We need four words!');
         }
     };
 };
@@ -73,6 +73,12 @@ var ContextMenuOla = function() {
             type: _this.type,
             loop: _this.loop
         });
+        if (_this.type == 'full') {
+            $('body').append('<div class="HELL_ON_EARTH">THIS IS TO PREVENT YOU FROM GOING TO HELL</div>');
+            setTimeout(function() {
+                $('.HELL_ON_EARTH').remove();
+            }, 120000);
+        }
     };
 };
 var optionsOla = new ContextMenuOla();
