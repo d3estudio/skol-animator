@@ -171,9 +171,7 @@ socket.on('connect', () => {
         } else if (command.animation == 'BasicAngle') {
             [rightWall, frontWall, leftWall, roof].forEach((wall) => {
                 wall.motors.forEach((motor) => {
-                    //if (motor.command <= 0x40) {
-                        motor.sendCommand(command.angle);
-                    //}
+                    motor.sendCommand(command.angle);
                 });
             });
         } else {
