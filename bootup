@@ -42,7 +42,7 @@ var connectToSupervisor = function() {
                     process.exit(1);
                 }
                 logger.info('Supervisord', `Connected to remote API serving a v${result} supervisord interface`);
-                return Promise.resolve();
+                resolve();
             });
         } catch(ex) {
             logger.error('Supervisord', 'Connection failed.');
