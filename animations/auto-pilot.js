@@ -84,7 +84,10 @@ module.exports = function AutoPilot(where) {
             animation.init();
         } else {
             setTimeout(() => {
-                animation.ended(5000);
+                globalMusic = null;
+                setTimeout(() => {
+                    animation.ended(5000);
+                }, 2000);
             }, 30000);
         }
     }
