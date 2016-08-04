@@ -64,11 +64,6 @@ var AdminCommands = function() {
             socket.emit('auto_pilot');
         }
     };
-    this.VERTICAL_OLA = function() {
-        socket.emit('animation', {
-            animation: 'VerticalOla'
-        });
-    };
 }
 
 var BasicAngles = function() {
@@ -121,8 +116,7 @@ createFolder('Admin Commands', new AdminCommands(), [
     'SET_ZERO_TO_POS____0xFD',
     'HALT____0xFB',
     'RANDOM_POSITION',
-    'AUTO_PILOT',
-    'VERTICAL_OLA'
+    'AUTO_PILOT'
 ]);
 createFolder('Basic Angles', new BasicAngles(), ['SEND'], {
     before: function(folder, prop) {

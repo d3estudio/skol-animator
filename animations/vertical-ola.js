@@ -1,7 +1,7 @@
 // main functions
 var helper = require('../lib/shared');
 
-module.exports = function VerticalOla(where) {
+module.exports = function VerticalOla(loop, where) {
     this.name = 'VerticalOla';
     this.where = where;
     this.right = where[0];
@@ -10,6 +10,7 @@ module.exports = function VerticalOla(where) {
     this.roof = where[3];
     this.steps = 10;
     this.returning = false;
+    this.loop = loop;
 
     this.draw = () => {
         this.yStep = 5;
@@ -56,18 +57,20 @@ module.exports = function VerticalOla(where) {
                 this.roofAStep = 0;
                 this.roofBStep = 11;
                 helper.logger.debug(`${this.name}::RoofStep Scheduling sidesStep`);
-                // this.getTimeout(() => sidesStep());
                 setTimeout(() => sidesStep(), 40 * where[0].motors[0].getFPS() + 200);
             } else if(bStep === 5 && this.returning) {
-                helper.logger.debug(`${this.name}::RoofStep Resetting return state`);
+                helper.logger.debug(`${this.name}::RsoofStep Resetting return state`);
                 this.returning = false;
+                this.yStep = 5;
+                this.roofAStep = 0;
+                this.roofBStep = 11;
+                if(this.loop) {
+                    setTimeout(() => sidesStep(), 40 * where[0].motors[0].getFPS() + 200);
+                }
                 helper.logger.debug(`${this.name}::RoofStep Done.`);
             }
         };
         sidesStep();
-        // this.where
-        //     .reduce((a, b) => a.concat(b.motors), [])
-        //     .forEach(motor => motor.sendCommand(20 + Math.floor(Math.random() * 20)));
         helper.logger.debug(`${this.name} almost FINISHED (waiting last command)`);
     }
     this.init = () => {
