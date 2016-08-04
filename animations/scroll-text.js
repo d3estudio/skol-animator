@@ -189,7 +189,9 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
                     _this.currentCol--;
                     _this.draw();
                 } else {
-                    _this.step2();
+                    setTimeout(() => {
+                        _this.step2();
+                    }, 8000);
                 }
             }
         }, _this.where[0].motors[0].getFPS() * (steps + 10)); //number of steps (each 9 degrees to the angle) + 10
