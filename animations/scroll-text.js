@@ -98,7 +98,7 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
             if (!_this.overflow) {
                 //_this.idle();
                 helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
-                _this.ended(10000); // wait 10 senconds after i have finished
+                _this.ended(6000); // wait 10 senconds after i have finished
             } else {
                 if (_this.loop) {
                     _this.currentCol = _this.width - 1;
@@ -136,15 +136,16 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
     _this.step2 = () => {
         [_this.where[0], _this.where[2]].forEach((wall, wallIndex) => {
             wall.motors.forEach((motor) => {
-                if (motor.command == 0x28) {
-                    motor.sendCommand(0x14);
-                } else if (motor.command == 0x14) {
-                    motor.sendCommand(0x28);
-                }
+                // if (motor.command == 0x28) {
+                //     motor.sendCommand(0x14);
+                // } else if (motor.command == 0x14) {
+                //     motor.sendCommand(0x28);
+                // }
+                motor.sendCommand(0x28);
             });
         });
         var steps = 20; // 1 step is 9deg // 3000 is an animation delay after roration
-        setTimeout(_this.step3, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 3000);
+        setTimeout(_this.step4, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 3000);
         _this.resetIdle();
         _this.idle();
     }

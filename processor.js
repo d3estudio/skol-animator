@@ -171,7 +171,9 @@ socket.on('connect', () => {
         } else if (command.animation == 'BasicAngle') {
             [rightWall, frontWall, leftWall, roof].forEach((wall) => {
                 wall.motors.forEach((motor) => {
-                    motor.sendCommand(command.angle);
+                    if (motor.command <= 0x40) {
+                        motor.sendCommand(command.angle);
+                    }
                 });
             });
         } else {
@@ -272,6 +274,7 @@ socket.on('connect', () => {
             animation = null;
         });
         currentAnimations = [];
+        AutoPilot.status = false;
     })
     .on('disconnect', () => {
         helper.logger.debug(`[Processor] Disconnected from port ${settings.SOCKET_PORT}`);
