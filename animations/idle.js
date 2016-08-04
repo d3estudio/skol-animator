@@ -223,9 +223,10 @@ module.exports = function Idle(type, width, where, loop) {
                             if (motor.x == (10 - _this.spiralXR) && motor.y == (4 - _this.spiralYR)) {
                                 motor.sendCommand(0x14);
                             }
+                            /*
                             if ((10 - _this.spiralXR) == 10 && motor.x > 10 && motor.y == (4 - _this.spiralYR)) {
                                 motor.sendCommand(0x14);
-                            }
+                            }*/
                         });
                     } else if (wall.name == 'left') {
                         wall.motors.forEach((motor) => {
@@ -234,10 +235,10 @@ module.exports = function Idle(type, width, where, loop) {
                             }
                             if (motor.x == (56 - _this.spiralXL-17) && motor.y == (4 - _this.spiralYL)) {
                                 motor.sendCommand(0x14);
-                            }
+                            }/*
                             if (_this.spiralXL == 23 && motor.x < 23 && motor.y == _this.spiralYL) {
                                 motor.sendCommand(0x14);
-                            }
+                            }*/
                         });
                     }
                 });
@@ -409,10 +410,10 @@ module.exports = function Idle(type, width, where, loop) {
                             }
                             if (motor.x == (10 - _this.spiralXR) && motor.y == (4 - _this.spiralYR)) {
                                 motor.sendCommand(0x19);
-                            }
+                            }/*
                             if ((10 - _this.spiralXR) == 10 && motor.x > 10 && motor.y == (4 - _this.spiralYR)) {
                                 motor.sendCommand(0x19);
-                            }
+                            }*/
                         });
                     } else if (wall.name == 'left') {
                         wall.motors.forEach((motor) => {
@@ -421,10 +422,10 @@ module.exports = function Idle(type, width, where, loop) {
                             }
                             if (motor.x == (56 - _this.spiralXL-17) && motor.y == (4 - _this.spiralYL)) {
                                 motor.sendCommand(0x19);
-                            }
+                            }/*
                             if (_this.spiralXL-17 == 23 && motor.x < 23 && motor.y == _this.spiralYL) {
                                 motor.sendCommand(0x19);
-                            }
+                            }*/
                         });
                     }
                 });
