@@ -15,7 +15,7 @@ var Music = require('./animations/music');
 var Idle = require('./animations/idle');
 var RandomPosition = require('./animations/random-position');
 var AutoPilot = require('./animations/auto-pilot');
-var VerticalOla = require('./animations/vertical_ola');
+var VerticalOla = require('./animations/vertical-ola');
 
 //walls with motors
 var roof = new Wall(374, 11, 'top', 0, socket),
@@ -154,7 +154,11 @@ socket.on('connect', () => {
             }, [rightWall, frontWall, leftWall, roof], command.loop);
             animation.init();
         } else if (command.animation == 'Ola') {
-            animation = new Ola(command.type, 13, [rightWall, frontWall, leftWall, roof], command.loop);
+            if(command.type === 'vertical') {
+                animation = new VerticalOla(command.loop, [rightWall, frontWall, leftWall, roof]);
+            } else {
+                animation = new Ola(command.type, 13, [rightWall, frontWall, leftWall, roof], command.loop);
+            }
             animation.init();
         } else if (command.animation == 'Music') {
             animation = new Music(command.type, 13, [rightWall, frontWall, leftWall, roof], null);
@@ -168,9 +172,6 @@ socket.on('connect', () => {
             animation.init();
         } else if (command.animation == 'RandomPosition') {
             animation = new RandomPosition([rightWall, frontWall, leftWall, roof]);
-            animation.init();
-        } else if (command.animation == 'VerticalOla') {
-            animation = new VerticalOla([rightWall, frontWall, leftWall, roof]);
             animation.init();
         } else if (command.animation == 'BasicAngle') {
             [rightWall, frontWall, leftWall, roof].forEach((wall) => {
