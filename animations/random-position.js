@@ -8,7 +8,7 @@ module.exports = function RandomPosition(where) {
     _this.draw = () => {
         _this.where
             .reduce((a, b) => a.concat(b.motors), [])
-            .forEach(motor => motor.sendCommand(20 + Math.floor(Math.random() * 10)));
+            .forEach(motor => motor.sendCommand(20 + Math.floor(Math.random() * 40)));
         helper.logger.debug(`${_this.name} almost FINISHED (waiting last command)`);
     }
     _this.init = () => {
