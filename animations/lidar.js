@@ -28,6 +28,12 @@ module.exports = function Lidar(where) {
         }
     }
 
+    this.prepare = () => {
+        this.where
+            .concat((a, b) => a.concat(b.motors), [])
+            .forEach(m => m.sendCommand(0x28));
+    }
+
     this.setEnabled = (value) => {
         if(this.enabled == value) {
             return;
@@ -70,5 +76,7 @@ module.exports = function Lidar(where) {
                 }
                 this.levels[m.y].push(m);
             });
+        this.prepare();
+        setTimeout(() => this.draw(), 4000);
     }
 };
