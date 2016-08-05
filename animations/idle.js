@@ -214,7 +214,7 @@ module.exports = function Idle(type, width, where, loop) {
             }
         } else if (_this.type == 'spiral') {
             if (_this.spiralCounter > -1) {
-                [_this.where[0], _this.where[1], _this.where[2]].forEach((wall) => {
+                _this.where.forEach((wall) => {
                     if (wall.name == 'right' || wall.name == 'front') {
                         wall.motors.forEach((motor) => {
                             if (motor.x == _this.spiralXR && motor.y == _this.spiralYR) {
@@ -236,6 +236,15 @@ module.exports = function Idle(type, width, where, loop) {
                                 motor.sendCommand(0x14);
                             }
                             if (_this.spiralXL == 23 && motor.x < 6 && motor.y == _this.spiralYL) {
+                                motor.sendCommand(0x14);
+                            }
+                        });
+                    } else if (wall.name == 'top') {
+                        wall.motors.forEach((motor) => {
+                            if (motor.x == _this.spiralXR && motor.y == _this.spiralYR + 12) {
+                                motor.sendCommand(0x14);
+                            }
+                            if (motor.x == (10 - _this.spiralXR) && motor.y == (4 - _this.spiralYR + 12)) {
                                 motor.sendCommand(0x14);
                             }
                         });
@@ -401,7 +410,7 @@ module.exports = function Idle(type, width, where, loop) {
             }
         } else if (_this.type == 'spiral') {
             if (_this.spiralCounter < 28) {
-                [_this.where[0], _this.where[1], _this.where[2]].forEach((wall) => {
+                _this.where.forEach((wall) => {
                     if (wall.name == 'right' || wall.name == 'front') {
                         wall.motors.forEach((motor) => {
                             if (motor.x == _this.spiralXR && motor.y == _this.spiralYR) {
@@ -423,6 +432,15 @@ module.exports = function Idle(type, width, where, loop) {
                                 motor.sendCommand(0x19);
                             }
                             if (_this.spiralXL == 23 && motor.x < 6 && motor.y == _this.spiralYL) {
+                                motor.sendCommand(0x19);
+                            }
+                        });
+                    } else if (wall.name == 'top') {
+                        wall.motors.forEach((motor) => {
+                            if (motor.x == _this.spiralXR && motor.y == _this.spiralYR + 12) {
+                                motor.sendCommand(0x19);
+                            }
+                            if (motor.x == (10 - _this.spiralXR) && motor.y == (4 - _this.spiralYR + 12)) {
                                 motor.sendCommand(0x19);
                             }
                         });
