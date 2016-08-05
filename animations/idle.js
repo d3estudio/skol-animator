@@ -51,11 +51,11 @@ module.exports = function Idle(type, width, where, loop) {
                             setTimeout(() => {
                                 motor.sendCommand(0x37);
                             }, _this.where[0].motors[0].getFPS() * flipDelay);
-                        }, motor.x * 2 * 50 * (multiply/multiply_divisor));
+                        }, motor.x * 2 * 50 * (multiply / multiply_divisor));
                     }
                 });
             } else {
-                var offset= wall.offset;
+                var offset = wall.offset;
                 if (wall.name == 'left') {
                     offset -= 4;
                 }
@@ -66,7 +66,7 @@ module.exports = function Idle(type, width, where, loop) {
                             setTimeout(() => {
                                 motor.sendCommand(0x37);
                             }, _this.where[0].motors[0].getFPS() * flipDelay);
-                        }, motor.y * 2 * 50 * (multiply/multiply_divisor));
+                        }, motor.y * 2 * 50 * (multiply / multiply_divisor));
                     }
                 });
             }
@@ -79,7 +79,7 @@ module.exports = function Idle(type, width, where, loop) {
         if (_this.currentCol == 17) {
             _this.currentCol = 0;
         }
-        var steps = 2 * (multiply/multiply_divisor);
+        var steps = 2 * (multiply / multiply_divisor);
         setTimeout(_this.idleGlass, (_this.where[0].motors[0].getFPS() * steps));
     }
     _this.idleBack = () => {
@@ -223,22 +223,21 @@ module.exports = function Idle(type, width, where, loop) {
                             if (motor.x == (10 - _this.spiralXR) && motor.y == (4 - _this.spiralYR)) {
                                 motor.sendCommand(0x14);
                             }
-                            /*
                             if ((10 - _this.spiralXR) == 10 && motor.x > 10 && motor.y == (4 - _this.spiralYR)) {
                                 motor.sendCommand(0x14);
-                            }*/
+                            }
                         });
                     } else if (wall.name == 'left') {
                         wall.motors.forEach((motor) => {
-                            if (motor.x == _this.spiralXL-17 && motor.y == _this.spiralYL) {
+                            if (motor.x == _this.spiralXL - 17 && motor.y == _this.spiralYL) {
                                 motor.sendCommand(0x14);
                             }
-                            if (motor.x == (56 - _this.spiralXL-17) && motor.y == (4 - _this.spiralYL)) {
+                            if (motor.x == (56 - _this.spiralXL - 17) && motor.y == (4 - _this.spiralYL)) {
                                 motor.sendCommand(0x14);
-                            }/*
-                            if (_this.spiralXL == 23 && motor.x < 23 && motor.y == _this.spiralYL) {
+                            }
+                            if (_this.spiralXL == 23 && motor.x < 6 && motor.y == _this.spiralYL) {
                                 motor.sendCommand(0x14);
-                            }*/
+                            }
                         });
                     }
                 });
@@ -410,22 +409,22 @@ module.exports = function Idle(type, width, where, loop) {
                             }
                             if (motor.x == (10 - _this.spiralXR) && motor.y == (4 - _this.spiralYR)) {
                                 motor.sendCommand(0x19);
-                            }/*
+                            }
                             if ((10 - _this.spiralXR) == 10 && motor.x > 10 && motor.y == (4 - _this.spiralYR)) {
                                 motor.sendCommand(0x19);
-                            }*/
+                            }
                         });
                     } else if (wall.name == 'left') {
                         wall.motors.forEach((motor) => {
-                            if (motor.x == _this.spiralXL-17 && motor.y == _this.spiralYL) {
+                            if (motor.x == _this.spiralXL - 17 && motor.y == _this.spiralYL) {
                                 motor.sendCommand(0x19);
                             }
-                            if (motor.x == (56 - _this.spiralXL-17) && motor.y == (4 - _this.spiralYL)) {
+                            if (motor.x == (56 - _this.spiralXL - 17) && motor.y == (4 - _this.spiralYL)) {
                                 motor.sendCommand(0x19);
-                            }/*
-                            if (_this.spiralXL-17 == 23 && motor.x < 23 && motor.y == _this.spiralYL) {
+                            }
+                            if (_this.spiralXL == 23 && motor.x < 6 && motor.y == _this.spiralYL) {
                                 motor.sendCommand(0x19);
-                            }*/
+                            }
                         });
                     }
                 });
@@ -471,7 +470,7 @@ module.exports = function Idle(type, width, where, loop) {
             setTimeout(() => {
                 helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
                 _this.ended(10000);
-            },30000);
+            }, 30000);
         } else if (_this.type == 'TEST') {
             _this.where.forEach((wall, wallIndex) => {
                 wall.motors.forEach((motor, motorIndex) => {
