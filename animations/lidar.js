@@ -10,7 +10,7 @@ module.exports = function Lidar(where) {
     this.roof = where[3];
     this.levels = {};
     this.currentLevel = 1;
-    this.enabled = false;
+    this.enabled = true;
 
     this.openLevel = (level) => {
         level = Math.abs(level - 4);
@@ -30,7 +30,7 @@ module.exports = function Lidar(where) {
 
     this.prepare = () => {
         this.where
-            .concat((a, b) => a.concat(b.motors), [])
+            .reduce((a, b) => a.concat(b.motors), [])
             .forEach(m => m.sendCommand(0x28));
     }
 
