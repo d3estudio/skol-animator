@@ -23,6 +23,11 @@ module.exports = function Idle(type, width, where, loop) {
     _this.currentColTopGlass = 16;
     _this.spiralTimer = 250;
     _this.spiralCounter = 0;
+    _this.reelCounterX = 44;
+    _this.reelCounterY = 4;
+    _this.reelCommand = 0x28;
+    _this.reelTimer = 25;
+    _this.stars = 0;
 
     _this.spiralXR = 5;
     _this.spiralYR = 2;
@@ -286,6 +291,42 @@ module.exports = function Idle(type, width, where, loop) {
                     _this.ended(10000);
                 }
             }
+        } else if (_this.type == 'reel') {
+            if (_this.reelCounterX == 0) {
+                _this.reelCounterX = 44;
+                _this.reelCounterY--;
+            }
+            if (_this.reelCounterY == -1) {
+                if (_this.loop) {
+                    _this.reelCounterX = 44;
+                    _this.reelCounterY = 4;
+                    _this.reelCommand = 0x28;
+                    _this.idle();
+                } else {
+                    helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+                    _this.ended(5000);
+                }
+            } else {
+                [_this.where[0],_this.where[1],_this.where[2]].forEach((wall, wallIndex) => {
+                    wall.motors.forEach((motor, motorIndex) => {
+                        if (_this.reelCounterX > 26 && wall.name == 'right') {
+                            if (motor.x == _this.reelCounterX - 27 && motor.y == _this.reelCounterY) {
+                                motor.sendCommand(_this.reelCommand);
+                            }
+                        } else if (_this.reelCounterX > 15 && wall.name == 'front') {
+                            if (motor.x == _this.reelCounterX - 16 && motor.y == _this.reelCounterY) {
+                                motor.sendCommand(_this.reelCommand);
+                            }
+                        } else if (_this.reelCounterX > -1 && wall.name == 'left') {
+                            if (motor.x == _this.reelCounterX - 1 && motor.y == _this.reelCounterY) {
+                                motor.sendCommand(_this.reelCommand);
+                            }
+                        }
+                    });
+                });
+                _this.reelCounterX--;
+                setTimeout(_this.idleBack, _this.reelTimer);
+            }
         }
     }
     _this.idle = () => {
@@ -476,6 +517,57 @@ module.exports = function Idle(type, width, where, loop) {
                 var steps = 10;
                 setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 10);
             }
+        } else if (_this.type == 'reel') {
+            if (_this.reelCounterX == 0) {
+                _this.reelCounterX = 44;
+                _this.reelCounterY--;
+            }
+            if (_this.reelCounterY == -1) {
+                _this.reelCounterX = 44;
+                _this.reelCounterY = 4;
+                _this.reelCommand = 0x14;
+                _this.idleBack();
+            } else {
+                [_this.where[0],_this.where[1],_this.where[2]].forEach((wall, wallIndex) => {
+                    wall.motors.forEach((motor, motorIndex) => {
+                        if (_this.reelCounterX > 26 && wall.name == 'right') {
+                            if (motor.x == _this.reelCounterX - 27 && motor.y == _this.reelCounterY) {
+                                motor.sendCommand(_this.reelCommand);
+                            }
+                        } else if (_this.reelCounterX > 15 && wall.name == 'front') {
+                            if (motor.x == _this.reelCounterX - 16 && motor.y == _this.reelCounterY) {
+                                motor.sendCommand(_this.reelCommand);
+                            }
+                        } else if (_this.reelCounterX > -1 && wall.name == 'left') {
+                            if (motor.x == _this.reelCounterX - 1 && motor.y == _this.reelCounterY) {
+                                motor.sendCommand(_this.reelCommand);
+                            }
+                        }
+                    });
+                });
+                _this.reelCounterX--;
+                setTimeout(_this.idle, _this.reelTimer);
+            }
+        } else if (_this.type == 'brendacadente') {
+            if (_this.stars == 20) {
+                if (_this.loop) {
+                    _this.stars = 0;
+                    _this.idle();
+                } else {
+                    helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+                }
+                _this.ended(5000);
+            } else {
+                var wall = [_this.where[0],_this.where[2],_this.where[3]][Math.round(Math.random() * 2)];
+                var line = Math.round(Math.random() * 4);
+                if (wall.name == 'top') {
+                    line = Math.round(Math.random() * 10);
+                }
+                _this.fireStar(wall, line, 16);
+                _this.stars++;
+                var steps = 50;
+                setTimeout(_this.idle, _this.where[0].motors[0].getFPS() * steps);
+            }
         } else if (_this.type == 'glass') {
             _this.where.forEach((wall, wallIndex) => {
                 wall.motors.forEach((motor, motorIndex) => {
@@ -489,14 +581,42 @@ module.exports = function Idle(type, width, where, loop) {
                 helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
                 _this.ended(10000);
             }, 30000);
-        } else if (_this.type == 'TEST') {
-            _this.where.forEach((wall, wallIndex) => {
-                wall.motors.forEach((motor, motorIndex) => {
-                    motor.sendCommand(0x3c);
-                });
-            });
-            var steps = 50;
-            setTimeout(_this.idleTest, (_this.where[0].motors[0].getFPS() * steps));
+        }
+    }
+    _this.fireStar = (where, line, currentIndex) => {
+        where.motors.forEach((motor) => {
+            if (where.name == 'top') {
+                if (motor.x == line && motor.y == 16-currentIndex) {
+                    if (motor.command == 0x14) {
+                        motor.sendCommand(0x3C);
+                    } else {
+                        motor.sendCommand(0x14);
+                    }
+                }
+            } else if (where.name == 'right') {
+                if (motor.y == line && motor.x == currentIndex) {
+                    if (motor.command == 0x14) {
+                        motor.sendCommand(0x3C);
+                    } else {
+                        motor.sendCommand(0x14);
+                    }
+                }
+            } else if (where.name == 'left') {
+                if (motor.y == line && motor.x == 16-currentIndex) {
+                    if (motor.command == 0x14) {
+                        motor.sendCommand(0x3C);
+                    } else {
+                        motor.sendCommand(0x14);
+                    }
+                }
+            }
+        });
+        if (currentIndex > -1) {
+            setTimeout(() => {
+                _this.fireStar(where, line, currentIndex-=1);
+            }, _this.where[0].motors[0].getFPS());
+        } else {
+            _this.where[1].motors[Math.round(Math.random()*_this.where[1].motors.length-1)].sendCommand(0x28);
         }
     }
     _this.init = () => {
