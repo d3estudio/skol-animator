@@ -64,6 +64,11 @@ var AdminCommands = function() {
             socket.emit('auto_pilot');
         }
     };
+    this.LIDAR_ANIM = function() {
+        socket.emit('animation', {
+            animation: 'lidar'
+        })
+    }
 }
 
 var BasicAngles = function() {
@@ -116,7 +121,8 @@ createFolder('Admin Commands', new AdminCommands(), [
     'SET_ZERO_TO_POS____0xFD',
     'HALT____0xFB',
     'RANDOM_POSITION',
-    'AUTO_PILOT'
+    'AUTO_PILOT',
+    'LIDAR_ANIM'
 ]);
 createFolder('Basic Angles', new BasicAngles(), ['SEND'], {
     before: function(folder, prop) {

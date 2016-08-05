@@ -16,6 +16,7 @@ var Idle = require('./animations/idle');
 var RandomPosition = require('./animations/random-position');
 var AutoPilot = require('./animations/auto-pilot');
 var VerticalOla = require('./animations/vertical-ola');
+var Lidar = require('./animations/lidar');
 
 //walls with motors
 var roof = new Wall(374, 11, 'top', 0, socket),
@@ -169,6 +170,9 @@ socket.on('connect', () => {
             }
         } else if (command.animation == 'Idle') {
             animation = new Idle(command.type, 18, [rightWall, frontWall, leftWall, roof], command.loop);
+            animation.init();
+        } else if (command.animation == 'lidar') {
+            animation = new Lidar([rightWall, frontWall, leftWall, roof]);
             animation.init();
         } else if (command.animation == 'RandomPosition') {
             animation = new RandomPosition([rightWall, frontWall, leftWall, roof]);
