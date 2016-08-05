@@ -2,5 +2,11 @@
     "SPEED": 1,
     "MIN_ANGLE": 9,
     "SOCKET_IP": "127.0.0.1",
-    "SOCKET_PORT": 3000
+    "SOCKET_PORT": 3000,
+    "LIDAR_LEVELS": {
+        "1": { "downward": 1, "upward": 1 },
+        "2": { "downward": 2, "upward": 2 },
+        "3": { "downward": 3, "upward": 3 },
+        "4": { "downward": 4, "upward": 4 }
+    }
 }
