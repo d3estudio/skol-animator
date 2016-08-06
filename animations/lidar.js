@@ -130,6 +130,13 @@ module.exports = function Lidar(where) {
         sidesStep();
     }
 
+    this.drop = () => {
+        this.where
+            .reduce((a, b) => a.concat(b.motors), [])
+            .forEach(m => m.sendCommand(0x28));
+        this.enabled = false;
+    }
+
     this.draw = () => {
         helper.logger.debug(`${this.name} Opening level 0`);
         this.openLevel(0);

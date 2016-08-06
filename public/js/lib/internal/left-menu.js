@@ -96,9 +96,8 @@ var LidarLevel = function() {
             upward: this.upward
         });
     };
-    this.downward = 0;
+    this.downward = 0.10;
     this.upward = 0;
-
 }
 
 var Unicast = function() {
