@@ -65,7 +65,7 @@ module.exports = function AutoPilot(where) {
                                 if (motor.x == 6 && motor.y == 3 && wall.name == 'right') {
                                     //do not calibrate
                                 } else {
-                                    motor.sendCommand(command);
+                                    motor.sendCommand(0xFE);
                                 }
                             })
                         });
