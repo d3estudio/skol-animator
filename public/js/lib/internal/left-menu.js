@@ -70,9 +70,11 @@ var AdminCommands = function() {
         })
     }
     this.ENABLE_LIDAR = function() {
-        socket.emit('animation', {
-            animation: 'enable_lidar'
-        });
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL START THE LIDAR')) {
+            socket.emit('animation', {
+                animation: 'enable_lidar'
+            });
+        }
     }
 }
 
@@ -104,8 +106,8 @@ var LidarLevel = function() {
             upward: this.upward
         });
     };
-    this.downward = 0.10;
-    this.upward = 0;
+    this.downward = 1;
+    this.upward = 1;
 }
 
 var Unicast = function() {
