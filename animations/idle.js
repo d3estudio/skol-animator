@@ -304,7 +304,7 @@ module.exports = function Idle(type, width, where, loop) {
                     _this.idle();
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
-                    _this.ended(5000);
+                    _this.ended(10000);
                 }
             } else {
                 [_this.where[0],_this.where[1],_this.where[2]].forEach((wall, wallIndex) => {
