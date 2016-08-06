@@ -17,6 +17,7 @@ var RandomPosition = require('./animations/random-position');
 var AutoPilot = require('./animations/auto-pilot');
 var VerticalOla = require('./animations/vertical-ola');
 var Lidar = require('./animations/lidar');
+var LidarHelper = require('./lib/lidar');
 
 //walls with motors
 var roof = new Wall(374, 11, 'top', 0, socket),
@@ -38,6 +39,8 @@ rightWall.init();
 
 AutoPilot = new AutoPilot([rightWall, frontWall, leftWall, roof]);
 AutoPilot.init();
+
+lidarHelper = new LidarHelper([rightWall, frontWall, leftWall, roof]);
 
 var refreshRate = roof.motors[0].getFPS();
 
@@ -143,7 +146,12 @@ socket.on('connect', () => {
         helper.logger.debug(`[Processor] Received Command ${command.animation}`);
         var animation = '';
         globalMusic = null;
-        if (command.animation == 'ScrollText') {
+        if (command.animation == 'enable_lidar') {
+            console.log('enabled');
+            lidarHelper.setEnabled(true);
+            lidarHelper.animation.prepare();
+            return;
+        } else if (command.animation == 'ScrollText') {
             animation = new ScrollText(command.message, 13, [rightWall, frontWall, leftWall, roof], command.continuous, command.loop);
             animation.init();
         } else if (command.animation == 'ScoreBoard') {
@@ -172,8 +180,8 @@ socket.on('connect', () => {
             animation = new Idle(command.type, 18, [rightWall, frontWall, leftWall, roof], command.loop);
             animation.init();
         } else if (command.animation == 'lidar') {
-            animation = new Lidar([rightWall, frontWall, leftWall, roof]);
-            animation.init();
+            lidarHelper.receiveValues(parseInt(command.upward), parseInt(command.downward));
+            animation = lidarHelper.animation;
         } else if (command.animation == 'RandomPosition') {
             animation = new RandomPosition([rightWall, frontWall, leftWall, roof]);
             animation.init();

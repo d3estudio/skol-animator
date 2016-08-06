@@ -69,6 +69,11 @@ var AdminCommands = function() {
             animation: 'lidar'
         })
     }
+    this.ENABLE_LIDAR = function() {
+        socket.emit('animation', {
+            animation: 'enable_lidar'
+        });
+    }
 }
 
 var BasicAngles = function() {
@@ -81,6 +86,19 @@ var BasicAngles = function() {
         }
     };
     this.angle = 0x14;
+}
+
+var LidarLevel = function() {
+    this.SEND = function() {
+        socket.emit('animation', {
+            animation: 'lidar',
+            downward: this.downward,
+            upward: this.upward
+        });
+    };
+    this.downward = 0;
+    this.upward = 0;
+
 }
 
 var Unicast = function() {
@@ -122,8 +140,14 @@ createFolder('Admin Commands', new AdminCommands(), [
     'HALT____0xFB',
     'RANDOM_POSITION',
     'AUTO_PILOT',
-    'LIDAR_ANIM'
+    'ENABLE_LIDAR'
 ]);
+createFolder('Lidar Levels', new LidarLevel(), ['SEND'], {
+    before: function(folder, prop) {
+        folder.add(prop, 'downward', 0);
+        folder.add(prop, 'upward', 0);
+    }
+})
 createFolder('Basic Angles', new BasicAngles(), ['SEND'], {
     before: function(folder, prop) {
         folder.add(prop, 'angle', {
