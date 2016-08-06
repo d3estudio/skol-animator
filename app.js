@@ -34,6 +34,7 @@ app
 app
     .get('/', publicController.index)
     .get('/mobile', publicController.mobile)
+    .get('/snake', publicController.snake)
     .get('/lidar/:upward/:downward', (req, res) => {
         serverSocket.emit('lidar', parseFloat(req.params.upward)+parseFloat(req.params.downward));
         res.status(200).end();
@@ -75,6 +76,12 @@ serverSocket.on('connection', (clientSocket) => {
         })
         .on('double_tap', (action) => {
             serverSocket.emit('pose');
+        })
+        .on('play', (game) => {
+            serverSocket.emit('game', game);
+        })
+        .on('keyboard', (key) => {
+            serverSocket.emit('keypress', key);
         })
         .on('ackHealth', (data) => {
             lastHealthStatus = data;

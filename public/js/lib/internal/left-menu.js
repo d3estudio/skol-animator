@@ -66,6 +66,14 @@ var AdminCommands = function() {
     };
 }
 
+var Games = function() {
+    this.SNAKE = function() {
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL PLAY THE SNAKE')) {
+            socket.emit('play', 'snake');
+        }
+    }
+}
+
 var BasicAngles = function() {
     this.SEND = function() {
         if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL ROTATE ALL THE MOTORS TO THE SPECIFIED ANGLE')) {
@@ -118,6 +126,7 @@ createFolder('Admin Commands', new AdminCommands(), [
     'RANDOM_POSITION',
     'AUTO_PILOT'
 ]);
+createFolder('Games', new Games(), ['SNAKE']);
 createFolder('Basic Angles', new BasicAngles(), ['SEND'], {
     before: function(folder, prop) {
         folder.add(prop, 'angle', {
