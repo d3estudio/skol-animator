@@ -23,6 +23,11 @@ module.exports = function Idle(type, width, where, loop) {
     _this.currentColTopGlass = 16;
     _this.spiralTimer = 250;
     _this.spiralCounter = 0;
+    _this.reelCounterX = 44;
+    _this.reelCounterY = 4;
+    _this.reelCommand = 0x28;
+    _this.reelTimer = 75;
+    _this.stars = 0;
 
     _this.spiralXR = 5;
     _this.spiralYR = 2;
@@ -51,11 +56,11 @@ module.exports = function Idle(type, width, where, loop) {
                             setTimeout(() => {
                                 motor.sendCommand(0x37);
                             }, _this.where[0].motors[0].getFPS() * flipDelay);
-                        }, motor.x * 2 * 50 * (multiply/multiply_divisor));
+                        }, motor.x * 2 * 50 * (multiply / multiply_divisor));
                     }
                 });
             } else {
-                var offset= wall.offset;
+                var offset = wall.offset;
                 if (wall.name == 'left') {
                     offset -= 4;
                 }
@@ -66,7 +71,7 @@ module.exports = function Idle(type, width, where, loop) {
                             setTimeout(() => {
                                 motor.sendCommand(0x37);
                             }, _this.where[0].motors[0].getFPS() * flipDelay);
-                        }, motor.y * 2 * 50 * (multiply/multiply_divisor));
+                        }, motor.y * 2 * 50 * (multiply / multiply_divisor));
                     }
                 });
             }
@@ -79,7 +84,7 @@ module.exports = function Idle(type, width, where, loop) {
         if (_this.currentCol == 17) {
             _this.currentCol = 0;
         }
-        var steps = 2 * (multiply/multiply_divisor);
+        var steps = 2 * (multiply / multiply_divisor);
         setTimeout(_this.idleGlass, (_this.where[0].motors[0].getFPS() * steps));
     }
     _this.idleBack = () => {
@@ -214,7 +219,7 @@ module.exports = function Idle(type, width, where, loop) {
             }
         } else if (_this.type == 'spiral') {
             if (_this.spiralCounter > -1) {
-                [_this.where[0], _this.where[1], _this.where[2]].forEach((wall) => {
+                _this.where.forEach((wall) => {
                     if (wall.name == 'right' || wall.name == 'front') {
                         wall.motors.forEach((motor) => {
                             if (motor.x == _this.spiralXR && motor.y == _this.spiralYR) {
@@ -223,22 +228,30 @@ module.exports = function Idle(type, width, where, loop) {
                             if (motor.x == (10 - _this.spiralXR) && motor.y == (4 - _this.spiralYR)) {
                                 motor.sendCommand(0x14);
                             }
-                            /*
                             if ((10 - _this.spiralXR) == 10 && motor.x > 10 && motor.y == (4 - _this.spiralYR)) {
                                 motor.sendCommand(0x14);
-                            }*/
+                            }
                         });
                     } else if (wall.name == 'left') {
                         wall.motors.forEach((motor) => {
-                            if (motor.x == _this.spiralXL-17 && motor.y == _this.spiralYL) {
+                            if (motor.x == _this.spiralXL - 17 && motor.y == _this.spiralYL) {
                                 motor.sendCommand(0x14);
                             }
-                            if (motor.x == (56 - _this.spiralXL-17) && motor.y == (4 - _this.spiralYL)) {
+                            if (motor.x == (56 - _this.spiralXL - 17) && motor.y == (4 - _this.spiralYL)) {
                                 motor.sendCommand(0x14);
-                            }/*
-                            if (_this.spiralXL == 23 && motor.x < 23 && motor.y == _this.spiralYL) {
+                            }
+                            if (_this.spiralXL == 23 && motor.x < 6 && motor.y == _this.spiralYL) {
                                 motor.sendCommand(0x14);
-                            }*/
+                            }
+                        });
+                    } else if (wall.name == 'top') {
+                        wall.motors.forEach((motor) => {
+                            if (motor.x == _this.spiralXR && motor.y == _this.spiralYR + 12) {
+                                motor.sendCommand(0x14);
+                            }
+                            if (motor.x == (10 - _this.spiralXR) && motor.y == (4 - _this.spiralYR + 12)) {
+                                motor.sendCommand(0x14);
+                            }
                         });
                     }
                 });
@@ -277,6 +290,42 @@ module.exports = function Idle(type, width, where, loop) {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
                     _this.ended(10000);
                 }
+            }
+        } else if (_this.type == 'reel') {
+            if (_this.reelCounterX == 0) {
+                _this.reelCounterX = 44;
+                _this.reelCounterY--;
+            }
+            if (_this.reelCounterY == -1) {
+                if (_this.loop) {
+                    _this.reelCounterX = 44;
+                    _this.reelCounterY = 4;
+                    _this.reelCommand = 0x28;
+                    _this.idle();
+                } else {
+                    helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+                    _this.ended(10000);
+                }
+            } else {
+                [_this.where[0],_this.where[1],_this.where[2]].forEach((wall, wallIndex) => {
+                    wall.motors.forEach((motor, motorIndex) => {
+                        if (_this.reelCounterX > 26 && wall.name == 'right') {
+                            if (motor.x == _this.reelCounterX - 27 && motor.y == _this.reelCounterY) {
+                                motor.sendCommand(_this.reelCommand);
+                            }
+                        } else if (_this.reelCounterX > 15 && wall.name == 'front') {
+                            if (motor.x == _this.reelCounterX - 16 && motor.y == _this.reelCounterY) {
+                                motor.sendCommand(_this.reelCommand);
+                            }
+                        } else if (_this.reelCounterX > -1 && wall.name == 'left') {
+                            if (motor.x == _this.reelCounterX - 1 && motor.y == _this.reelCounterY) {
+                                motor.sendCommand(_this.reelCommand);
+                            }
+                        }
+                    });
+                });
+                _this.reelCounterX--;
+                setTimeout(_this.idleBack, _this.reelTimer);
             }
         }
     }
@@ -402,7 +451,7 @@ module.exports = function Idle(type, width, where, loop) {
             }
         } else if (_this.type == 'spiral') {
             if (_this.spiralCounter < 28) {
-                [_this.where[0], _this.where[1], _this.where[2]].forEach((wall) => {
+                _this.where.forEach((wall) => {
                     if (wall.name == 'right' || wall.name == 'front') {
                         wall.motors.forEach((motor) => {
                             if (motor.x == _this.spiralXR && motor.y == _this.spiralYR) {
@@ -410,22 +459,31 @@ module.exports = function Idle(type, width, where, loop) {
                             }
                             if (motor.x == (10 - _this.spiralXR) && motor.y == (4 - _this.spiralYR)) {
                                 motor.sendCommand(0x19);
-                            }/*
+                            }
                             if ((10 - _this.spiralXR) == 10 && motor.x > 10 && motor.y == (4 - _this.spiralYR)) {
                                 motor.sendCommand(0x19);
-                            }*/
+                            }
                         });
                     } else if (wall.name == 'left') {
                         wall.motors.forEach((motor) => {
-                            if (motor.x == _this.spiralXL-17 && motor.y == _this.spiralYL) {
+                            if (motor.x == _this.spiralXL - 17 && motor.y == _this.spiralYL) {
                                 motor.sendCommand(0x19);
                             }
-                            if (motor.x == (56 - _this.spiralXL-17) && motor.y == (4 - _this.spiralYL)) {
+                            if (motor.x == (56 - _this.spiralXL - 17) && motor.y == (4 - _this.spiralYL)) {
                                 motor.sendCommand(0x19);
-                            }/*
-                            if (_this.spiralXL-17 == 23 && motor.x < 23 && motor.y == _this.spiralYL) {
+                            }
+                            if (_this.spiralXL == 23 && motor.x < 6 && motor.y == _this.spiralYL) {
                                 motor.sendCommand(0x19);
-                            }*/
+                            }
+                        });
+                    } else if (wall.name == 'top') {
+                        wall.motors.forEach((motor) => {
+                            if (motor.x == _this.spiralXR && motor.y == _this.spiralYR + 12) {
+                                motor.sendCommand(0x19);
+                            }
+                            if (motor.x == (10 - _this.spiralXR) && motor.y == (4 - _this.spiralYR + 12)) {
+                                motor.sendCommand(0x19);
+                            }
                         });
                     }
                 });
@@ -459,6 +517,57 @@ module.exports = function Idle(type, width, where, loop) {
                 var steps = 10;
                 setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 10);
             }
+        } else if (_this.type == 'reel') {
+            if (_this.reelCounterX == 0) {
+                _this.reelCounterX = 44;
+                _this.reelCounterY--;
+            }
+            if (_this.reelCounterY == -1) {
+                _this.reelCounterX = 44;
+                _this.reelCounterY = 4;
+                _this.reelCommand = 0x14;
+                _this.idleBack();
+            } else {
+                [_this.where[0],_this.where[1],_this.where[2]].forEach((wall, wallIndex) => {
+                    wall.motors.forEach((motor, motorIndex) => {
+                        if (_this.reelCounterX > 26 && wall.name == 'right') {
+                            if (motor.x == _this.reelCounterX - 27 && motor.y == _this.reelCounterY) {
+                                motor.sendCommand(_this.reelCommand);
+                            }
+                        } else if (_this.reelCounterX > 15 && wall.name == 'front') {
+                            if (motor.x == _this.reelCounterX - 16 && motor.y == _this.reelCounterY) {
+                                motor.sendCommand(_this.reelCommand);
+                            }
+                        } else if (_this.reelCounterX > -1 && wall.name == 'left') {
+                            if (motor.x == _this.reelCounterX - 1 && motor.y == _this.reelCounterY) {
+                                motor.sendCommand(_this.reelCommand);
+                            }
+                        }
+                    });
+                });
+                _this.reelCounterX--;
+                setTimeout(_this.idle, _this.reelTimer);
+            }
+        } else if (_this.type == 'brendacadente') {
+            if (_this.stars == 20) {
+                if (_this.loop) {
+                    _this.stars = 0;
+                    _this.idle();
+                } else {
+                    helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+                }
+                _this.ended(5000);
+            } else {
+                var wall = [_this.where[0],_this.where[2],_this.where[3]][Math.round(Math.random() * 2)];
+                var line = Math.round(Math.random() * 4);
+                if (wall.name == 'top') {
+                    line = Math.round(Math.random() * 10);
+                }
+                _this.fireStar(wall, line, 16);
+                _this.stars++;
+                var steps = 50;
+                setTimeout(_this.idle, _this.where[0].motors[0].getFPS() * steps);
+            }
         } else if (_this.type == 'glass') {
             _this.where.forEach((wall, wallIndex) => {
                 wall.motors.forEach((motor, motorIndex) => {
@@ -471,15 +580,43 @@ module.exports = function Idle(type, width, where, loop) {
             setTimeout(() => {
                 helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
                 _this.ended(10000);
-            },30000);
-        } else if (_this.type == 'TEST') {
-            _this.where.forEach((wall, wallIndex) => {
-                wall.motors.forEach((motor, motorIndex) => {
-                    motor.sendCommand(0x3c);
-                });
-            });
-            var steps = 50;
-            setTimeout(_this.idleTest, (_this.where[0].motors[0].getFPS() * steps));
+            }, 30000);
+        }
+    }
+    _this.fireStar = (where, line, currentIndex) => {
+        where.motors.forEach((motor) => {
+            if (where.name == 'top') {
+                if (motor.x == line && motor.y == 16-currentIndex) {
+                    if (motor.command == 0x14) {
+                        motor.sendCommand(0x3C);
+                    } else {
+                        motor.sendCommand(0x14);
+                    }
+                }
+            } else if (where.name == 'right') {
+                if (motor.y == line && motor.x == currentIndex) {
+                    if (motor.command == 0x14) {
+                        motor.sendCommand(0x3C);
+                    } else {
+                        motor.sendCommand(0x14);
+                    }
+                }
+            } else if (where.name == 'left') {
+                if (motor.y == line && motor.x == 16-currentIndex) {
+                    if (motor.command == 0x14) {
+                        motor.sendCommand(0x3C);
+                    } else {
+                        motor.sendCommand(0x14);
+                    }
+                }
+            }
+        });
+        if (currentIndex > -1) {
+            setTimeout(() => {
+                _this.fireStar(where, line, currentIndex-=1);
+            }, _this.where[0].motors[0].getFPS());
+        } else {
+            _this.where[1].motors[Math.round(Math.random()*_this.where[1].motors.length-1)].sendCommand(0x28);
         }
     }
     _this.init = () => {

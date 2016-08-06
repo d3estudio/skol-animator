@@ -34,6 +34,7 @@ app
 app
     .get('/', publicController.index)
     .get('/mobile', publicController.mobile)
+    .get('/snake', publicController.snake)
     .get('/lidar/:upward/:downward', (req, res) => {
         serverSocket.emit('exec', {
             animation: 'lidar',
@@ -75,11 +76,16 @@ serverSocket.on('connection', (clientSocket) => {
             serverSocket.emit('magic', action);
         })
         .on('quaternion', (quaternion) => {
-            console.log(quaternion);
             serverSocket.emit('orientation', quaternion);
         })
         .on('double_tap', (action) => {
             serverSocket.emit('pose');
+        })
+        .on('play', (game) => {
+            serverSocket.emit('game', game);
+        })
+        .on('keyboard', (key) => {
+            serverSocket.emit('keypress', key);
         })
         .on('ackHealth', (data) => {
             lastHealthStatus = data;

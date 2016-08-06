@@ -64,15 +64,23 @@ var AdminCommands = function() {
             socket.emit('auto_pilot');
         }
     };
-    this.LIDAR_ANIM = function() {
+this.LIDAR_ANIM = function() {
         socket.emit('animation', {
             animation: 'lidar'
         })
     }
-    this.ENABLE_LIDAR = function() {
+this.ENABLE_LIDAR = function() {
         socket.emit('animation', {
             animation: 'enable_lidar'
         });
+    }
+}
+
+var Games = function() {
+    this.SNAKE = function() {
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL PLAY THE SNAKE')) {
+            socket.emit('play', 'snake');
+        }
     }
 }
 
@@ -141,6 +149,7 @@ createFolder('Admin Commands', new AdminCommands(), [
     'AUTO_PILOT',
     'ENABLE_LIDAR'
 ]);
+createFolder('Games', new Games(), ['SNAKE']);
 createFolder('Lidar Levels', new LidarLevel(), ['SEND'], {
     before: function(folder, prop) {
         folder.add(prop, 'downward', 0);

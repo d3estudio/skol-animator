@@ -19,6 +19,10 @@ var VerticalOla = require('./animations/vertical-ola');
 var Lidar = require('./animations/lidar');
 var LidarHelper = require('./lib/lidar');
 
+//games
+var Snake = require('./games/snake');
+var Game;
+
 //walls with motors
 var roof = new Wall(374, 11, 'top', 0, socket),
     leftWall = new Wall(170, 34, 'left', 4, socket),
@@ -123,7 +127,11 @@ var TOP_BITMAP = {
         TOP_BITMAP.map[motor.y][motor.x] = motor.command;
     });
     rightWall.motors.forEach((motor) => {
-        FACE_BITMAP.map[motor.y][motor.x + 28] = motor.command;
+        if ((motor.x == 6 && motor.y == 3) || (motor.x == 0 && motor.y == 4)) {
+            FACE_BITMAP.map[motor.y][motor.x + 28] = 0x14;
+        } else {
+            FACE_BITMAP.map[motor.y][motor.x + 28] = motor.command;
+        }
     });
     frontWall.motors.forEach((motor) => {
         FACE_BITMAP.map[motor.y][motor.x + 17] = motor.command;
@@ -197,7 +205,11 @@ socket.on('connect', () => {
                 refreshRate = 4000;
                 [rightWall, frontWall, leftWall, roof].forEach((wall) => {
                     wall.motors.forEach((motor) => {
-                        motor.sendCommand(command);
+                        if (command == 0xFE && motor.x == 6 && motor.y == 3 && wall.name == 'right') {
+                            //do not calibrate
+                        } else {
+                            motor.sendCommand(command);
+                        }
                     })
                     wall.locked = false;
                 });
@@ -224,6 +236,7 @@ socket.on('connect', () => {
         });
     })
     .on('the_beast', () => {
+        refreshRate = roof.motors[0].getFPS();
         if (AUTO_PILOT_STATUS) {
             AUTO_PILOT_STATUS = false;
         } else {
@@ -282,6 +295,16 @@ socket.on('connect', () => {
 
             });
         })
+    })
+    .on('game', (type) => {
+        if (type == 'snake') {
+            Game = new Snake([roof, leftWall, frontWall, rightWall]);
+        }
+        Game.start();
+        currentAnimations.push(Game);
+    })
+    .on('keypress', (key) => {
+        //Game.pressKey(key);
     })
     .on('freeze', () => {
         var noop = () => {};

@@ -36,7 +36,7 @@ module.exports = function AutoPilot(where) {
             animation = new Music('equalizer', 13, _this.where, null);
             globalMusic = animation;
         } else if (animation.name == 'Idle') {
-            var types = ['shuffle', 'live', 'open', 'breathing', 'spiral'][Math.round(Math.random() * 4)];
+            var types = ['shuffle', 'live', 'open', 'breathing', 'spiral','reel','brendacadente'][Math.round(Math.random() * 6)];
             animation = new animation(types, 18, _this.where, false);
         }
         if (animation.type) {
@@ -60,7 +60,15 @@ module.exports = function AutoPilot(where) {
                     _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0x1e));
                     setTimeout(() => {
                         helper.logger.debug(`${_this.name} WILL CALIBRATE`);
-                        _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0xfe));
+                        _this.where.forEach((wall) => {
+                            wall.motors.forEach((motor) => {
+                                if (motor.x == 6 && motor.y == 3 && wall.name == 'right') {
+                                    //do not calibrate
+                                } else {
+                                    motor.sendCommand(0xFE);
+                                }
+                            })
+                        });
                         setTimeout(() => {
                             _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0x14));
                             setTimeout(() => {
@@ -95,7 +103,6 @@ module.exports = function AutoPilot(where) {
         if (_this.status) {
             _this.runAnimation();
         } else {
-            helper.logger.debug(`${_this.name} WAITING`);
             setTimeout(_this.pilot, 1000);
         }
     }

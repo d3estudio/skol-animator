@@ -76,4 +76,10 @@ var checkStatuses = function() {
 
 checkStatuses.lastCommandStatus = true;
 
-setInterval(checkStatuses, 1000);
+setInterval(checkStatuses, 5000);
+
+//get keys for GAMES
+$(document).keypress(function(event) {
+    var key = event.which;
+    socket.emit('keyboard', key);
+});

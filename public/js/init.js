@@ -1,7 +1,7 @@
 //3D ambient
 var ambient = new Ambient(document.body, {
-    x: 750*-1,
-    y: 375*2,
+    x: 750 * -1,
+    y: 375 * 2,
     z: -1200,
     distance: 45
 }, window.innerWidth, window.innerHeight);
