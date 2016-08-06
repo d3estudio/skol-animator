@@ -4,9 +4,9 @@
     "SOCKET_IP": "127.0.0.1",
     "SOCKET_PORT": 3000,
     "LIDAR_LEVELS": {
-        "1": { "downward": 1, "upward": 1 },
-        "2": { "downward": 2, "upward": 2 },
-        "3": { "downward": 3, "upward": 3 },
-        "4": { "downward": 4, "upward": 4 }
+        "1": { "minDownward": 1, "minUpward": 1, "maxDownward": 2, "maxUpward": 2 },
+        "2": { "minDownward": 3, "minUpward": 3, "maxDownward": 4, "maxUpward": 4 },
+        "3": { "minDownward": 5, "minUpward": 5, "maxDownward": 6, "maxUpward": 6 },
+        "4": { "minDownward": 7, "minUpward": 7, "maxDownward": 8, "maxUpward": 8 }
     }
 }
