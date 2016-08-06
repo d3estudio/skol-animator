@@ -155,8 +155,8 @@ socket.on('connect', () => {
         var animation = '';
         globalMusic = null;
         if (command.animation == 'enable_lidar') {
-            console.log('enabled');
-            lidarHelper.setEnabled(true);
+            console.log('lidar', command.enabled);
+            lidarHelper.setEnabled(command.enabled);
             lidarHelper.animation.prepare();
             return;
         } else if (command.animation == 'ScrollText') {
