@@ -304,7 +304,7 @@ socket.on('connect', () => {
         currentAnimations.push(Game);
     })
     .on('keypress', (key) => {
-        Game.pressKey(key);
+        //Game.pressKey(key);
     })
     .on('freeze', () => {
         var noop = () => {};
