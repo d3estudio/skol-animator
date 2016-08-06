@@ -76,6 +76,14 @@ var AdminCommands = function() {
     }
 }
 
+var Games = function() {
+    this.SNAKE = function() {
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL PLAY THE SNAKE')) {
+            socket.emit('play', 'snake');
+        }
+    }
+}
+
 var BasicAngles = function() {
     this.SEND = function() {
         if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL ROTATE ALL THE MOTORS TO THE SPECIFIED ANGLE')) {
@@ -141,12 +149,7 @@ createFolder('Admin Commands', new AdminCommands(), [
     'AUTO_PILOT',
     'ENABLE_LIDAR'
 ]);
-createFolder('Lidar Levels', new LidarLevel(), ['SEND'], {
-    before: function(folder, prop) {
-        folder.add(prop, 'downward', 0);
-        folder.add(prop, 'upward', 0);
-    }
-})
+createFolder('Games', new Games(), ['SNAKE']);
 createFolder('Basic Angles', new BasicAngles(), ['SEND'], {
     before: function(folder, prop) {
         folder.add(prop, 'angle', {

@@ -19,6 +19,10 @@ var VerticalOla = require('./animations/vertical-ola');
 var Lidar = require('./animations/lidar');
 var LidarHelper = require('./lib/lidar');
 
+//games
+var Snake = require('./games/snake');
+var Game;
+
 //walls with motors
 var roof = new Wall(374, 11, 'top', 0, socket),
     leftWall = new Wall(170, 34, 'left', 4, socket),
@@ -282,6 +286,16 @@ socket.on('connect', () => {
 
             });
         })
+    })
+    .on('game', (type) => {
+        if (type == 'snake') {
+            Game = new Snake([roof, leftWall, frontWall, rightWall]);
+        }
+        Game.start();
+        currentAnimations.push(Game);
+    })
+    .on('keypress', (key) => {
+        Game.pressKey(key);
     })
     .on('freeze', () => {
         var noop = () => {};
