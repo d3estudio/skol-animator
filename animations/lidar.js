@@ -85,7 +85,7 @@ module.exports = function Lidar(where) {
             helper.logger.debug(`${this.name} Performing side step ${step}, returning: ${this.returning}`);
             sideMotors
                 .filter(m => m.y == step)
-                .forEach(m => m.sendCommand(m.command === 0x14 ? 0x3C : 0x14));
+                .forEach(m => m.sendCommand(m.command === 0x37 ? 0x3C : 0x37));
             if(this.yStep > 0) {
                 helper.logger.debug(`${this.name}::SideStep Scheduling sideStep.`);
                 this.getTimeout(() => sidesStep());
@@ -101,7 +101,7 @@ module.exports = function Lidar(where) {
             if(bStep >= 6) {
                 this.roof.motors
                     .filter(m => m.x == aStep || m.x == bStep)
-                    .forEach(m => m.sendCommand(m.command === 0x14 ? 0x3C : 0x14));
+                    .forEach(m => m.sendCommand(m.command === 0x37 ? 0x3C : 0x37));
             }
             if(bStep > 5) {
                 helper.logger.debug(`${this.name}::RoofStep Scheduling roofStep (${aStep}, ${bStep})`);
