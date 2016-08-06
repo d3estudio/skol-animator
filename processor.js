@@ -180,7 +180,8 @@ socket.on('connect', () => {
             animation = new Idle(command.type, 18, [rightWall, frontWall, leftWall, roof], command.loop);
             animation.init();
         } else if (command.animation == 'lidar') {
-            lidarHelper.receiveValues(parseInt(command.upward), parseInt(command.downward));
+            console.log(command);
+            lidarHelper.receiveValues(parseFloat(command.upward), parseFloat(command.downward));
             animation = lidarHelper.animation;
         } else if (command.animation == 'RandomPosition') {
             animation = new RandomPosition([rightWall, frontWall, leftWall, roof]);
