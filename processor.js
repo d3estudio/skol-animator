@@ -314,6 +314,7 @@ socket.on('connect', () => {
         });
         currentAnimations = [];
         AutoPilot.status = false;
+        lidarHelper.setEnabled(false);
     })
     .on('disconnect', () => {
         helper.logger.debug(`[Processor] Disconnected from port ${settings.SOCKET_PORT}`);
