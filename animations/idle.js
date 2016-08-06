@@ -26,7 +26,7 @@ module.exports = function Idle(type, width, where, loop) {
     _this.reelCounterX = 44;
     _this.reelCounterY = 4;
     _this.reelCommand = 0x28;
-    _this.reelTimer = 25;
+    _this.reelTimer = 75;
     _this.stars = 0;
 
     _this.spiralXR = 5;
