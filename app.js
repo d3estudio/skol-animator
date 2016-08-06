@@ -35,8 +35,8 @@ app
     .get('/', publicController.index)
     .get('/mobile', publicController.mobile)
     .get('/lidar/:upward/:downward', (req, res) => {
-        serverSocket.emit('animation', {
-            command: 'lidar',
+        serverSocket.emit('exec', {
+            animation: 'lidar',
             upward: parseFloat(req.params.upward),
             downward: parseFloat(req.params.downward)
         });
