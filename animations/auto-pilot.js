@@ -60,7 +60,15 @@ module.exports = function AutoPilot(where) {
                     _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0x1e));
                     setTimeout(() => {
                         helper.logger.debug(`${_this.name} WILL CALIBRATE`);
-                        _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0xfe));
+                        _this.where.forEach((wall) => {
+                            wall.motors.forEach((motor) => {
+                                if (command == 0xFE && motor.x == 6 && motor.y == 3 && wall.name == 'right') {
+                                    //do not calibrate
+                                } else {
+                                    motor.sendCommand(command);
+                                }
+                            })
+                        });
                         setTimeout(() => {
                             _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0x14));
                             setTimeout(() => {
