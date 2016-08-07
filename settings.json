@@ -5,7 +5,7 @@
     "SOCKET_PORT": 3000,
     "LIDAR": {
         "readingsCount": 2,
-        "dropAvg": 0.03,
+        "dropAvg": -1,
         "nextLevelValue": 0.03
     }
 }
