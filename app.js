@@ -16,8 +16,7 @@ var publicController = require('./controllers/public');
 
 // We keep the last engine health check, so we can emit it
 // as soon as the client connects.
-var lastHealthStatus;
-
+var lastHealthStatus, lastLidarStatus;
 // webserver configuration
 app
     .set('views', __dirname + '/views')
@@ -89,6 +88,10 @@ serverSocket.on('connection', (clientSocket) => {
         })
         .on('ackHealth', (data) => {
             lastHealthStatus = data;
-            serverSocket.emit('ackHealth', lastHealthStatus);
+            serverSocket.emit('ackHealth_ui', lastHealthStatus);
+        })
+        .on('lidarStatus', (data) => {
+            lastLidarStatus = data;
+            serverSocket.emit('lidarStatus_ui', lastLidarStatus);
         });
 });

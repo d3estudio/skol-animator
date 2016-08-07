@@ -18,7 +18,9 @@ if (!DEBUG) {
 }
 
 var lastCommand = Date.now(),
-    lastAckHealth = { healthy: true };
+    lastAckHealth = { healthy: true },
+    lastLidarStatus = false;
+
 var socket = io();
 socket
     .on('command', function (command) {
@@ -27,8 +29,12 @@ socket
             motor.sendCommand(command.motors[index]);
         });
     })
-    .on('ackHealth', function(data) {
+    .on('ackHealth_ui', function(data) {
         lastAckHealth = data;
+    })
+    .on('lidarStatus_ui', function(status) {
+        lastLidarStatus = status;
+        checkStatuses();
     });
 
 var checkStatuses = function() {
@@ -71,6 +77,19 @@ var checkStatuses = function() {
         }
         leftGui.updateStatusForEngines(color, text);
         checkStatuses.lastAckStatus = lastAckHealth.healthy;
+    }
+
+    if(checkStatuses.lastLidarStatus != lastLidarStatus) {
+        var color, text;
+        if(lastLidarStatus) {
+            color = '#00E029';
+            text = 'Dancing';
+        } else {
+            color = '#D4DE11';
+            text = 'Asleep';
+        }
+        leftGui.updateStatusForLidar(color, text);
+        checkStatuses.lastLidarStatus = lastLidarStatus;
     }
 };
 

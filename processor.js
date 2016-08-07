@@ -80,6 +80,11 @@ var enginesWatchDog = function() {
         emitHealthStatus(true);
     }
 }
+var emitLidarStatus = function() {
+    if(lidarHelper) {
+        socket.emit('lidarStatus', lidarHelper.enabled);
+    }
+}
 
 setInterval(enginesWatchDog, 1000);
 
@@ -157,6 +162,7 @@ socket.on('connect', () => {
         if (command.animation == 'enable_lidar') {
             console.log('lidar', command.enabled);
             lidarHelper.setEnabled(command.enabled);
+            emitLidarStatus();
             lidarHelper.animation.prepare();
             return;
         } else if (command.animation == 'ScrollText') {

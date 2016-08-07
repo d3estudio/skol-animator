@@ -148,7 +148,7 @@ var Statuses = function() {
         status: 'Alive\'n\'kickin\''
     };
     this.lidar = {
-        color: '#00E029',
+        color: '#D4DE11',
         status: 'Asleep'
     }
 }
