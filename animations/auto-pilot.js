@@ -16,17 +16,19 @@ var ANIMATIONS = [
     Idle
 ]
 
-module.exports = function AutoPilot(where) {
+module.exports = function AutoPilot(where, socket) {
     var _this = this;
     _this.name = 'AutoPilot';
     _this.status = false;
     _this.where = where;
     _this.animationCount = 0;
+    _this.socket = socket;
     _this.noop = () => {};
 
     _this.runAnimation = () => {
         var animation = ANIMATIONS[Math.round(Math.random() * 3)];
         helper.logger.debug(`${_this.name} PREPARING TO RUN ${animation.name}`);
+        socket.emit('pilotstatus', `PREPARING TO RUN ${animation.name}`);
         if (animation.name == 'ScrollText') {
             animation = new animation('SKOL', 13, _this.where, false, false);
         } else if (animation.name == 'Ola') {
@@ -41,25 +43,32 @@ module.exports = function AutoPilot(where) {
         }
         if (animation.type) {
             helper.logger.debug(`${_this.name} WILL RUN ${animation.name} OF TYPE ${animation.type}`);
+            socket.emit('pilotstatus', `WILL RUN ${animation.name} OF TYPE ${animation.type}`);
         } else {
             helper.logger.debug(`${_this.name} WILL RUN ${animation.name}`);
+            socket.emit('pilotstatus', `WILL RUN ${animation.name}`);
         }
         animation.ended = (timeToWait) => {
             helper.logger.debug(`${_this.name} AUTO_PILOT ENDED ${animation.name}`);
+            socket.emit('pilotstatus', `ENDED ${animation.name}`);
+            helper.logger.debug(`${_this.name} ERASED ${animation.name} FROM QUEUE`);
+            socket.emit('pilotstatus', `ERASED ${animation.name}`);
             Object.keys(animation).forEach((key) => animation[key] = _this.noop);
             animation = null;
             globalMusic = null;
-            helper.logger.debug(`${_this.name} ERASED ANIMATION FROM QUEUE`);
             if (!timeToWait) {
                 timeToWait = 25000;
             }
             helper.logger.debug(`${_this.name} WILL WAIT ${timeToWait} AND LOOP`);
+            socket.emit('pilotstatus', `WILL WAIT ${timeToWait} AND LOOP`);
             if (_this.animationCount == 4) {
                 setTimeout(() => {
                     helper.logger.debug(`${_this.name} PREPARE TO CALIBRATE`);
+                    socket.emit('pilotstatus', `PREPARE TO CALIBRATE`);
                     _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0x1e));
                     setTimeout(() => {
                         helper.logger.debug(`${_this.name} WILL CALIBRATE`);
+                        socket.emit('pilotstatus', `WILL CALIBRATE`);
                         _this.where.forEach((wall) => {
                             wall.motors.forEach((motor) => {
                                 motor.sendCommand(0xFE);
@@ -70,6 +79,7 @@ module.exports = function AutoPilot(where) {
                             setTimeout(() => {
                                 _this.animationCount = 0;
                                 helper.logger.debug(`${_this.name} WILL LOOP`);
+                                socket.emit('pilotstatus', `WILL LOOP`);
                                 _this.pilot();
                             }, 25000)
                         }, 2000);
@@ -78,6 +88,7 @@ module.exports = function AutoPilot(where) {
             } else {
                 _this.animationCount++;
                 helper.logger.debug(`${_this.name} WILL ROTATE ALL MOTORS TO ZERO`);
+                socket.emit('pilotstatus', `WILL ROTATE ALL MOTORS TO ZERO`);
                 _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0x14));
                 setTimeout(() => {
                     _this.pilot();

@@ -41,7 +41,7 @@ leftWall.init();
 frontWall.init();
 rightWall.init();
 
-AutoPilot = new AutoPilot([rightWall, frontWall, leftWall, roof]);
+AutoPilot = new AutoPilot([rightWall, frontWall, leftWall, roof], socket);
 AutoPilot.init();
 
 lidarHelper = new LidarHelper([rightWall, frontWall, leftWall, roof]);
