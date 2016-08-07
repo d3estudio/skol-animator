@@ -90,5 +90,9 @@ serverSocket.on('connection', (clientSocket) => {
         .on('ackHealth', (data) => {
             lastHealthStatus = data;
             serverSocket.emit('ackHealth', lastHealthStatus);
+        })
+        .on('pilotstatus', (msg) => {
+            console.log('PILOT STATUS', msg);
+            serverSocket.emit('statuspilot', msg);
         });
 });
