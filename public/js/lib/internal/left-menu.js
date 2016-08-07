@@ -69,7 +69,7 @@ var AdminCommands = function() {
             animation: 'lidar'
         })
     }
-    this.ENABLE_LIDAR = function() {
+    this.ENABLE_BALIDAR = function() {
         if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL START THE LIDAR')) {
             socket.emit('animation', {
                 animation: 'enable_lidar',
@@ -77,8 +77,8 @@ var AdminCommands = function() {
             });
         }
     }
-    this.DISABLE_LIDAR = function() {
-        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL START THE LIDAR')) {
+    this.DISABLE_BALIDAR = function() {
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL STOP THE LIDAR')) {
             socket.emit('animation', {
                 animation: 'enable_lidar',
                 enabled: false
@@ -158,8 +158,8 @@ createFolder('Admin Commands', new AdminCommands(), [
     'HALT____0xFB',
     'RANDOM_POSITION',
     'AUTO_PILOT',
-    'ENABLE_LIDAR',
-    'DISABLE_LIDAR'
+    'ENABLE_BALIDAR',
+    'DISABLE_BALIDAR'
 ]);
 createFolder('Games', new Games(), ['SNAKE']);
 createFolder('Basic Angles', new BasicAngles(), ['SEND'], {
