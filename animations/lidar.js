@@ -1,53 +1,83 @@
-// main functions
 var helper = require('../lib/shared');
 
-module.exports = function Lidar(where) {
+function Line(y) {
+    this.y = y;
+    this.motors = [];
+    this.active = false;
+    this.xCounter = 44;
+    this.interval = setInterval(() => this.tick(), 75);
+    this.nextLoop = 0;
+    this.safeStopAt = Date.now();
+}
+
+Line.prototype = {
+    destroy: function() {
+        clearInterval(this.interval);
+    },
+    reset: function() {
+        this.active = false;
+        setTimeout(() => {
+            this.motors.forEach(m => m.sendCommand(0x14));
+        }, Date.now() - this.safeStopAt);
+    },
+    tick: function() {
+        this.safeStopAt = Date.now() + 2000;
+        if(this.active && Date.now() > this.nextLoop) {
+            this.motors.forEach((motor, motorIndex) => {
+                if (this.xCounter > 26 && motor.parent == 'right') {
+                    if (motor.x == this.xCounter - 27) {
+                        motor.sendCommand(motor.command === 0x14 ? 0x3C : 0x14);
+                    }
+                } else if (this.xCounter > 15 && motor.parent == 'front') {
+                    if (motor.x == this.xCounter - 16) {
+                        motor.sendCommand(motor.command === 0x14 ? 0x3C : 0x14);
+                    }
+                } else if (this.xCounter > -1 && motor.parent == 'left') {
+                    if (motor.x == this.xCounter - 1) {
+                        motor.sendCommand(motor.command === 0x14 ? 0x3C : 0x14);
+                    }
+                }
+            });
+            this.xCounter--;
+            if(this.xCounter == -1) {
+                this.xCounter = 44;
+                this.nextLoop = Date.now() + 2000;
+            }
+        }
+    }
+};
+
+
+
+function Lidar(where) {
     this.name = 'Lidar';
     this.where = where;
     this.right = where[0];
     this.front = where[1];
     this.left = where[2];
     this.roof = where[3];
-    this.levels = {};
-    this.currentLevel = 0;
-    this.enabled = true;
+    this.lines = {};
+    this.enabled = false;
     this.steps = 10;
     this.returning = false;
+
+    [this.right, this.left, this.front]
+        .reduce((a, b) => a.concat(b.motors), [])
+        .forEach(m => {
+            if(!this.lines.hasOwnProperty(m.y)) {
+                this.lines[m.y] = new Line(m.y);
+            }
+            this.lines[m.y].motors.push(m);
+        });
 
     this.debug = function() {
         if(this.enabled) {
             helper.logger.debug.apply(helper.logger, arguments);
         }
-    };
-
-    [this.right, this.left, this.front]
-        .reduce((a, b) => a.concat(b.motors), [])
-        .forEach(m => {
-            if(!this.levels.hasOwnProperty(m.y)) {
-                this.levels[m.y] = [];
-            }
-            this.levels[m.y].push(m);
-        });
-
-    this.openLevel = (level) => {
-        this.debug(`${this.name} openLevel::${level}`);
-        level = Math.abs(level - 4);
-        if(level < 0 || level > 4) {
-            this.debug(`${this.name}: Received invalid openLevel call for level ${level}`);
-            return;
-        }
-        var targets = this.levels[level];
-        if(level === 0) {
-            // Open roof as well!
-            targets = targets.concat(this.roof.motors);
-            setTimeout(() => this.performOla(), 2000);
-        }
-        if(this.enabled) {
-            targets.forEach(m => m.sendCommand(0x14));
-        }
-    }
+    },
 
     this.prepare = () => {
+        this.currentLevel = 0;
         this.where
             .reduce((a, b) => a.concat(b.motors), [])
             .forEach(m => m.sendCommand(0x28));
@@ -60,20 +90,20 @@ module.exports = function Lidar(where) {
         } else {
             this.enabled = value;
         }
-    };
+    }
 
-    this.setLevel = (value) => {
-        this.debug(`${this.name} Setting level to ${value}`);
-        for(var i = 1; i < Math.min(5, value); i++) {
-            if(this.currentLevel >= i) {
-                this.debug(`${this.name} skipped level ${i}`);
-                continue;
-            }
-            this.debug(`${this.name} accepted level ${i}`);
-            this.openLevel(i);
-            this.currentLevel = i;
+    this.openLevel = (level) => {
+        level = Math.abs(level - 4);
+        if(level < 0 || level > 4) {
+            return;
         }
-    };
+        this.lines[level].active = true;
+        if(level == 0) {
+            Object.keys(this.lines)
+                .forEach(k => { this.lines[k].active = false });
+            setTimeout(() => this.performOla(), 4000);
+        }
+    }
 
     this.performOla = () => {
         this.yStep = 5;
@@ -135,34 +165,6 @@ module.exports = function Lidar(where) {
         };
         sidesStep();
     }
+}
 
-    this.drop = () => {
-        this.where
-            .reduce((a, b) => a.concat(b.motors), [])
-            .forEach(m => m.sendCommand(0x28));
-        this.enabled = false;
-    }
-
-    this.draw = () => {
-        this.debug(`${this.name} Opening level 0`);
-        this.openLevel(0);
-        var l = 1;
-        var next = () => {
-            this.openLevel(l);
-            l++;
-            if(l <= 4) {
-                this.debug(`${this.name} Scheduled open for level ${l} in 2000ms`);
-                setTimeout(() => next(), 1000);
-            } else {
-                this.debug(`${this.name} Done.`);
-            }
-        }
-        this.debug(`${this.name} Scheduled open for level ${l} in 2000ms`);
-        setTimeout(() => next(), 1000);
-    }
-
-    this.init = () => {
-        this.prepare();
-        setTimeout(() => this.draw(), 4000);
-    }
-};
+module.exports = Lidar;
