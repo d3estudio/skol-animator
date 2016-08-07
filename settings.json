@@ -11,5 +11,9 @@
         "MINIMUM_ENGINES_COUNT": 340,
         "ENGINE_DISCOVER_TIMEOUT": 180,
         "CALIBRATION_OPERATION_TIME": 8
+    "LIDAR": {
+        "readingsCount": 2,
+        "dropAvg": 0.03,
+        "nextLevelValue": 0.03
     }
 }
