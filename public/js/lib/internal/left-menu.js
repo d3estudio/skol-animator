@@ -147,6 +147,10 @@ var Statuses = function() {
         color: '#00E029',
         status: 'Alive\'n\'kickin\''
     };
+    this.lidar = {
+        color: '#00E029',
+        status: 'Asleep'
+    }
 }
 
 createFolder('Stop All', new StopAllButton(), ['STOP_ALL']);
@@ -191,7 +195,7 @@ createFolder('Unicast', new Unicast(), ['SEND'], {
     }
 });
 
-createFolder('Statuses', new Statuses(), ['server', 'engines', 'socket']);
+createFolder('Statuses', new Statuses(), ['server', 'engines', 'socket', 'lidar']);
 
 var container = document.getElementById('left-menu');
 container.appendChild(leftGui.domElement);
@@ -216,3 +220,4 @@ var updateStatusFactory = function(name) {
 leftGui.updateStatusForServer = updateStatusFactory('server');
 leftGui.updateStatusForEngines = updateStatusFactory('engines');
 leftGui.updateStatusForSocket = updateStatusFactory('socket');
+leftGui.updateStatusForLidar = updateStatusFactory('lidar');
