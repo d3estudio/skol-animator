@@ -62,11 +62,7 @@ module.exports = function AutoPilot(where) {
                         helper.logger.debug(`${_this.name} WILL CALIBRATE`);
                         _this.where.forEach((wall) => {
                             wall.motors.forEach((motor) => {
-                                if (motor.x == 6 && motor.y == 3 && wall.name == 'right') {
-                                    //do not calibrate
-                                } else {
-                                    motor.sendCommand(0xFE);
-                                }
+                                motor.sendCommand(0xFE);
                             })
                         });
                         setTimeout(() => {
