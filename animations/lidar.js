@@ -14,6 +14,12 @@ module.exports = function Lidar(where) {
     this.steps = 10;
     this.returning = false;
 
+    this.debug = function() {
+        if(this.enabled) {
+            helper.logger.debug.apply(helper.logger, arguments);
+        }
+    };
+
     [this.right, this.left, this.front]
         .reduce((a, b) => a.concat(b.motors), [])
         .forEach(m => {
@@ -24,10 +30,10 @@ module.exports = function Lidar(where) {
         });
 
     this.openLevel = (level) => {
-        console.log('openLevel::' + level);
+        this.debug(`${this.name} openLevel::${level}`);
         level = Math.abs(level - 4);
         if(level < 0 || level > 4) {
-            helper.logger.debug(`${this.name}: Received invalid openLevel call for level ${level}`);
+            this.debug(`${this.name}: Received invalid openLevel call for level ${level}`);
             return;
         }
         var targets = this.levels[level];
@@ -57,13 +63,13 @@ module.exports = function Lidar(where) {
     };
 
     this.setLevel = (value) => {
-        helper.logger.debug(`${this.name} Setting level to ${value}`);
+        this.debug(`${this.name} Setting level to ${value}`);
         for(var i = 1; i < Math.min(5, value); i++) {
             if(this.currentLevel >= i) {
-                console.log('skipped level ' + i);
+                this.debug(`${this.name} skipped level ${i}`);
                 continue;
             }
-            console.log('accepted level ' + i)
+            this.debug(`${this.name} accepted level ${i}`);
             this.openLevel(i);
             this.currentLevel = i;
         }
@@ -82,15 +88,15 @@ module.exports = function Lidar(where) {
 
         var sidesStep = () => {
             var step = --this.yStep;
-            helper.logger.debug(`${this.name} Performing side step ${step}, returning: ${this.returning}`);
+            this.debug(`${this.name} Performing side step ${step}, returning: ${this.returning}`);
             sideMotors
                 .filter(m => m.y == step)
                 .forEach(m => m.sendCommand(m.command === 0x37 ? 0x3C : 0x37));
             if(this.yStep > 0) {
-                helper.logger.debug(`${this.name}::SideStep Scheduling sideStep.`);
+                this.debug(`${this.name}::SideStep Scheduling sideStep.`);
                 this.getTimeout(() => sidesStep());
             } else {
-                helper.logger.debug(`${this.name}::SideStep Scheduling roofStep.`);
+                this.debug(`${this.name}::SideStep Scheduling roofStep.`);
                 this.getTimeout(() => roofSteps());
             }
         };
@@ -104,19 +110,19 @@ module.exports = function Lidar(where) {
                     .forEach(m => m.sendCommand(m.command === 0x37 ? 0x3C : 0x37));
             }
             if(bStep > 5) {
-                helper.logger.debug(`${this.name}::RoofStep Scheduling roofStep (${aStep}, ${bStep})`);
+                this.debug(`${this.name}::RoofStep Scheduling roofStep (${aStep}, ${bStep})`);
                 this.getTimeout(() => roofSteps());
             }
             if(bStep === 5 && !this.returning) {
-                helper.logger.debug(`${this.name}::RoofStep Resetting variables and returning`);
+                this.debug(`${this.name}::RoofStep Resetting variables and returning`);
                 this.returning = true;
                 this.yStep = 5;
                 this.roofAStep = 0;
                 this.roofBStep = 11;
-                helper.logger.debug(`${this.name}::RoofStep Scheduling sidesStep`);
+                this.debug(`${this.name}::RoofStep Scheduling sidesStep`);
                 setTimeout(() => sidesStep(), 40 * where[0].motors[0].getFPS() + 200);
             } else if(bStep === 5 && this.returning) {
-                helper.logger.debug(`${this.name}::RsoofStep Resetting return state`);
+                this.debug(`${this.name}::RsoofStep Resetting return state`);
                 this.returning = false;
                 this.yStep = 5;
                 this.roofAStep = 0;
@@ -124,7 +130,7 @@ module.exports = function Lidar(where) {
                 if(this.loop) {
                     setTimeout(() => sidesStep(), 40 * where[0].motors[0].getFPS() + 200);
                 }
-                helper.logger.debug(`${this.name}::RoofStep Done.`);
+                this.debug(`${this.name}::RoofStep Done.`);
             }
         };
         sidesStep();
@@ -138,20 +144,20 @@ module.exports = function Lidar(where) {
     }
 
     this.draw = () => {
-        helper.logger.debug(`${this.name} Opening level 0`);
+        this.debug(`${this.name} Opening level 0`);
         this.openLevel(0);
         var l = 1;
         var next = () => {
             this.openLevel(l);
             l++;
             if(l <= 4) {
-                helper.logger.debug(`${this.name} Scheduled open for level ${l} in 2000ms`);
+                this.debug(`${this.name} Scheduled open for level ${l} in 2000ms`);
                 setTimeout(() => next(), 1000);
             } else {
-                helper.logger.debug(`${this.name} Done.`);
+                this.debug(`${this.name} Done.`);
             }
         }
-        helper.logger.debug(`${this.name} Scheduled open for level ${l} in 2000ms`);
+        this.debug(`${this.name} Scheduled open for level ${l} in 2000ms`);
         setTimeout(() => next(), 1000);
     }
 
