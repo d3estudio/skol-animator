@@ -69,22 +69,6 @@ var AdminCommands = function() {
             animation: 'lidar'
         })
     }
-    this.ENABLE_BALIDAR = function() {
-        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL START THE LIDAR')) {
-            socket.emit('animation', {
-                animation: 'enable_lidar',
-                enabled: true
-            });
-        }
-    }
-    this.DISABLE_BALIDAR = function() {
-        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL STOP THE LIDAR')) {
-            socket.emit('animation', {
-                animation: 'enable_lidar',
-                enabled: false
-            });
-        }
-    }
 }
 
 var Games = function() {
@@ -107,16 +91,33 @@ var BasicAngles = function() {
     this.angle = 0x14;
 }
 
-var LidarLevel = function() {
-    this.SEND = function() {
+var Lidar = function() {
+    this.ENABLE_BALIDAR = function() {
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL START THE LIDAR')) {
+            socket.emit('animation', {
+                animation: 'enable_lidar',
+                enabled: true
+            });
+        }
+    }
+    this.DISABLE_BALIDAR = function() {
+        if (window.confirm('ARE YOU SURE???? \n\nTHIS WILL STOP THE LIDAR')) {
+            socket.emit('animation', {
+                animation: 'enable_lidar',
+                enabled: false
+            });
+        }
+    }
+    this.INCREASE_LEVEL = function() {
         socket.emit('animation', {
-            animation: 'lidar',
-            downward: this.downward,
-            upward: this.upward
+            animation: 'increase_lidar_level'
         });
-    };
-    this.downward = 1;
-    this.upward = 1;
+    }
+    this.DROP = function() {
+        socket.emit('animation', {
+            animation: 'drop_lidar'
+        });
+    }
 }
 
 var Unicast = function() {
@@ -161,17 +162,10 @@ createFolder('Admin Commands', new AdminCommands(), [
     'SET_ZERO_TO_POS____0xFD',
     'HALT____0xFB',
     'RANDOM_POSITION',
-    'AUTO_PILOT',
-    'ENABLE_BALIDAR',
-    'DISABLE_BALIDAR'
+    'AUTO_PILOT'
 ]);
 createFolder('Games', new Games(), ['SNAKE']);
-createFolder('Lidar Levels', new LidarLevel(), ['SEND'], {
-    before: function(folder, prop) {
-        folder.add(prop, 'downward', 0);
-        folder.add(prop, 'upward', 0);
-    }
-})
+createFolder('Lidar', new Lidar(), ['ENABLE_BALIDAR', 'DISABLE_BALIDAR', 'INCREASE_LEVEL', 'DROP']);
 createFolder('Basic Angles', new BasicAngles(), ['SEND'], {
     before: function(folder, prop) {
         folder.add(prop, 'angle', {
