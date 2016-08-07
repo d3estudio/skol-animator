@@ -194,7 +194,6 @@ socket.on('connect', () => {
             animation = new Idle(command.type, 18, [rightWall, frontWall, leftWall, roof], command.loop);
             animation.init();
         } else if (command.animation == 'lidar') {
-            console.log(command);
             lidarHelper.receiveValues(parseFloat(command.upward), parseFloat(command.downward));
             animation = lidarHelper.animation;
         } else if (command.animation == 'RandomPosition') {
