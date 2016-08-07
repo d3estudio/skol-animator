@@ -3,10 +3,9 @@
     "MIN_ANGLE": 9,
     "SOCKET_IP": "127.0.0.1",
     "SOCKET_PORT": 3000,
-    "LIDAR_LEVELS": {
-        "1": { "minDownward": 1, "minUpward": 1, "maxDownward": 2, "maxUpward": 2 },
-        "2": { "minDownward": 3, "minUpward": 3, "maxDownward": 4, "maxUpward": 4 },
-        "3": { "minDownward": 5, "minUpward": 5, "maxDownward": 6, "maxUpward": 6 },
-        "4": { "minDownward": 7, "minUpward": 7, "maxDownward": 8, "maxUpward": 8 }
+    "LIDAR": {
+        "readingsCount": 2,
+        "dropAvg": 0.03,
+        "nextLevelValue": 0.03
     }
 }
