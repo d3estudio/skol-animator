@@ -127,11 +127,7 @@ var TOP_BITMAP = {
         TOP_BITMAP.map[motor.y][motor.x] = motor.command;
     });
     rightWall.motors.forEach((motor) => {
-        if ((motor.x == 6 && motor.y == 3) || (motor.x == 0 && motor.y == 4)) {
-            FACE_BITMAP.map[motor.y][motor.x + 28] = 0x14;
-        } else {
-            FACE_BITMAP.map[motor.y][motor.x + 28] = motor.command;
-        }
+        FACE_BITMAP.map[motor.y][motor.x + 28] = motor.command;
     });
     frontWall.motors.forEach((motor) => {
         FACE_BITMAP.map[motor.y][motor.x + 17] = motor.command;
