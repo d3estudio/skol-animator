@@ -201,11 +201,7 @@ socket.on('connect', () => {
                 refreshRate = 4000;
                 [rightWall, frontWall, leftWall, roof].forEach((wall) => {
                     wall.motors.forEach((motor) => {
-                        if (command == 0xFE && motor.x == 6 && motor.y == 3 && wall.name == 'right') {
-                            //do not calibrate
-                        } else {
-                            motor.sendCommand(command);
-                        }
+                        motor.sendCommand(command);
                     })
                     wall.locked = false;
                 });
