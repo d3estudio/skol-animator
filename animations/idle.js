@@ -615,8 +615,6 @@ module.exports = function Idle(type, width, where, loop) {
             setTimeout(() => {
                 _this.fireStar(where, line, currentIndex-=1);
             }, _this.where[0].motors[0].getFPS());
-        } else {
-            _this.where[1].motors[Math.round(Math.random()*_this.where[1].motors.length-1)].sendCommand(0x28);
         }
     }
     _this.init = () => {
