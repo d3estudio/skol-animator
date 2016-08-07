@@ -161,6 +161,12 @@ socket.on('connect', () => {
             emitLidarStatus();
             lidarHelper.animation.prepare();
             return;
+        } else if (command.animation == 'increase_lidar_level') {
+            lidarHelper.forceLevelUp();
+            return;
+        } else if (command.animation == 'drop_lidar') {
+            lidarHelper.forceDrop();
+            return;
         } else if (command.animation == 'ScrollText') {
             animation = new ScrollText(command.message, 13, [rightWall, frontWall, leftWall, roof], command.continuous, command.loop);
             animation.init();
