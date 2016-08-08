@@ -80,7 +80,7 @@ var ensureGateways = function() {
         logger.info('GatewayDiscover', 'Performing operations...');
         var knownGateways = [],
             gauge = new ProgressBar(':bar (:current of :total)', { total: settings.GATEWAYS_COUNT }),
-            t = new Tail('/tmp/x', 'Auth is GO'),
+            t = new Tail('/home/d3/Desktop/skol-animator/logs/ppv4.log', 'Auth is GO'),
             regexp = /\[HandlerFSM:\d+:\d+:(\d+)\]: Auth is GO!$/g,
             timeout;
 
@@ -167,7 +167,7 @@ var waitRouterEngines = () => {
             }, settings.ENGINE_DISCOVER_TIMEOUT * 1000);
         };
 
-        var t = new Tail('/tmp/x', 'Garanteed'),
+        var t = new Tail('/home/d3/Desktop/skol-animator/logs/animationMapRouter.log', 'Garanteed'),
             regex = /\s+Garanteed Config'ed (\d+)\s.*$/;
         t.onLineReceived(line => {
             line = line.trim();
