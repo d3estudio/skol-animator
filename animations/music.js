@@ -3,6 +3,7 @@ var helper = require('../lib/shared');
 
 module.exports = function Music(type, width, where) {
     var _this = this;
+    _this.TIMERS = [];
     _this.name = 'MusicAnimation';
     _this.type = type;
     _this.width = width;
@@ -122,7 +123,8 @@ module.exports = function Music(type, width, where) {
             }
             _this.currentCol++;
             var steps = 5; // 1 step is 9deg
-            setTimeout(_this.boom, (_this.where[0].motors[0].getFPS() * steps) + 10);
+            var TMP_TIMER = setTimeout(_this.boom, (_this.where[0].motors[0].getFPS() * steps) + 10);
+            _this.TIMERS.push(TMP_TIMER);
         } else {
             helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
         }
@@ -281,9 +283,10 @@ module.exports = function Music(type, width, where) {
                 face = 0x2d;
             }
             _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(face));
-            setTimeout(() => {
+            var TMP_TIMER = setTimeout(() => {
                 _this.ready = 2;
             }, (_this.where[0].motors[0].getFPS() * steps));
+            _this.TIMERS.push(TMP_TIMER);
         }
         if (_this.ready == 2) {
             var time = new Date().getTime();

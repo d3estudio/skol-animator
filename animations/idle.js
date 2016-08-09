@@ -3,6 +3,7 @@ var helper = require('../lib/shared');
 
 module.exports = function Idle(type, width, where, loop) {
     var _this = this;
+    _this.TIMERS = [];
     var shuffle = (a) => {
         var j, x, i;
         for (i = a.length; i; i -= 1) {
@@ -51,12 +52,14 @@ module.exports = function Idle(type, width, where, loop) {
             if (wall.name == 'top') {
                 wall.motors.forEach((motor) => {
                     if (motor.y == _this.currentColTopGlass) {
-                        setTimeout(() => {
+                        var TMP_TIMER = setTimeout(() => {
                             motor.sendCommand(0x41);
-                            setTimeout(() => {
+                            var TMP_TIMER = setTimeout(() => {
                                 motor.sendCommand(0x37);
                             }, _this.where[0].motors[0].getFPS() * flipDelay);
+                            _this.TIMERS.push(TMP_TIMER);
                         }, motor.x * 2 * 50 * (multiply / multiply_divisor));
+                        _this.TIMERS.push(TMP_TIMER);
                     }
                 });
             } else {
@@ -66,12 +69,14 @@ module.exports = function Idle(type, width, where, loop) {
                 }
                 wall.motors.forEach((motor) => {
                     if (motor.x == _this.currentCol + offset) {
-                        setTimeout(() => {
+                        var TMP_TIMER = setTimeout(() => {
                             motor.sendCommand(0x41);
-                            setTimeout(() => {
+                            var TMP_TIMER = setTimeout(() => {
                                 motor.sendCommand(0x37);
                             }, _this.where[0].motors[0].getFPS() * flipDelay);
+                            _this.TIMERS.push(TMP_TIMER);
                         }, motor.y * 2 * 50 * (multiply / multiply_divisor));
+                        _this.TIMERS.push(TMP_TIMER);
                     }
                 });
             }
@@ -85,7 +90,8 @@ module.exports = function Idle(type, width, where, loop) {
             _this.currentCol = 0;
         }
         var steps = 2 * (multiply / multiply_divisor);
-        setTimeout(_this.idleGlass, (_this.where[0].motors[0].getFPS() * steps));
+        var TMP_TIMER = setTimeout(_this.idleGlass, (_this.where[0].motors[0].getFPS() * steps));
+        _this.TIMERS.push(TMP_TIMER);
     }
     _this.idleBack = () => {
         if (_this.type == 'shuffle') {
@@ -111,7 +117,8 @@ module.exports = function Idle(type, width, where, loop) {
                     _this.roof.shift();
                 }
                 var steps = 2 + Math.floor(Math.random() * 30); // 1 step is 9deg
-                setTimeout(_this.idleBack, _this.where[0].motors[0].getFPS() * steps);
+                var TMP_TIMER = setTimeout(_this.idleBack, _this.where[0].motors[0].getFPS() * steps);
+                _this.TIMERS.push(TMP_TIMER);
             } else {
                 if (_this.loop) {
                     _this.command = 0x3C;
@@ -172,12 +179,14 @@ module.exports = function Idle(type, width, where, loop) {
                     });
                 }
                 _this.currentCol--;
-                setTimeout(_this.idleBack, _this.timerOpen *= 0.9);
+                var TMP_TIMER = setTimeout(_this.idleBack, _this.timerOpen *= 0.9);
+                _this.TIMERS.push(TMP_TIMER);
             } else {
                 if (_this.loop) {
                     _this.currentCol = width;
                     _this.timerOpen = _this.where[0].motors[0].getFPS() * 10;
-                    setTimeout(_this.idle, _this.timerOpen + 1000);
+                    var TMP_TIMER = setTimeout(_this.idle, _this.timerOpen + 1000);
+                    _this.TIMERS.push(TMP_TIMER);
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
                     _this.ended(10000);
@@ -206,12 +215,14 @@ module.exports = function Idle(type, width, where, loop) {
                     });
                 });
                 _this.currentCol--;
-                setTimeout(_this.idleBack, _this.timerBreathing *= 0.9);
+                var TMP_TIMER = setTimeout(_this.idleBack, _this.timerBreathing *= 0.9);
+                _this.TIMERS.push(TMP_TIMER);
             } else {
                 if (_this.loop) {
                     _this.currentCol = 0;
                     _this.timerBreathing = _this.where[0].motors[0].getFPS() * 2;
-                    setTimeout(_this.idle, _this.timerBreathing + 2000);
+                    var TMP_TIMER = setTimeout(_this.idle, _this.timerBreathing + 2000);
+                    _this.TIMERS.push(TMP_TIMER);
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
                     _this.ended(10000);
@@ -276,7 +287,8 @@ module.exports = function Idle(type, width, where, loop) {
                 }
                 _this.spiralCounter--;
                 _this.spiralTimer = _this.spiralTimer * 1.1111111111111112;
-                setTimeout(_this.idleBack, _this.spiralTimer);
+                var TMP_TIMER = setTimeout(_this.idleBack, _this.spiralTimer);
+                _this.TIMERS.push(TMP_TIMER);
             } else {
                 if (_this.loop) {
                     _this.spiralCounter = 0;
@@ -285,7 +297,8 @@ module.exports = function Idle(type, width, where, loop) {
                     _this.spiralYR = 2;
                     _this.spiralXL = 28;
                     _this.spiralYL = 2;
-                    setTimeout(_this.idle, 2000);
+                    var TMP_TIMER = setTimeout(_this.idle, 2000);
+                    _this.TIMERS.push(TMP_TIMER);
                 } else {
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
                     _this.ended(10000);
@@ -325,7 +338,8 @@ module.exports = function Idle(type, width, where, loop) {
                     });
                 });
                 _this.reelCounterX--;
-                setTimeout(_this.idleBack, _this.reelTimer);
+                var TMP_TIMER = setTimeout(_this.idleBack, _this.reelTimer);
+                _this.TIMERS.push(TMP_TIMER);
             }
         }
     }
@@ -353,7 +367,8 @@ module.exports = function Idle(type, width, where, loop) {
                     _this.roof.shift();
                 }
                 var steps = 2 + Math.floor(Math.random() * 30); // 1 step is 9deg
-                setTimeout(_this.idle, _this.where[0].motors[0].getFPS() * steps);
+                var TMP_TIMER = setTimeout(_this.idle, _this.where[0].motors[0].getFPS() * steps);
+                _this.TIMERS.push(TMP_TIMER);
             } else {
                 _this.command = 0x14;
                 _this.reset();
@@ -366,7 +381,8 @@ module.exports = function Idle(type, width, where, loop) {
                 });
             });
             var steps = 10; // 1 step is 9deg
-            setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 10);
+            var TMP_TIMER = setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 10);
+            _this.TIMERS.push(TMP_TIMER);
         } else if (_this.type == 'breathing') {
             if (_this.currentCol < 12) {
                 _this.where.forEach((wall) => {
@@ -390,9 +406,11 @@ module.exports = function Idle(type, width, where, loop) {
                     });
                 });
                 _this.currentCol++;
-                setTimeout(_this.idle, _this.timerBreathing *= 1.11111111111);
+                var TMP_TIMER = setTimeout(_this.idle, _this.timerBreathing *= 1.11111111111);
+                _this.TIMERS.push(TMP_TIMER);
             } else {
-                setTimeout(_this.idleBack, _this.timerBreathing);
+                var TMP_TIMER = setTimeout(_this.idleBack, _this.timerBreathing);
+                _this.TIMERS.push(TMP_TIMER);
             }
         } else if (_this.type == 'live') {
             //[0x19, 0x16]
@@ -402,44 +420,50 @@ module.exports = function Idle(type, width, where, loop) {
                     _this.right[0].sendCommand(command[Math.floor(Math.random() * command.length)]);
                     var motor_right = _this.right[0];
                     _this.right.shift();
-                    setTimeout(() => {
+                    var TMP_TIMER = setTimeout(() => {
                         motor_right.sendCommand(0x14);
                     }, _this.where[0].motors[0].getFPS() + 1000);
+                    _this.TIMERS.push(TMP_TIMER);
                 }
                 if (_this.front[0] && !_this.front[0].locked) {
                     _this.front[0].sendCommand(command[Math.floor(Math.random() * command.length)]);
                     var motor_front = _this.front[0];
                     _this.front.shift();
-                    setTimeout(() => {
+                    var TMP_TIMER = setTimeout(() => {
                         motor_front.sendCommand(0x14);
                     }, _this.where[0].motors[0].getFPS() + 1000);
+                    _this.TIMERS.push(TMP_TIMER);
                 }
                 if (_this.left[0] && !_this.left[0].locked) {
                     _this.left[0].sendCommand(command[Math.floor(Math.random() * command.length)]);
                     var motor_left = _this.left[0];
                     _this.left.shift();
-                    setTimeout(() => {
+                    var TMP_TIMER = setTimeout(() => {
                         motor_left.sendCommand(0x14);
                     }, _this.where[0].motors[0].getFPS() + 1000);
+                    _this.TIMERS.push(TMP_TIMER);
                 }
                 if (_this.roof[0] && !_this.roof[0].locked) {
                     _this.roof[0].sendCommand(command[Math.floor(Math.random() * command.length)]);
                     var motor_roof = _this.roof[0];
                     _this.roof.shift();
-                    setTimeout(() => {
+                    var TMP_TIMER = setTimeout(() => {
                         motor_roof.sendCommand(0x14);
                     }, _this.where[0].motors[0].getFPS() + 1000);
+                    _this.TIMERS.push(TMP_TIMER);
                 }
                 if (_this.roof[0] && !_this.roof[0].locked) {
                     _this.roof[0].sendCommand(command[Math.floor(Math.random() * command.length)]);
                     var motor_roof_2 = _this.roof[0];
                     _this.roof.shift();
-                    setTimeout(() => {
+                    var TMP_TIMER = setTimeout(() => {
                         motor_roof_2.sendCommand(0x14);
                     }, _this.where[0].motors[0].getFPS() + 1000);
+                    _this.TIMERS.push(TMP_TIMER);
                 }
                 var steps = 4; // 1 step is 9deg
-                setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps) + 250);
+                var TMP_TIMER = setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps) + 250);
+                _this.TIMERS.push(TMP_TIMER);
             } else {
                 if (_this.loop) {
                     _this.reset();
@@ -508,14 +532,16 @@ module.exports = function Idle(type, width, where, loop) {
                 }
                 _this.spiralCounter++;
                 _this.spiralTimer = _this.spiralTimer * 0.9;
-                setTimeout(_this.idle, _this.spiralTimer);
+                var TMP_TIMER = setTimeout(_this.idle, _this.spiralTimer);
+                _this.TIMERS.push(TMP_TIMER);
             } else {
                 _this.spiralYR = 0;
                 _this.spiralXR = 0;
                 _this.spiralYL = 0;
                 _this.spiralXL = 23;
                 var steps = 10;
-                setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 10);
+                var TMP_TIMER = setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 10);
+                _this.TIMERS.push(TMP_TIMER);
             }
         } else if (_this.type == 'reel') {
             if (_this.reelCounterX == 0) {
@@ -546,7 +572,8 @@ module.exports = function Idle(type, width, where, loop) {
                     });
                 });
                 _this.reelCounterX--;
-                setTimeout(_this.idle, _this.reelTimer);
+                var TMP_TIMER = setTimeout(_this.idle, _this.reelTimer);
+                _this.TIMERS.push(TMP_TIMER);
             }
         } else if (_this.type == 'brendacadente') {
             if (_this.stars == 20) {
@@ -566,7 +593,8 @@ module.exports = function Idle(type, width, where, loop) {
                 _this.fireStar(wall, line, 16);
                 _this.stars++;
                 var steps = 50;
-                setTimeout(_this.idle, _this.where[0].motors[0].getFPS() * steps);
+                var TMP_TIMER = setTimeout(_this.idle, _this.where[0].motors[0].getFPS() * steps);
+                _this.TIMERS.push(TMP_TIMER);
             }
         } else if (_this.type == 'glass') {
             _this.where.forEach((wall, wallIndex) => {
@@ -576,11 +604,13 @@ module.exports = function Idle(type, width, where, loop) {
             });
             _this.currentCol = 0;
             var steps = 70;
-            setTimeout(_this.idleGlass, (_this.where[0].motors[0].getFPS() * steps) + 250);
-            setTimeout(() => {
+            var TMP_TIMER = setTimeout(_this.idleGlass, (_this.where[0].motors[0].getFPS() * steps) + 250);
+            _this.TIMERS.push(TMP_TIMER);
+            var TMP_TIMER = setTimeout(() => {
                 helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
                 _this.ended(10000);
             }, 30000);
+            _this.TIMERS.push(TMP_TIMER);
         }
     }
     _this.fireStar = (where, line, currentIndex) => {
@@ -612,9 +642,10 @@ module.exports = function Idle(type, width, where, loop) {
             }
         });
         if (currentIndex > -1) {
-            setTimeout(() => {
+            var TMP_TIMER = setTimeout(() => {
                 _this.fireStar(where, line, currentIndex-=1);
             }, _this.where[0].motors[0].getFPS());
+            _this.TIMERS.push(TMP_TIMER);
         }
     }
     _this.init = () => {

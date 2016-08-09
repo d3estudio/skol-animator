@@ -310,10 +310,9 @@ socket.on('connect', () => {
         //Game.pressKey(key);
     })
     .on('freeze', () => {
-        var noop = () => {};
         currentAnimations.forEach((animation) => {
-            Object.keys(animation).forEach((key) => animation[key] = noop);
-            animation = null;
+            helper.logger.debug(`[Processor] Will CANCEL ${animation.name}`);
+            helper.clearTimers(animation);
         });
         currentAnimations = [];
         AutoPilot.status = false;

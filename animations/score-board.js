@@ -6,6 +6,7 @@ var Alphabet = require('../lib/alphabet');
 
 module.exports = function ScoreBoard(message, where, loop) {
     var _this = this;
+    _this.TIMERS = [];
     _this.name = 'ScoreBoardAnimation';
     _this.where = where;
     _this.message = [
@@ -55,9 +56,10 @@ module.exports = function ScoreBoard(message, where, loop) {
             });
             _this.message.shift();
             var steps = 40; // 1 step is 9deg // 3000 is an animation delay after roration
-            setTimeout(() => {
+            var TMP_TIMER = setTimeout(() => {
                 _this.draw()
             }, (_this.where[0].motors[0].getFPS() * steps) + 3000);
+            _this.TIMERS.push(TMP_TIMER);
         } else {
             if (_this.loop) {
                 _this.currentCol = 0;
@@ -67,7 +69,8 @@ module.exports = function ScoreBoard(message, where, loop) {
                     new Alphabet(message.country2 + '--'),
                     new Alphabet(message.score2 + '--')
                 ];
-                setTimeout(_this.draw, 0);
+                var TMP_TIMER = setTimeout(_this.draw, 0);
+                _this.TIMERS.push(TMP_TIMER);
             } else {
                 [_this.where[0], _this.where[1], _this.where[2]].forEach((wall, wallIndex) => {
                     wall.motors.forEach((motor) => {

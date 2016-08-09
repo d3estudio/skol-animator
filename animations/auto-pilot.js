@@ -23,7 +23,6 @@ module.exports = function AutoPilot(where, socket) {
     _this.where = where;
     _this.animationCount = 0;
     _this.socket = socket;
-    _this.noop = () => {};
 
     _this.runAnimation = () => {
         var animation = ANIMATIONS[Math.round(Math.random() * 3)];
@@ -53,8 +52,7 @@ module.exports = function AutoPilot(where, socket) {
             socket.emit('pilotstatus', `ENDED ${animation.name}`);
             helper.logger.debug(`${_this.name} ERASED ${animation.name} FROM QUEUE`);
             socket.emit('pilotstatus', `ERASED ${animation.name}`);
-            Object.keys(animation).forEach((key) => animation[key] = _this.noop);
-            animation = null;
+            helper.clearTimers(animation);
             globalMusic = null;
             if (!timeToWait) {
                 timeToWait = 25000;

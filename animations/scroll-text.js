@@ -6,6 +6,7 @@ var Alphabet = require('../lib/alphabet');
 
 module.exports = function ScrollText(message, width, where, overflow, loop) {
     var _this = this;
+    _this.TIMERS = [];
     _this.name = 'ScrollTextAnimation';
     _this.width = width;
     _this.where = where;
@@ -114,7 +115,8 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
         if (_this.loop) {
             _this.currentCol -= 1;
             var steps = 40; // 1 step is 9deg // 3000 is an animation delay after roration
-            setTimeout(_this.step2, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 6000);
+            var TMP_TIMER = setTimeout(_this.step2, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 6000);
+            _this.TIMERS.push(TMP_TIMER);
         } else {
             _this.finish();
         }
@@ -131,7 +133,8 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
             });
         });
         var steps = 40; // 1 step is 9deg // 3000 is an animation delay after roration
-        setTimeout(_this.step4, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 3000);
+        var TMP_TIMER = setTimeout(_this.step4, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 3000);
+        _this.TIMERS.push(TMP_TIMER);
     }
     _this.step2 = () => {
         [_this.where[0], _this.where[2]].forEach((wall, wallIndex) => {
@@ -145,7 +148,8 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
             });
         });
         var steps = 20; // 1 step is 9deg // 3000 is an animation delay after roration
-        setTimeout(_this.step4, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 3000);
+        var TMP_TIMER = setTimeout(_this.step4, (_this.where[0].motors[0].getFPS() * (steps + 10)) + 3000);
+        _this.TIMERS.push(TMP_TIMER);
         _this.resetIdle();
         _this.idle();
     }
@@ -169,12 +173,13 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
             });
             _this.idleCurrentCol += 1;
             var steps = 5; // 1 step is 9deg
-            setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps));
+            var TMP_TIMER = setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps));
+            _this.TIMERS.push(TMP_TIMER);
         }
     }
     _this.draw = () => {
         var steps = 40; // 1 step is 9deg
-        setTimeout(() => {
+        var TMP_TIMER = setTimeout(() => {
             if (_this.overflow) {
                 if (_this.currentCol > ((_this.message.size * -1) - 25)) {
                     _this.moveLettersOverflow();
@@ -189,12 +194,14 @@ module.exports = function ScrollText(message, width, where, overflow, loop) {
                     _this.currentCol--;
                     _this.draw();
                 } else {
-                    setTimeout(() => {
+                    var TMP_TIMER = setTimeout(() => {
                         _this.step2();
                     }, 8000);
+                    _this.TIMERS.push(TMP_TIMER);
                 }
             }
         }, _this.where[0].motors[0].getFPS() * (steps + 10)); //number of steps (each 9 degrees to the angle) + 10
+        _this.TIMERS.push(TMP_TIMER);
     }
     _this.init = () => {
         if (!_this.running) {
