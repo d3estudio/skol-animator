@@ -296,6 +296,7 @@ module.exports = function Music(type, width, where) {
                 _this.type = Math.round(Math.random() * 2);
                 _this.angle = Math.round(Math.random() * 1);
                 _this.face = Math.round(Math.random() * 1);
+                _this.y = 16;
                 _this.ready = 0;
             }
             _this.getRandomBass(frequency);
