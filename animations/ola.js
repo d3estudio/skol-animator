@@ -3,6 +3,7 @@ var helper = require('../lib/shared');
 
 module.exports = function Ola(type, width, where, loop) {
     var _this = this;
+    _this.TIMERS = [];
     _this.name = 'OlaAnimation';
     _this.type = type;
     _this.width = parseInt(width);
@@ -44,13 +45,15 @@ module.exports = function Ola(type, width, where, loop) {
                     });
                 }
                 _this.currentColErase--;
-                setTimeout(_this.eraseWave, _this.timer);
+                var TMP_TIMER = setTimeout(_this.eraseWave, _this.timer);
+                _this.TIMERS.push(TMP_TIMER);
             } else {
                 if (_this.loop) {
                     _this.currentCol = _this.width + 3;
                     _this.currentColErase = _this.width + 3;
                     var steps = 50;
-                    setTimeout(_this.wave, _this.where[0].motors[0].getFPS() * steps);
+                    var TMP_TIMER = setTimeout(_this.wave, _this.where[0].motors[0].getFPS() * steps);
+                    _this.TIMERS.push(TMP_TIMER);
                 } else {
                     _this.running = false;
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
@@ -96,13 +99,15 @@ module.exports = function Ola(type, width, where, loop) {
                 }
                 _this.currentColErase--;
                 var steps = 10; // 1 step is 9deg
-                setTimeout(_this.eraseWave, _this.where[0].motors[0].getFPS() * steps);
+                var TMP_TIMER = setTimeout(_this.eraseWave, _this.where[0].motors[0].getFPS() * steps);
+                _this.TIMERS.push(TMP_TIMER);
             } else {
                 if (_this.loop) {
                     _this.currentCol = _this.width + 3;
                     _this.currentColErase = _this.width + 3;
                     var steps = 900;
-                    setTimeout(_this.wave(), _this.where[0].motors[0].getFPS() * steps);
+                    var TMP_TIMER = setTimeout(_this.wave(), _this.where[0].motors[0].getFPS() * steps);
+                    _this.TIMERS.push(TMP_TIMER);
                 } else {
                     _this.running = false;
                     helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
@@ -150,7 +155,8 @@ module.exports = function Ola(type, width, where, loop) {
                 }
                 _this.currentCol--;
                 var steps = 5; // 1 step is 9deg
-                setTimeout(_this.wave, _this.timer);
+                var TMP_TIMER = setTimeout(_this.wave, _this.timer);
+                _this.TIMERS.push(TMP_TIMER);
             }
         } else {
             if (_this.currentCol > -30) {
@@ -356,7 +362,8 @@ module.exports = function Ola(type, width, where, loop) {
                 }
                 _this.currentCol--;
                 var steps = 10; // 1 step is 9deg
-                setTimeout(_this.wave, _this.where[0].motors[0].getFPS() * steps);
+                var TMP_TIMER = setTimeout(_this.wave, _this.where[0].motors[0].getFPS() * steps);
+                _this.TIMERS.push(TMP_TIMER);
             }
         }
     }
@@ -367,10 +374,11 @@ module.exports = function Ola(type, width, where, loop) {
             _this.running = true;
             if (_this.type != 'little') {
                 var steps = 900;
-                setTimeout(() => {
+                var TMP_TIMER = setTimeout(() => {
                     helper.logger.debug(`${_this.name} WILL ERASE`);
                     _this.eraseWave();
                 }, _this.where[0].motors[0].getFPS() * steps);
+                _this.TIMERS.push(TMP_TIMER);
             }
         } else {
             helper.logger.debug(`${_this.name} already RUNNING`);
