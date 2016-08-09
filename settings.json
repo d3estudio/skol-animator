@@ -11,17 +11,10 @@
         "MINIMUM_ENGINES_COUNT": 340,
         "ENGINE_DISCOVER_TIMEOUT": 180,
         "CALIBRATION_OPERATION_TIME": 8
+    },
     "LIDAR": {
         "readingsCount": 2,
         "dropAvg": -1,
         "nextLevelValue": 0.03
-    "BOOTUP": {
-        "SUPERVISOR_URI": "http://localhost:9001",
-        "GATEWAYS_COUNT": 16,
-        "GATEWAY_DISCOVER_TIMEOUT": 3,
-        "TOTAL_ENGINES_COUNT": 345,
-        "MINIMUM_ENGINES_COUNT": 340,
-        "ENGINE_DISCOVER_TIMEOUT": 180,
-        "CALIBRATION_OPERATION_TIME": 8
     }
 }
