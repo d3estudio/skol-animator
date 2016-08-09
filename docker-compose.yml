@@ -1,0 +1,8 @@
+version: '2'
+services:
+  bootup:
+    build: .
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: sleep 7200
