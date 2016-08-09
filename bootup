@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-var ProgressBar = require('progress'),
-    logger = require('npmlog'),
+var logger = require('npmlog'),
     Systemd = require('./lib/bootup/systemd'),
     Supervisord = require('supervisord'),
     config = require('./config.json'),
     Tail = require('./lib/bootup/tail'),
-    settings = require('./settings.json').BOOTUP;
+    settings = require('./settings.json').BOOTUP,
+    Gauge = require('gauge');
 
 var superv;
 
@@ -79,37 +79,43 @@ var ensureGateways = function() {
     return new Promise((resolve) => {
         logger.info('GatewayDiscover', 'Performing operations...');
         var knownGateways = [],
-            gauge = new ProgressBar(':bar (:current of :total)', { total: settings.GATEWAYS_COUNT }),
-            t = new Tail('/home/d3/Desktop/skol-animator/logs/ppv4.log', 'Auth is GO'),
-            regexp = /\[HandlerFSM:\d+:\d+:(\d+)\]: Auth is GO!$/g,
-            timeout;
+            gauge = new Gauge({ theme: 'brailleSpinner', updateInterval: 50 }),
+            t = new Tail('/home/d3/Desktop/skol-animator/logs/ppv4.log', 'Auth'),
+            regexp = /\[HandlerFSM:\d+:\d+:(\d+)\]: Auth is GO/,
+            timeout,
+            current = 0;
+        gauge.show('Waiting startup...', 0);
 
         var resetTimeout = () => {
             if(timeout) {
                 clearTimeout(timeout);
             }
             timeout = setTimeout(() => {
-                gauge.terminate();
+                gauge.disable();
                 logger.error('GatewayDiscover', 'Cannot find all gateways.');
                 logger.error('Missing: ', Object.keys(config.NodeDistribution).filter(k => knownGateways.indexOf(k) === -1));
                 process.exit(1);
             }, settings.GATEWAY_DISCOVER_TIMEOUT * 1000);
         };
         t.onLineReceived((line) => {
+            line = line.toString();
             if(regexp.test(line)) {
                 var gatewayId = regexp.exec(line)[1];
                 if(knownGateways.indexOf(gatewayId) === -1) {
                     knownGateways.push(gatewayId);
                     resetTimeout();
-                    if(knownGateways.length > gauge.curr) {
-                        for(var i = 0; i < (knownGateways.length - gauge.curr); i++) {
-                            gauge.tick();
-                        }
+                    gauge.pulse();
+                    if(knownGateways.length > current) {
+                        gauge.show(`${knownGateways.length} of ${settings.GATEWAYS_COUNT}`, (knownGateways.length / settings.GATEWAYS_COUNT));
+                        current = knownGateways.length;
                     }
                 }
                 if(knownGateways.length === settings.GATEWAYS_COUNT) {
-                    gauge.terminate();
-                    logger.info('Succeeded.');
+                    gauge.disable();
+                    logger.info('GatewayDiscover', 'Succeeded.');
+                    if(timeout) {
+                        clearTimeout(timeout);
+                    }
                     resolve();
                 }
             }
@@ -142,22 +148,27 @@ var startAnimationMapRouter = () => {
                 process.exit(1);
                 return Promise.reject();
             }
+            resolve();
         });
     });
 }
 
 var waitRouterEngines = () => {
     return new Promise((resolve, reject) => {
-        var gauge = new ProgressBar(':bar (:current of :total)', { total: settings.TOTAL_ENGINES_COUNT }),
-            timeout;
+        logger.info('WaitRouterEngines', 'Waiting for engines...');
+        console.log();
+        var gauge = gauge = new Gauge({ theme: 'brailleSpinner', updateInterval: 50 }),
+            timeout,
+            current = 0;
+        gauge.show('Waiting startup...', 0);
         var resetTimeout = () => {
             if(timeout) {
                 clearTimeout(timeout);
             }
             timeout = setTimeout(() => {
                 if(gauge.curr >= settings.MINIMUM_ENGINES_COUNT) {
-                    logger.warn('WaitRouterEngines', `Timeout exceeded. Continuing with minimum engine count (${gauge.curr})`);
-                    gauge.terminate();
+                    logger.warn('WaitRouterEngines', `Timeout exceeded. Continuing with minimum engine count (${current})`);
+                    gauge.disable();
                     resolve();
                 } else {
                     logger.error('WaitRouterEngines', 'Cannot guarantee minimal engine count. Aborting.');
@@ -168,20 +179,20 @@ var waitRouterEngines = () => {
         };
 
         var t = new Tail('/home/d3/Desktop/skol-animator/logs/animationMapRouter.log', 'Garanteed'),
-            regex = /\s+Garanteed Config'ed (\d+)\s.*$/;
+            regex = /Garanteed Config'ed (\d+)\s.*/;
         t.onLineReceived(line => {
             line = line.trim();
             if(regex.test(line)) {
                 var currentCount = parseInt(regex.exec(line)[1]);
-                if(currentCount > gauge.curr) {
-                    for(var i = 0; i < currentCount - gauge.curr; i++) {
-                        resetTimeout();
-                        gauge.tick();
-                    }
+                gauge.pulse();
+                if(currentCount > current) {
+                    gauge.show(`${current} of ${settings.TOTAL_ENGINES_COUNT}`, (current / settings.TOTAL_ENGINES_COUNT));
+                    current = currentCount;
                 }
-                if(gauge.curr === settings.TOTAL_ENGINES_COUNT) {
+                if(current === settings.TOTAL_ENGINES_COUNT) {
+                    logger.info('WaitRouterEngines', 'Completed. Optimal engines count achieved!');
                     clearTimeout(timeout);
-                    gauge.terminate();
+                    gauge.disable();
                     resolve();
                 }
             }
