@@ -148,11 +148,13 @@ var TOP_BITMAP = {
 //init socket
 socket.on('connect', () => {
         helper.logger.debug(`[Processor] Connected to port ${settings.SOCKET_PORT}`);
+        socket.emit('pilotstatus', `[Processor] RESTARTED`);
         emitHealthStatus();
     })
     .on('exec', (command) => {
         refreshRate = roof.motors[0].getFPS();
         helper.logger.debug(`[Processor] Received Command ${command.animation}`);
+        socket.emit('pilotstatus', `[Processor] Received Command ${command.animation}`);
         var animation = '';
         globalMusic = null;
         if (command.animation == 'enable_lidar') {
@@ -232,6 +234,8 @@ socket.on('connect', () => {
         }
     })
     .on('single', (data) => {
+        helper.logger.debug(`[Processor] Received UNICAST X:${data.x} Y:${data.y} W:${data.wall} C:0x${data.command.toString(16).toUpperCase()}`);
+        socket.emit('pilotstatus', `[Processor] Received UNICAST \nX:${data.x} Y:${data.y} W:${data.wall} C:0x${data.command.toString(16).toUpperCase()}`);
         walls[data.wall].motors.forEach((motor) => {
             if (motor.x == data.x && motor.y == data.y) {
                 motor.sendCommand(data.command);
@@ -310,8 +314,11 @@ socket.on('connect', () => {
         //Game.pressKey(key);
     })
     .on('freeze', () => {
+        helper.logger.debug(`[Processor] RECECIVED STOP ALL`);
+        socket.emit('pilotstatus', `[Processor] RECECIVED STOP ALL`);
         currentAnimations.forEach((animation) => {
             helper.logger.debug(`[Processor] Will CANCEL ${animation.name}`);
+            socket.emit('pilotstatus', `[Processor] Will CANCEL ${animation.name}`);
             helper.clearTimers(animation);
         });
         currentAnimations = [];
