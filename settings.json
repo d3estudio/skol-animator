@@ -6,7 +6,7 @@
     "BOOTUP": {
         "SUPERVISOR_URI": "http://localhost:9001",
         "GATEWAYS_COUNT": 16,
-        "GATEWAY_DISCOVER_TIMEOUT": 10,
+        "GATEWAY_DISCOVER_TIMEOUT": 60,
         "TOTAL_ENGINES_COUNT": 345,
         "MINIMUM_ENGINES_COUNT": 340,
         "ENGINE_DISCOVER_TIMEOUT": 180,
