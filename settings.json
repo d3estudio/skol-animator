@@ -6,6 +6,6 @@
     "LIDAR": {
         "readingsCount": 2,
         "dropAvg": -1,
-        "nextLevelValue": 0.03
+        "nextLevelValue": 0.07
     }
 }
