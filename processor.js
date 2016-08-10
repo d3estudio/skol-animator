@@ -161,7 +161,6 @@ socket.on('connect', () => {
             console.log('lidar', command.enabled);
             lidarHelper.setEnabled(command.enabled);
             emitLidarStatus();
-            lidarHelper.animation.prepare();
             return;
         } else if (command.animation == 'increase_lidar_level') {
             lidarHelper.forceLevelUp();

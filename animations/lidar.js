@@ -16,6 +16,7 @@ Line.prototype = {
     },
     reset: function() {
         this.active = false;
+        this.xCounter = 44;
         setTimeout(() => {
             this.motors.forEach(m => m.sendCommand(0x14));
         }, Date.now() - this.safeStopAt);
@@ -78,6 +79,7 @@ function Lidar(where) {
 
     this.prepare = () => {
         this.currentLevel = 0;
+        this.returning = false;
         this.where
             .reduce((a, b) => a.concat(b.motors), [])
             .forEach(m => m.sendCommand(0x28));
@@ -85,10 +87,13 @@ function Lidar(where) {
     }
 
     this.setEnabled = (value) => {
-        if(this.enabled == value) {
-            return;
-        } else {
+        if(this.enabled != value) {
             this.enabled = value;
+            if(this.enabled) {
+                this.prepare();
+            } else {
+                this.drop();
+            }
         }
     }
 
@@ -99,9 +104,14 @@ function Lidar(where) {
         }
         this.lines[level].active = true;
         if(level == 0) {
+            var drift = 200;
             Object.keys(this.lines)
-                .forEach(k => { this.lines[k].active = false });
-            setTimeout(() => this.performOla(), 4000);
+                .forEach(k => {
+                    setTimeout(() => this.lines[k].reset(), drift);
+                    drift += 300;
+                });
+            this.roof.motors.forEach(m => m.sendCommand(0x14));
+            setTimeout(() => this.performOla(), 6000 + drift);
         }
     }
 
@@ -121,7 +131,7 @@ function Lidar(where) {
             this.debug(`${this.name} Performing side step ${step}, returning: ${this.returning}`);
             sideMotors
                 .filter(m => m.y == step)
-                .forEach(m => m.sendCommand(m.command === 0x37 ? 0x3C : 0x37));
+                .forEach(m => m.sendCommand(m.command === 0x14 ? 0x3C : 0x14));
             if(this.yStep > 0) {
                 this.debug(`${this.name}::SideStep Scheduling sideStep.`);
                 this.getTimeout(() => sidesStep());
@@ -137,7 +147,7 @@ function Lidar(where) {
             if(bStep >= 6) {
                 this.roof.motors
                     .filter(m => m.x == aStep || m.x == bStep)
-                    .forEach(m => m.sendCommand(m.command === 0x37 ? 0x3C : 0x37));
+                    .forEach(m => m.sendCommand(m.command === 0x14 ? 0x3C : 0x14));
             }
             if(bStep > 5) {
                 this.debug(`${this.name}::RoofStep Scheduling roofStep (${aStep}, ${bStep})`);
@@ -152,7 +162,7 @@ function Lidar(where) {
                 this.debug(`${this.name}::RoofStep Scheduling sidesStep`);
                 setTimeout(() => sidesStep(), 40 * where[0].motors[0].getFPS() + 200);
             } else if(bStep === 5 && this.returning) {
-                this.debug(`${this.name}::RsoofStep Resetting return state`);
+                this.debug(`${this.name}::RoofStep Resetting return state`);
                 this.returning = false;
                 this.yStep = 5;
                 this.roofAStep = 0;
