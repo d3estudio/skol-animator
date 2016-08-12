@@ -226,13 +226,10 @@ socket.on('connect', () => {
         }
     })
     .on('fft', (data) => {
-        if (new Date().getTime() > now + 150) {
-            if (globalMusic) {
-                globalMusic.process(data);
-            }
-            AutoPilot.getBeatFromHell(data);
-            now = new Date().getTime();
+        if (globalMusic) {
+            globalMusic.process(data);
         }
+        AutoPilot.getBeatFromHell(data);
     })
     .on('single', (data) => {
         helper.logger.debug(`[Processor] Received UNICAST X:${data.x} Y:${data.y} W:${data.wall} C:0x${data.command.toString(16).toUpperCase()}`);
