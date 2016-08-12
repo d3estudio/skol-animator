@@ -84,12 +84,14 @@ module.exports = function AutoPilot(where, socket) {
                     }, 5000);
                 }, timeToWait);
             } else {
-                _this.animationCount++;
-                helper.logger.debug(`${_this.name} WILL ROTATE ALL MOTORS TO ZERO`);
-                socket.emit('pilotstatus', `WILL ROTATE ALL MOTORS TO ZERO`);
-                _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0x14));
                 setTimeout(() => {
-                    _this.pilot();
+                    _this.animationCount++;
+                    helper.logger.debug(`${_this.name} WILL ROTATE ALL MOTORS TO ZERO`);
+                    socket.emit('pilotstatus', `WILL ROTATE ALL MOTORS TO ZERO`);
+                    _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0x14));
+                    setTimeout(() => {
+                        _this.pilot();
+                    }, 5000);
                 }, timeToWait);
             }
         }
