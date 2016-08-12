@@ -175,6 +175,7 @@ function Lidar(where) {
         };
         sidesStep();
     }
+    this.drop = () => {}
 }
 
 module.exports = Lidar;

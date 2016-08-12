@@ -153,8 +153,10 @@ socket.on('connect', () => {
     })
     .on('exec', (command) => {
         refreshRate = roof.motors[0].getFPS();
+	if (command.animation !== 'lidar'){
+            socket.emit('pilotstatus', `[Processor] Received Command ${command.animation}`);
+	}
         helper.logger.debug(`[Processor] Received Command ${command.animation}`);
-        socket.emit('pilotstatus', `[Processor] Received Command ${command.animation}`);
         var animation = '';
         globalMusic = null;
         if (command.animation == 'enable_lidar') {
