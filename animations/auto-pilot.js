@@ -90,7 +90,7 @@ module.exports = function AutoPilot(where, socket) {
                 _this.where.reduce((a, b) => a.concat(b.motors), []).forEach(motor => motor.sendCommand(0x14));
                 setTimeout(() => {
                     _this.pilot();
-                }, 5000);
+                }, timeToWait);
             }
         }
         if (!globalMusic) {
