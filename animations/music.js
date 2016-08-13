@@ -14,7 +14,7 @@ module.exports = function Music(type, width, where) {
     _this.maxPeak = 0;
     _this.y = 16;
     _this.now = new Date().getTime();
-    _this.type = Math.round(Math.random() * 2);
+    _this.type = 2;
     _this.angle = Math.round(Math.random() * 1);
     _this.face = Math.round(Math.random() * 1);
     _this.ready = 0;
@@ -293,7 +293,7 @@ module.exports = function Music(type, width, where) {
             //if (time > now + 120000) {
             if (time > _this.now + 30000) {
                 _this.now = time;
-                _this.type = Math.round(Math.random() * 2);
+                _this.type = 2;
                 _this.angle = Math.round(Math.random() * 1);
                 _this.face = Math.round(Math.random() * 1);
                 _this.y = 16;
