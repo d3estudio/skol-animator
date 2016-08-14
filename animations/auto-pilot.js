@@ -10,6 +10,7 @@ var Idle = require('../animations/idle');
 var globalMusic = null;
 
 var ANIMATIONS = [
+    Music,
     ScrollText,
     Idle,
     Ola,
@@ -22,8 +23,9 @@ var ANIMATIONS = [
     Idle,
     ScrollText,
     Idle,
+    Music,
     ScrollText,
-    Idle,
+    Idle
 ]
 
 module.exports = function AutoPilot(where, socket) {
@@ -37,7 +39,7 @@ module.exports = function AutoPilot(where, socket) {
     _this.currentRunningAnimation = null;
 
     _this.runAnimation = () => {
-        _this.currentRunningAnimation = ANIMATIONS[Math.round(Math.random() * 13)];
+        _this.currentRunningAnimation = ANIMATIONS[Math.round(Math.random() * 15)];
         helper.logger.debug(`${_this.name} PREPARING TO RUN ${_this.currentRunningAnimation.name}`);
         socket.emit('pilotstatus', `PREPARING TO RUN ${_this.currentRunningAnimation.name}`);
         if (_this.currentRunningAnimation.name == 'ScrollText') {
