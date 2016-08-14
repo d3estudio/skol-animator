@@ -242,12 +242,7 @@ socket.on('connect', () => {
     })
     .on('the_beast', () => {
         refreshRate = roof.motors[0].getFPS();
-        if (AUTO_PILOT_STATUS) {
-            AUTO_PILOT_STATUS = false;
-        } else {
-            AUTO_PILOT_STATUS = true;
-        }
-        AutoPilot.status = AUTO_PILOT_STATUS;
+        AutoPilot.status = true;
     })
     .on('magic', (action) => {
         //helper.logger.debug('[Processor] Myo Command ');
