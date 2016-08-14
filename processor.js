@@ -43,6 +43,9 @@ rightWall.init();
 
 AutoPilot = new AutoPilot([rightWall, frontWall, leftWall, roof], socket);
 AutoPilot.init();
+AutoPilot.informCurrentAnimation = (animation) => {
+    currentAnimations.push(animation);
+}
 
 lidarHelper = new LidarHelper([rightWall, frontWall, leftWall, roof]);
 
@@ -316,6 +319,7 @@ socket.on('connect', () => {
         });
         currentAnimations = [];
         AutoPilot.status = false;
+        AutoPilot.init();
         lidarHelper.setEnabled(false);
     })
     .on('disconnect', () => {
