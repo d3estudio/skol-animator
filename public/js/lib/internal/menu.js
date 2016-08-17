@@ -116,7 +116,8 @@ idleMenu.add(optionsIdle, 'type', {
     Breathing: 'breathing',
     Spiral: 'spiral',
     Reel: 'reel',
-    BrendaCadente: 'brendacadente'
+    BrendaCadente: 'brendacadente',
+    Dehzinho: 'dehzinho'
 });
 idleMenu.add(optionsIdle, 'loop');
 idleMenu.add(optionsIdle, 'START');

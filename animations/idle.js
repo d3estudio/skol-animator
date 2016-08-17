@@ -341,6 +341,115 @@ module.exports = function Idle(type, width, where, loop) {
                 var TMP_TIMER = setTimeout(_this.idleBack, _this.reelTimer);
                 _this.TIMERS.push(TMP_TIMER);
             }
+        } else if (_this.type == 'dehzinho') {
+            if (_this.currentCol < 22) {
+                if (_this.currentCol < 5) {
+                    _this.where[1].motors.forEach((motor) => {
+                        if (_this.currentCol == 0) {
+                            if (motor.x > 3 && motor.x < 7 && motor.y == 4) {
+                                if (motor.command == 0x14) {
+                                    motor.sendCommand(_this.command);
+                                } else {
+                                    motor.sendCommand(0x14);
+                                }
+                            }
+                        } else if (_this.currentCol == 1) {
+                            if ((motor.x == 3 || motor.x == 7) && (motor.y == 3 || motor.y == 4)) {
+                                if (motor.command == 0x14) {
+                                    motor.sendCommand(_this.command);
+                                } else {
+                                    motor.sendCommand(0x14);
+                                }
+                            } else if ((motor.x > 3 && motor.x < 7) && motor.y == 3) {
+                                if (motor.command == 0x14) {
+                                    motor.sendCommand(_this.command);
+                                } else {
+                                    motor.sendCommand(0x14);
+                                }
+                            }
+                        } else if (_this.currentCol == 2) {
+                            if ((motor.x == 2 || motor.x == 8) && (motor.y == 2 || motor.y == 3 || motor.y == 4)) {
+                                if (motor.command == 0x14) {
+                                    motor.sendCommand(_this.command);
+                                } else {
+                                    motor.sendCommand(0x14);
+                                }
+                            } else if ((motor.x > 2 && motor.x < 8) && motor.y == 2) {
+                                if (motor.command == 0x14) {
+                                    motor.sendCommand(_this.command);
+                                } else {
+                                    motor.sendCommand(0x14);
+                                }
+                            }
+                        } else if (_this.currentCol == 3) {
+                            if ((motor.x == 1 || motor.x == 9) && (motor.y == 1 || motor.y == 2 || motor.y == 3 || motor.y == 4)) {
+                                if (motor.command == 0x14) {
+                                    motor.sendCommand(_this.command);
+                                } else {
+                                    motor.sendCommand(0x14);
+                                }
+                            } else if ((motor.x > 1 && motor.x < 9) && motor.y == 1) {
+                                if (motor.command == 0x14) {
+                                    motor.sendCommand(_this.command);
+                                } else {
+                                    motor.sendCommand(0x14);
+                                }
+                            }
+                        } else if (_this.currentCol == 4) {
+                            if ((motor.x == 0 || motor.x == 10) && (motor.y == 0 || motor.y == 1 || motor.y == 2 || motor.y == 3 || motor.y == 4)) {
+                                if (motor.command == 0x14) {
+                                    motor.sendCommand(_this.command);
+                                } else {
+                                    motor.sendCommand(0x14);
+                                }
+                            } else if ((motor.x > 0 && motor.x < 10) && motor.y == 0) {
+                                if (motor.command == 0x14) {
+                                    motor.sendCommand(_this.command);
+                                } else {
+                                    motor.sendCommand(0x14);
+                                }
+                            }
+                        }
+                    });
+                } else {
+                    _this.where[0].motors.forEach((motor) => {
+                        var x = _this.currentCol - 5;
+                        if (motor.x == x) {
+                            if (motor.command == 0x14) {
+                                motor.sendCommand(_this.command);
+                            } else {
+                                motor.sendCommand(0x14);
+                            }
+                        }
+                    });
+                    _this.where[2].motors.forEach((motor) => {
+                        var x = (16 - (_this.currentCol - 5));
+                        if (motor.x == x) {
+                            if (motor.command == 0x14) {
+                                motor.sendCommand(_this.command);
+                            } else {
+                                motor.sendCommand(0x14);
+                            }
+                        }
+                    });
+                    _this.where[3].motors.forEach((motor) => {
+                        var y = (16 - (_this.currentCol - 5));
+                        if (motor.y == y) {
+                            if (motor.command == 0x14) {
+                                motor.sendCommand(_this.command);
+                            } else {
+                                motor.sendCommand(0x14);
+                            }
+                        }
+                    });
+                }
+                _this.currentCol++;
+                var steps = 5; // 1 step is 9deg
+                var TMP_TIMER = setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps) + 10);
+                _this.TIMERS.push(TMP_TIMER);
+            } else {
+                helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+            }
         }
     }
     _this.idle = () => {
@@ -595,6 +704,37 @@ module.exports = function Idle(type, width, where, loop) {
                 var steps = 50;
                 var TMP_TIMER = setTimeout(_this.idle, _this.where[0].motors[0].getFPS() * steps);
                 _this.TIMERS.push(TMP_TIMER);
+            }
+        } else if (_this.type == 'dehzinho') {
+            var dehCol = 18 - _this.currentCol;
+            _this.where[3].motors.forEach((motor) => {
+                if (motor.y == dehCol && motor.x > 3 && motor.x < 7) {
+                    motor.sendCommand(0x1E);
+                }
+            });
+            if (dehCol < 17) {
+                _this.currentCol--;
+                var steps = 3;
+                var TMP_TIMER = setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps));
+                _this.TIMERS.push(TMP_TIMER);
+            } else {
+                var dehCol2 = 4 - (_this.currentCol + 3);
+                if (dehCol2 < 5) {
+                    _this.where[1].motors.forEach((motor) => {
+                        if (motor.y == dehCol2 && motor.x > 3 && motor.x < 7) {
+                            motor.sendCommand(0x1E);
+                        }
+                    });
+                    _this.currentCol--;
+                    var steps = 3;
+                    var TMP_TIMER = setTimeout(_this.idle, (_this.where[0].motors[0].getFPS() * steps));
+                    _this.TIMERS.push(TMP_TIMER);
+                } else {
+                    _this.currentCol = 0;
+                    var steps = 5;
+                    var TMP_TIMER = setTimeout(_this.idleBack, (_this.where[0].motors[0].getFPS() * steps));
+                    _this.TIMERS.push(TMP_TIMER);
+                }
             }
         } else if (_this.type == 'glass') {
             _this.where.forEach((wall, wallIndex) => {
