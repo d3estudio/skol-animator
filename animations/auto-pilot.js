@@ -51,7 +51,7 @@ module.exports = function AutoPilot(where, socket) {
             _this.currentRunningAnimation = new Music('equalizer', 13, _this.where, null);
             globalMusic = _this.currentRunningAnimation;
         } else if (_this.currentRunningAnimation.name == 'Idle') {
-            var types = ['shuffle', 'live', 'open', 'breathing', 'spiral', 'reel', 'brendacadente'][Math.round(Math.random() * 6)];
+            var types = ['shuffle', 'live', 'open', 'breathing', 'spiral', 'reel', 'brendacadente','dehzinho'][Math.round(Math.random() * 7)];
             _this.currentRunningAnimation = new _this.currentRunningAnimation(types, 18, _this.where, false);
         }
         if (_this.currentRunningAnimation.type) {

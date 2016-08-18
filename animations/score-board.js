@@ -31,8 +31,7 @@ module.exports = function ScoreBoard(message, where, loop) {
                 letter.forEach((line, lineIndex) => {
                     line.forEach((dot, dotIndex) => {
                         var x = _this.currentCol + dotIndex + shift,
-                            y = lineIndex,
-                            bit;
+                            y = lineIndex;
                         [_this.where[0], _this.where[1], _this.where[2]].forEach((wall, wallIndex) => {
                             if (wall.name == 'front') {
                                 x = _this.currentCol + dotIndex + shift - 1;

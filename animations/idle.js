@@ -449,6 +449,7 @@ module.exports = function Idle(type, width, where, loop) {
                 _this.TIMERS.push(TMP_TIMER);
             } else {
                 helper.logger.debug(`${_this.name} FINISHED (waiting last command)`);
+                _this.ended(10000);
             }
         }
     }
