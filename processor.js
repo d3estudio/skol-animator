@@ -84,7 +84,7 @@ var enginesWatchDog = function() {
     }
 }
 var emitLidarStatus = function() {
-    if(lidarHelper) {
+    if (lidarHelper) {
         socket.emit('lidarStatus', lidarHelper.enabled);
     }
 }
@@ -156,9 +156,9 @@ socket.on('connect', () => {
     })
     .on('exec', (command) => {
         refreshRate = roof.motors[0].getFPS();
-	if (command.animation !== 'lidar'){
+        if (command.animation !== 'lidar') {
             socket.emit('pilotstatus', `[Processor] Received Command ${command.animation}`);
-	}
+        }
         helper.logger.debug(`[Processor] Received Command ${command.animation}`);
         var animation = '';
         globalMusic = null;
@@ -185,7 +185,7 @@ socket.on('connect', () => {
             }, [rightWall, frontWall, leftWall, roof], command.loop);
             animation.init();
         } else if (command.animation == 'Ola') {
-            if(command.type === 'vertical') {
+            if (command.type === 'vertical') {
                 animation = new VerticalOla(command.loop, [rightWall, frontWall, leftWall, roof]);
             } else {
                 animation = new Ola(command.type, 13, [rightWall, frontWall, leftWall, roof], command.loop);

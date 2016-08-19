@@ -51,6 +51,7 @@ serverSocket.on('connection', (clientSocket) => {
     helper.logger.debug(`[CLIENT] ${clientSocket.id} CONNECTED`);
     if(lastHealthStatus !== undefined) {
         serverSocket.emit('ackHealth', lastHealthStatus);
+        clientSocket.emit('statuspilot', `[CLIENT] ${clientSocket.id} WELCOME`)
     }
     clientSocket
         .on('update', (command) => {
